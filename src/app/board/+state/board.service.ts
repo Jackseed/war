@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { Tile, createTile } from './board.model';
+import { createSoldier } from './board.model';
 
 
 @Injectable({
@@ -19,16 +18,14 @@ export class BoardService {
     .collection('tiles').valueChanges();
   }
 
-  public async getActualGameTiles(gameId): Promise<Tile[]> {
-    const tiles: Tile[] = [];
-    const tilesSnapShot = await this.db.collection('games').doc(gameId)
-      .collection('tiles', ref => ref.orderBy('number'))
-        .get().toPromise().then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const tile = createTile(doc.data());
-            tiles.push(tile);
-          });
-      });
-    return tiles;
+  createUnits(gameId) {
+    const id = this.db.createId();
+    const quantity = 100;
+    const soldier = createSoldier({
+      id,
+      quantity,
+    });
+    this.db.collection('games').doc(gameId)
+      .collection('units').doc(id).set(soldier);
   }
 }

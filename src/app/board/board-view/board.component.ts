@@ -28,4 +28,8 @@ export class BoardComponent implements OnInit {
   play(i) {
     console.log(i);
   }
+
+  createUnits() {
+    this.boardService.createUnits(this.gameId);
+  }
 }

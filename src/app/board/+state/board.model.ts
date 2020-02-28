@@ -30,3 +30,16 @@ export function createTile(params: Partial<Tile> = {}): Tile {
   };
 }
 
+export function createSoldier(params: Partial<Unit>): Unit {
+  return {
+    id: params.id,
+    type: 'soldier',
+    quantity: params.quantity,
+    range: 1,
+    move: 1,
+    stamina: 1,
+    vision: 1,
+    noise: 1,
+    ...params
+  };
+}
