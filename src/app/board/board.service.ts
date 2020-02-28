@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { Tile, createTile } from './game.model';
+import { Tile, createTile } from './board.model';
 
 
 @Injectable({
@@ -30,27 +30,5 @@ export class BoardService {
           });
       });
     return tiles;
-  }
-  
-  createNewGame() {
-    const gameId = this.db.createId();
-    // Create the game
-    this.db.collection('games').doc(gameId).set({gameId});
-    // Create the tiles:
-    for (let i = 0; i < 26; i++) {
-      for (let j = 0; j < 26; j++) {
-        const tileId = j + 26 * i;
-        this.db.collection('games').doc(gameId)
-          .collection('tiles').doc(tileId.toString()).set({
-            x: j,
-            y: i,
-            color: 'grey',
-            id: tileId,
-            unitId: ''
-
-        });
-      }
-    }
-    return gameId;
   }
 }

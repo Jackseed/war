@@ -1,15 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {MatGridListModule} from '@angular/material/grid-list';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UnitComponent } from './unit/unit.component';
-import { TileComponent } from './tile/tile.component';
-import { BoardComponent } from './board/board.component';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
+import { GamesModule } from './games/games.module';
+import { BoardModule } from './board/board.module';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -24,18 +21,15 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    UnitComponent,
-    TileComponent,
-    BoardComponent
   ],
   imports: [
-
-    MatGridListModule,
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     NoopAnimationsModule,
+    GamesModule,
+    BoardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

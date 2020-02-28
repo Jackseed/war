@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from './board.service';
-import { Tile } from './game.model';
+import { Tile } from './board.model';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -10,21 +11,18 @@ import { Observable } from 'rxjs';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  tiles: Tile[];
+  tiles$: Observable<Tile[]>;
   gameId: string;
 
 
   constructor(
-    private boardService: BoardService
+    private route: ActivatedRoute,
+    private boardService: BoardService,
   ) {}
 
   ngOnInit() {
-    this.gameId = this.boardService.createNewGame();
-    this.getTiles();
-  }
-
-  private async getTiles() {
-    this.tiles = await this.boardService.getActualGameTiles(this.gameId);
+    this.gameId = this.route.snapshot.paramMap.get('id');
+    this.tiles$ = this.boardService.getGameTiles(this.gameId);
   }
 
   play(i) {

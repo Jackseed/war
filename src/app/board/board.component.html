@@ -1,4 +1,4 @@
-
+<div *ngIf="(tiles$ | async) as tiles">
   <mat-grid-list cols="26" rowHeight="1:1">
     <mat-grid-tile
       *ngFor="let tile of tiles; let i = index;"
@@ -9,3 +9,4 @@
       <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
     </mat-grid-tile>
   </mat-grid-list>
+</div>

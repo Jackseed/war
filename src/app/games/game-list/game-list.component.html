@@ -1,0 +1,10 @@
+<app-game-form></app-game-form>
+<h2>Join a game</h2>
+<div *ngIf="(games$ | async) as games">
+  <div *ngFor="let game of games">
+    <button mat-raised-button color='primary'
+      (click)='joinGame(game)'>{{game.name}}
+    </button>
+  </div>
+</div>
+
