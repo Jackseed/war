@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameService } from './game.service';
+import { GameService } from './+state/game.service';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GameListComponent } from './game-list/game-list.component';
 import { GameFormComponent } from './game-form/game-form.component';

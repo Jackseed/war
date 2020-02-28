@@ -1,4 +1,4 @@
-import { Tile } from '../board/board.model';
+import { Tile } from '../../board/+state/board.model';
 
 export interface Game {
   id?: string;

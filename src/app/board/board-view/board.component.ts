@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BoardService } from './board.service';
-import { Tile } from './board.model';
+import { BoardService } from '../+state/board.service';
+import { Tile } from '../+state/board.model';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
