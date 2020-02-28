@@ -25,8 +25,6 @@ export class GameService {
             y: i,
             color: 'grey',
             id: tileId,
-            unitId: ''
-
         });
       }
     }

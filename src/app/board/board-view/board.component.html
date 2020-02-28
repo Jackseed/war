@@ -6,7 +6,11 @@
       [rowspan]=1
       [style.background]="tiles[i].color"
       >
-      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
+      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;">
+        <div *ngIf="tile.unitId as id">
+          {{ (getUnitbyId(id) | async).type }}
+        </div>
+      </button>
     </mat-grid-tile>
   </mat-grid-list>
 </div>

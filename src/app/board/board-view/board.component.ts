@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../+state/board.service';
-import { Tile } from '../+state/board.model';
+import { Tile, Unit } from '../+state/board.model';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,9 +11,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  tiles$: Observable<Tile[]>;
   gameId: string;
-
+  tiles$: Observable<Tile[]>;
+  units$: Observable<Unit[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +23,7 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
+    this.units$ = this.boardService.getGameUnits(this.gameId);
   }
 
   play(i) {
@@ -31,5 +32,9 @@ export class BoardComponent implements OnInit {
 
   createUnits() {
     this.boardService.createUnits(this.gameId);
+  }
+
+  public async getUnitbyId(id): Promise<Unit> {
+    return await this.boardService.getUnit(this.gameId, id);
   }
 }
