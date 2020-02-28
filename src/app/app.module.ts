@@ -7,6 +7,7 @@ import { AngularFireModule } from '@angular/fire';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GamesModule } from './games/games.module';
 import { BoardModule } from './board/board.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -30,6 +31,7 @@ const firebaseConfig = {
     NoopAnimationsModule,
     GamesModule,
     BoardModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
