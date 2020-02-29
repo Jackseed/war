@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
 import { createSoldier, Unit, Tile } from './board.model';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -32,6 +33,17 @@ export class BoardService {
     return createSoldier(unitSnapShot.data());
   }
 
+  public getUnit$(gameId: string, unitId: string): Observable<Unit> {
+    console.log('hello');
+    console.log(gameId, unitId);
+    const unit$ = this.db.collection('games').doc(gameId)
+      .collection('units').doc(unitId).valueChanges();
+    unit$.pipe(
+      tap(unit => console.log(unit))
+    );
+    return unit$;
+  }
+
   public createUnits(gameId) {
     const id = this.db.createId();
     const quantity = 100;
@@ -42,4 +54,6 @@ export class BoardService {
     this.db.collection('games').doc(gameId)
       .collection('units').doc(id).set(soldier);
   }
+
 }
+

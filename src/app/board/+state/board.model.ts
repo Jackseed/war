@@ -18,6 +18,21 @@ export interface Unit {
   noise?: number;
 }
 
+export interface TileWithUnit {
+  id?: number;
+  color?: string;
+  x?: number;
+  y?: number;
+  unitId?: string;
+  type?: string;
+  quantity?: number;
+  range?: number;
+  move?: number;
+  stamina?: number;
+  vision?: number;
+  noise?: number;
+}
+
 /** A factory function that creates Tiles */
 export function createTile(params: Partial<Tile> = {}): Tile {
   return {
@@ -42,4 +57,23 @@ export function createSoldier(params: Partial<Unit>): Unit {
     noise: 1,
     ...params
   };
+}
+
+export function createTileWithUnit(paramsTile: Partial<Tile>, paramsUnit: Partial<Unit>): TileWithUnit {
+  const tile = {
+    id: paramsTile.id,
+    color: paramsTile.color,
+    x: paramsTile.x,
+    y: paramsTile.y,
+    unitId: paramsTile.unitId,
+    type: paramsUnit.type,
+    quantity: paramsUnit.quantity,
+    range: paramsUnit.range,
+    move: paramsUnit.move,
+    stamina: paramsUnit.stamina,
+    vision: paramsUnit.vision,
+    noise: paramsUnit.noise,
+  };
+  console.log(tile);
+  return tile;
 }
