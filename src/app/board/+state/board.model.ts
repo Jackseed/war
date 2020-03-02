@@ -4,11 +4,27 @@ export interface Tile {
   x?: number;
   y?: number;
   unitId?: string;
+  unit?: Unit;
 }
 
 export interface Unit {
   id?: string;
   tileId?: number;
+  type?: string;
+  quantity?: number;
+  range?: number;
+  move?: number;
+  stamina?: number;
+  vision?: number;
+  noise?: number;
+}
+
+export interface TileWithUnit {
+  id?: number;
+  color?: string;
+  x?: number;
+  y?: number;
+  unitId?: string;
   type?: string;
   quantity?: number;
   range?: number;
@@ -26,6 +42,7 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     x: params.x,
     y: params.y,
     unitId: params.unitId,
+    unit: params.unit,
     ...params
   };
 }

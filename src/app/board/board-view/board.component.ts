@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../+state/board.service';
-import { Tile, Unit } from '../+state/board.model';
-import { Observable } from 'rxjs';
+import { Tile, Unit, TileWithUnit } from '../+state/board.model';
+import { Observable, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -14,6 +14,8 @@ export class BoardComponent implements OnInit {
   gameId: string;
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
+  unit: Unit;
+  tilesWithUnits$: Observable<Tile[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +26,21 @@ export class BoardComponent implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
+    this.tilesWithUnits$ = combineLatest([this.tiles$, this.units$]).pipe(
+      map(([tiles, units]) =>
+        tiles.map(tile => {
+          if (tile.unitId) {
+            return {
+              ...tile,
+              unit: units.find(unit => unit.id === tile.unitId)
+            };
+          } else {
+            return tile;
+          }
+        })
+      )
+    );
+    this.tilesWithUnits$.subscribe(console.log);
   }
 
   play(i) {
@@ -34,7 +51,20 @@ export class BoardComponent implements OnInit {
     this.boardService.createUnits(this.gameId);
   }
 
-  public async getUnitbyId(id): Promise<Unit> {
-    return await this.boardService.getUnit(this.gameId, id);
+  getUnitbyId(id: string): Observable<Unit> {
+    return this.units$.pipe(
+        map(units => units.find(unit => unit.id === id))
+    );
+  }
+
+  getUnit(id): Unit {
+    let newUnit: Unit;
+    this.boardService.getUnit(this.gameId, id)
+      .then(unit =>  {
+          newUnit = unit;
+          console.log(newUnit);
+      });
+    console.log(newUnit);
+    return newUnit;
   }
 }

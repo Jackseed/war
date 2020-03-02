@@ -1,4 +1,4 @@
-<div *ngIf="(tiles$ | async) as tiles">
+<div *ngIf="(tilesWithUnits$ | async) as tiles">
   <mat-grid-list cols="26" rowHeight="1:1">
     <mat-grid-tile
       *ngFor="let tile of tiles; let i = index;"
@@ -7,10 +7,11 @@
       [style.background]="tiles[i].color"
       >
       <button (click)="play(i)" mat-button style="width: 20px; height: 20px;">
-        <div *ngIf="tile.unitId as id">
-          {{ (getUnitbyId(id) | async).type }}
-        </div>
+
       </button>
+      <div *ngIf="tile.unit">
+        {{tile.unit.type}}
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
