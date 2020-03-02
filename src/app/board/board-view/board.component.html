@@ -7,11 +7,11 @@
       [style.background]="tiles[i].color"
       >
       <button (click)="play(i)" mat-button style="width: 20px; height: 20px;">
-        <div *ngIf="tile.unitId">
-          {{tile.type}}
-        </div>
-      </button>
 
+      </button>
+      <div *ngIf="tile.unit">
+        {{tile.unit.type}}
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
 </div>

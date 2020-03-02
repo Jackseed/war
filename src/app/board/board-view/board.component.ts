@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../+state/board.service';
-import { Tile, Unit, TileWithUnit, createTileWithUnit } from '../+state/board.model';
-import { Observable, zip, of } from 'rxjs';
+import { Tile, Unit, TileWithUnit } from '../+state/board.model';
+import { Observable, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { map, mergeMap, tap, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -15,7 +15,7 @@ export class BoardComponent implements OnInit {
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
   unit: Unit;
-  tilesWithUnits$: Observable<TileWithUnit[]>;
+  tilesWithUnits$: Observable<Tile[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,27 +26,21 @@ export class BoardComponent implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
-    this.tilesWithUnits$ = this.tiles$.pipe(
-      mergeMap(tiles =>
-        zip(...tiles.map(
-          tile => {
-            if (tile.unitId !== '') {
-              console.log('coucou');
-              return this.boardService.getUnit$(this.gameId, tile.unitId).pipe(
-                catchError(error => {
-                  console.log(error);
-                  return of(null);
-                }),
-                map(unit => createTileWithUnit(tile, unit)),
-                tap(res => console.log(res))
-              );
-            } else {
-              return;
-            }
+    this.tilesWithUnits$ = combineLatest([this.tiles$, this.units$]).pipe(
+      map(([tiles, units]) =>
+        tiles.map(tile => {
+          if (tile.unitId) {
+            return {
+              ...tile,
+              unit: units.find(unit => unit.id === tile.unitId)
+            };
+          } else {
+            return tile;
           }
-        ))
+        })
       )
     );
+    this.tilesWithUnits$.subscribe(console.log);
   }
 
   play(i) {

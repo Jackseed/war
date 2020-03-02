@@ -4,6 +4,7 @@ export interface Tile {
   x?: number;
   y?: number;
   unitId?: string;
+  unit?: Unit;
 }
 
 export interface Unit {
@@ -41,6 +42,7 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     x: params.x,
     y: params.y,
     unitId: params.unitId,
+    unit: params.unit,
     ...params
   };
 }
@@ -57,23 +59,4 @@ export function createSoldier(params: Partial<Unit>): Unit {
     noise: 1,
     ...params
   };
-}
-
-export function createTileWithUnit(paramsTile: Partial<Tile>, paramsUnit: Partial<Unit>): TileWithUnit {
-  const tile = {
-    id: paramsTile.id,
-    color: paramsTile.color,
-    x: paramsTile.x,
-    y: paramsTile.y,
-    unitId: paramsTile.unitId,
-    type: paramsUnit.type,
-    quantity: paramsUnit.quantity,
-    range: paramsUnit.range,
-    move: paramsUnit.move,
-    stamina: paramsUnit.stamina,
-    vision: paramsUnit.vision,
-    noise: paramsUnit.noise,
-  };
-  console.log(tile);
-  return tile;
 }
