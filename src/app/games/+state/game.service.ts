@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Game, createGame } from './game.model';
+import { Game, createGame, createPlayer, Player } from './game.model';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable()
 export class GameService {
@@ -9,10 +10,16 @@ export class GameService {
   constructor(
     private db: AngularFirestore,
     private router: Router,
+    private afAuth: AngularFireAuth,
   ) { }
 
   createNewGame(name: string) {
     const id = this.db.createId();
+    const user = this.afAuth.auth.currentUser;
+    const firstPlayer: Player = createPlayer({
+      userId: user.uid,
+      isActive: true,
+    });
     // Create the game
     this.db.collection('games').doc(id).set({id, name});
     // Create the tiles:
@@ -28,6 +35,10 @@ export class GameService {
         });
       }
     }
+    // Create first player:
+    this.db.collection('games').doc(id)
+      .collection('players').doc(user.uid).set(firstPlayer);
+
     return id;
   }
 
@@ -48,11 +59,22 @@ export class GameService {
       .get().toPromise();
     return createGame(gameSnapShot.data());
   }
-
+  /**
+   * Add a player to the game
+   */
+  addPlayer(gameId: string, userId: string) {
+    const secondPlayer: Player = createPlayer({
+      userId,
+    });
+    return this.db.collection('games').doc(gameId)
+      .collection('players').doc(userId).set(secondPlayer);
+  }
   /**
    * Join a player to a game
    */
   async joinGame(game) {
+    const user = await this.afAuth.auth.currentUser;
+    this.addPlayer(game.id, user.uid);
     this.router.navigate([`/games/${game.id}`]);
   }
 

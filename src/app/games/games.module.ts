@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     CommonModule,
     MatButtonModule,
     BoardModule,
+    AuthModule,
     MatIconModule,
     FormsModule,
     MatFormFieldModule,
