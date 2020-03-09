@@ -22,9 +22,9 @@ export class GameFormComponent implements OnInit {
 
   onSubmit() { this.submitted = true; }
 
-  public async createNewGame() {
+  public createNewGame() {
     const gameName = this.game.name;
-    const gameId = await this.gameService.createNewGame(gameName);
+    const gameId = this.gameService.createNewGame(gameName);
     this.router.navigate([`/games/${gameId}`]);
   }
 

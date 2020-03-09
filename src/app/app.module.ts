@@ -8,6 +8,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GamesModule } from './games/games.module';
 import { BoardModule } from './board/board.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AuthModule } from './auth/auth.module';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthGuard } from './auth/guard/auth.guard';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -28,12 +31,14 @@ const firebaseConfig = {
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
+    AngularFireAuthModule,
     NoopAnimationsModule,
     GamesModule,
     BoardModule,
     FlexLayoutModule,
+    AuthModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

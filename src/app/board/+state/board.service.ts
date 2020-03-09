@@ -14,15 +14,14 @@ export class BoardService {
     private db: AngularFirestore,
   ) { }
 
-
   public getGameTiles(gameId: string): Observable<Tile[]> {
     return this.db.collection('games').doc(gameId)
-    .collection('tiles', ref => ref.orderBy('id')).valueChanges();
+      .collection('tiles', ref => ref.orderBy('id')).valueChanges();
   }
 
   public getGameUnits(gameId: string): Observable<Unit[]> {
     return this.db.collection('games').doc(gameId)
-    .collection('units').valueChanges();
+      .collection('units').valueChanges();
   }
 
   public async getUnit(gameId: string, unitId: string): Promise<Unit> {
