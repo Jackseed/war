@@ -24,25 +24,6 @@ export class BoardService {
       .collection('units').valueChanges();
   }
 
-  public async getUnit(gameId: string, unitId: string): Promise<Unit> {
-    const unitSnapShot = await this.db.collection('games').doc(gameId)
-      .collection('units').doc(unitId)
-        .get().toPromise();
-    console.log(createSoldier(unitSnapShot.data()));
-    return createSoldier(unitSnapShot.data());
-  }
-
-  public getUnit$(gameId: string, unitId: string): Observable<Unit> {
-    console.log('hello');
-    console.log(gameId, unitId);
-    const unit$ = this.db.collection('games').doc(gameId)
-      .collection('units').doc(unitId).valueChanges();
-    unit$.pipe(
-      tap(unit => console.log(unit))
-    );
-    return unit$;
-  }
-
   public createUnits(gameId) {
     const id = this.db.createId();
     const quantity = 100;

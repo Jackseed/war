@@ -17,6 +17,7 @@ export interface Unit {
   stamina?: number;
   vision?: number;
   noise?: number;
+  playerId?: string;
 }
 
 export interface TileWithUnit {
@@ -57,6 +58,7 @@ export function createSoldier(params: Partial<Unit>): Unit {
     stamina: 1,
     vision: 1,
     noise: 1,
+    playerId: params.playerId,
     ...params
   };
 }

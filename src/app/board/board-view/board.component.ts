@@ -51,20 +51,4 @@ export class BoardComponent implements OnInit {
     this.boardService.createUnits(this.gameId);
   }
 
-  getUnitbyId(id: string): Observable<Unit> {
-    return this.units$.pipe(
-        map(units => units.find(unit => unit.id === id))
-    );
-  }
-
-  getUnit(id): Unit {
-    let newUnit: Unit;
-    this.boardService.getUnit(this.gameId, id)
-      .then(unit =>  {
-          newUnit = unit;
-          console.log(newUnit);
-      });
-    console.log(newUnit);
-    return newUnit;
-  }
 }
