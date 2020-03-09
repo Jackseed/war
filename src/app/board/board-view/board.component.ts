@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../+state/board.service';
-import { Tile, Unit, TileWithUnit } from '../+state/board.model';
+import { Tile, Unit } from '../+state/board.model';
 import { Observable, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/+state/auth.service';
+import { User } from 'src/app/auth/+state/user.model';
+
 
 @Component({
   selector: 'app-board',
@@ -16,13 +19,16 @@ export class BoardComponent implements OnInit {
   units$: Observable<Unit[]>;
   unit: Unit;
   tilesWithUnits$: Observable<Tile[]>;
+  user$: Observable<User>;
 
   constructor(
     private route: ActivatedRoute,
     private boardService: BoardService,
+    private afAuth: AuthService,
   ) {}
 
   ngOnInit() {
+    this.user$ = this.afAuth.user$;
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
@@ -47,8 +53,8 @@ export class BoardComponent implements OnInit {
     console.log(i);
   }
 
-  createUnits() {
-    this.boardService.createUnits(this.gameId);
+  createUnits(userId: string) {
+    this.boardService.createUnits(this.gameId, userId);
   }
 
 }

@@ -1,19 +1,21 @@
-<div *ngIf="(tilesWithUnits$ | async) as tiles">
-  <mat-grid-list cols="26" rowHeight="1:1" gutterSize="0">
-    <mat-grid-tile
-      *ngFor="let tile of tiles; let i = index;"
-      [colspan]=1
-      [rowspan]=1
-      [style.background]="tiles[i].color"
-      >
-      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;">
-        <img src="assets/img/herbe.jpg" alt="grass" fxFlexFill>
-        <div *ngIf="tile.unit">
-          {{tile.unit.type}}
-        </div>
-      </button>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+<div *ngIf="(user$ | async) as user">
+  <div *ngIf="(tilesWithUnits$ | async) as tiles">
+    <mat-grid-list cols="26" rowHeight="1:1" gutterSize="0">
+      <mat-grid-tile
+        *ngFor="let tile of tiles; let i = index;"
+        [colspan]=1
+        [rowspan]=1
+        [style.background]="tiles[i].color"
+        >
+        <button (click)="play(i)" mat-button style="width: 20px; height: 20px;">
+          <img src="assets/img/herbe.jpg" alt="grass" fxFlexFill>
+          <div *ngIf="tile.unit">
+            {{tile.unit.type}}
+          </div>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
 
-<button mat-raised-button color="primary" (click)="createUnits()">Create units</button>
+  <button mat-raised-button color="primary" (click)="createUnits(user.uid)">Create units</button>
+</div>
