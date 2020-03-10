@@ -18,9 +18,8 @@ export class BoardComponent implements OnInit {
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
   unit: Unit;
-  tilesWithUnits$: Observable<Tile[]>;
   user$: Observable<User>;
-  visibleTiles$: Observable<Tile[]>;
+  visibleTilesWithUnits$: Observable<Tile[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,29 +32,16 @@ export class BoardComponent implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
-    this.tilesWithUnits$ = combineLatest([this.tiles$, this.units$]).pipe(
-      map(([tiles, units]) =>
+    this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
+      map(([tiles, user, units]) =>
         tiles.map(tile => {
           if (tile.unitId) {
-            return {
-              ...tile,
-              unit: units.find(unit => unit.id === tile.unitId)
-            };
-          } else {
-            return tile;
-          }
-        })
-      )
-    );
-    this.tilesWithUnits$.subscribe(console.log);
-    this.visibleTiles$ = combineLatest([this.tilesWithUnits$, this.user$]).pipe(
-      map(([tiles, user]) =>
-        tiles.map(tile => {
-          if (tile.unitId) {
-            if (tile.unit.playerId === user.uid) {
+            const unit: Unit = units.find(res => res.id === tile.unitId);
+            if (unit.playerId === user.uid) {
+              console.log(user.uid);
               return {
                 ...tile,
-                visible: true,
+                unit,
               };
             } else {
               return tile;
@@ -66,7 +52,7 @@ export class BoardComponent implements OnInit {
         })
       )
     );
-    this.visibleTiles$.subscribe(console.log);
+    this.visibleTilesWithUnits$.subscribe(console.log);
   }
 
 
