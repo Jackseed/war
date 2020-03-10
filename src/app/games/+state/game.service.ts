@@ -5,7 +5,9 @@ import { Game, createGame, createPlayer, Player } from './game.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable()
+
 export class GameService {
+  public boardSize = 3;
 
   constructor(
     private db: AngularFirestore,
@@ -23,9 +25,9 @@ export class GameService {
     // Create the game
     this.db.collection('games').doc(id).set({id, name});
     // Create the tiles:
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        const tileId = j + 3 * i;
+    for (let i = 0; i < this.boardSize; i++) {
+      for (let j = 0; j < this.boardSize; j++) {
+        const tileId = j + this.boardSize * i;
         this.db.collection('games').doc(id)
           .collection('tiles').doc(tileId.toString()).set({
             x: j,
