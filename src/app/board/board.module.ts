@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BoardComponent } from './board-view/board.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     MatGridListModule,
     MatButtonModule,
+    FlexLayoutModule,
   ]
 })
 export class BoardModule { }

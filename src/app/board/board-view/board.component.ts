@@ -20,6 +20,7 @@ export class BoardComponent implements OnInit {
   unit: Unit;
   tilesWithUnits$: Observable<Tile[]>;
   user$: Observable<User>;
+  visibleTiles$: Observable<Tile[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,7 +48,27 @@ export class BoardComponent implements OnInit {
       )
     );
     this.tilesWithUnits$.subscribe(console.log);
+    this.visibleTiles$ = combineLatest([this.tilesWithUnits$, this.user$]).pipe(
+      map(([tiles, user]) =>
+        tiles.map(tile => {
+          if (tile.unitId) {
+            if (tile.unit.playerId === user.uid) {
+              return {
+                ...tile,
+                visible: true,
+              };
+            } else {
+              return tile;
+            }
+          } else {
+            return tile;
+          }
+        })
+      )
+    );
+    this.visibleTiles$.subscribe(console.log);
   }
+
 
   play(i) {
     console.log(i);

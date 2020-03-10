@@ -23,15 +23,16 @@ export class GameService {
     // Create the game
     this.db.collection('games').doc(id).set({id, name});
     // Create the tiles:
-    for (let i = 0; i < 26; i++) {
-      for (let j = 0; j < 26; j++) {
-        const tileId = j + 26 * i;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const tileId = j + 3 * i;
         this.db.collection('games').doc(id)
           .collection('tiles').doc(tileId.toString()).set({
             x: j,
             y: i,
             color: 'grey',
             id: tileId,
+            visible: false,
         });
       }
     }

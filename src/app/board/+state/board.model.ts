@@ -5,6 +5,7 @@ export interface Tile {
   y?: number;
   unitId?: string;
   unit?: Unit;
+  visible?: boolean;
 }
 
 export interface Unit {
@@ -44,6 +45,7 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     y: params.y,
     unitId: params.unitId,
     unit: params.unit,
+    visible: params.visible,
     ...params
   };
 }
