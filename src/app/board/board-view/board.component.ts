@@ -89,7 +89,7 @@ export class BoardComponent implements OnInit {
         map(tiles =>
           tiles.map(tile => {
             if (tile.unit && (tile.unit.tileId === i) && (tile.unit.playerId === user.uid)) {
-              this.switchAdjacentTilesParameter(tiles, tile, 'move', 0, tile.unit.move);
+              this.switchAdjacentTilesParameter(tiles, tile, 'move', -tile.unit.move, tile.unit.move);
               return tile;
             }
             return tile;
@@ -106,6 +106,7 @@ export class BoardComponent implements OnInit {
       for (let y = start; y <= end; y++) {
         const X = tile.x + x;
         const Y = tile.y + y;
+        // verifies that the tile is inside the board
         if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
           const id = X + this.boardSize * Y;
           if (parameter === 'visibility') {

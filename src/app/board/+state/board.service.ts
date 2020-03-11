@@ -44,6 +44,7 @@ export class BoardService {
       id,
       quantity,
       playerId: userId,
+      isSelected: false,
     });
     this.db.collection('games').doc(gameId)
       .collection('units').doc(id).set(soldier);
