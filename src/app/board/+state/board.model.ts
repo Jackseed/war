@@ -6,6 +6,7 @@ export interface Tile {
   unitId?: string;
   unit?: Unit;
   visible?: boolean;
+  isSelected?: boolean;
 }
 
 export interface Unit {
@@ -34,6 +35,7 @@ export interface TileWithUnit {
   stamina?: number;
   vision?: number;
   noise?: number;
+  isSelected?: boolean;
 }
 
 /** A factory function that creates Tiles */
@@ -46,6 +48,7 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     unitId: params.unitId,
     unit: params.unit,
     visible: params.visible,
+    isSelected: params.isSelected,
     ...params
   };
 }

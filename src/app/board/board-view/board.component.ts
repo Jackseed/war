@@ -18,7 +18,6 @@ export class BoardComponent implements OnInit {
   gameId: string;
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
-  unit: Unit;
   user$: Observable<User>;
   visibleTilesWithUnits$: Observable<Tile[]>;
   boardSize: number;
@@ -33,7 +32,6 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.boardSize = this.gameService.boardSize;
     this.user$ = this.afAuth.user$;
-    this.user$.subscribe(console.log);
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
@@ -53,7 +51,6 @@ export class BoardComponent implements OnInit {
                       ...tiles[id],
                       visible: true,
                     };
-                    console.log('X:', X, 'Y:', Y, 'tile ', id, ': ', tiles[id]);
                   }
                 }
               }
@@ -81,8 +78,22 @@ export class BoardComponent implements OnInit {
     this.visibleTilesWithUnits$.subscribe(console.log);
   }
 
-  play(i) {
-    console.log(i);
+  play(i: number) {
+    this.visibleTilesWithUnits$ = this.visibleTilesWithUnits$.pipe(
+      map(tiles =>
+        tiles.map(tile => {
+          if (tile.id === i) {
+            return {
+              ...tile,
+              isSelected: true,
+            };
+          } else {
+            return tile;
+          }
+        })
+      )
+    );
+    this.visibleTilesWithUnits$.subscribe(console.log);
   }
 
   createUnits(userId: string) {
