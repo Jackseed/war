@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, first } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -30,6 +30,10 @@ export class AuthService {
       }
     })
   );
+  }
+
+  public getUser(): Promise<User> {
+    return this.afAuth.authState.pipe(first()).toPromise();
   }
 
 

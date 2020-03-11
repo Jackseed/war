@@ -6,7 +6,6 @@ export interface Tile {
   unitId?: string;
   unit?: Unit;
   visible?: boolean;
-  isSelected?: boolean;
   possibleMove?: boolean;
 }
 
@@ -21,6 +20,7 @@ export interface Unit {
   vision?: number;
   noise?: number;
   playerId?: string;
+  isSelected?: boolean;
 }
 
 export interface TileWithUnit {
@@ -50,7 +50,6 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     unitId: params.unitId,
     unit: params.unit,
     visible: params.visible,
-    isSelected: params.isSelected,
     possibleMove: params.possibleMove,
     ...params
   };
@@ -67,6 +66,7 @@ export function createSoldier(params: Partial<Unit>): Unit {
     vision: 1,
     noise: 1,
     playerId: params.playerId,
+    isSelected: params.isSelected,
     ...params
   };
 }

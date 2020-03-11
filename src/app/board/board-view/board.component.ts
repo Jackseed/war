@@ -25,13 +25,13 @@ export class BoardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private boardService: BoardService,
-    private afAuth: AuthService,
+    private authService: AuthService,
     private gameService: GameService,
   ) {}
 
   ngOnInit() {
     this.boardSize = this.gameService.boardSize;
-    this.user$ = this.afAuth.user$;
+    this.user$ = this.authService.user$;
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
@@ -54,40 +54,51 @@ export class BoardComponent implements OnInit {
                   ...tile,
                   unit,
                 };
-              } else {
-                return tile;
               }
             }
-          } else {
-            return tile;
           }
+          return tile;
         })
       )
     );
     this.visibleTilesWithUnits$.subscribe(console.log);
   }
 
-  play(i: number) {
-    this.visibleTilesWithUnits$ = combineLatest([this.visibleTilesWithUnits$, this.user$]).pipe(
-      map(([tiles, user]) =>
-        tiles.map(tile => {
-          if (tile.id === i) {
-            if (tile.unit && (tile.unit.playerId === user.uid)) {
-              this.switchAdjacentTilesParameter(tiles, tile, 'move', 0, tile.unit.move);
-              return {
-                ...tile,
-                isSelected: true,
-              };
-            } else {
-              return tile;
-            }
+  async play(i: number) {
+    const user = await this.authService.getUser();
+    const selectedUnit$: Observable<Unit> | undefined = this.units$.pipe(
+      map(units => units.find(unit => unit.isSelected === true)));
+    // If a unit was clicked and belongs to player, turns it selected
+    this.units$ = this.units$.pipe(
+      map(units =>
+        units.map(unit => {
+          if ((unit.tileId === i) && (unit.playerId === user.uid)) {
+            return {
+              ...unit,
+              isSelected: true,
+            };
           } else {
-            return tile;
+            return unit;
           }
         })
       )
     );
+    // If a unit was selected, turns adjacent tiles to possible moves
+    if (selectedUnit$) {
+      this.visibleTilesWithUnits$ = this.visibleTilesWithUnits$.pipe(
+        map(tiles =>
+          tiles.map(tile => {
+            if (tile.unit && (tile.unit.tileId === i) && (tile.unit.playerId === user.uid)) {
+              this.switchAdjacentTilesParameter(tiles, tile, 'move', 0, tile.unit.move);
+              return tile;
+            }
+            return tile;
+          })
+        )
+      );
+    }
     this.visibleTilesWithUnits$.subscribe(console.log);
+    this.units$.subscribe(console.log);
   }
 
   switchAdjacentTilesParameter(tiles: Tile[], tile: Tile, parameter: 'visibility' | 'move', start: number, end: number) {
