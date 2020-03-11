@@ -22,9 +22,13 @@ img {
   -webkit-filter: drop-shadow(5px 5px 5px #222);
   filter: drop-shadow(5px 5px 5px #222);
 }
-.visible {
+.invisible {
   filter: grayscale(1);
 }
 .selected {
-  filter: brightness(200%);
+  filter: brightness(150%);
+}
+.possibleMove {
+  filter: brightness(125%);
+  filter: hue-rotate(90deg)
 }

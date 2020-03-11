@@ -7,6 +7,7 @@ export interface Tile {
   unit?: Unit;
   visible?: boolean;
   isSelected?: boolean;
+  possibleMove?: boolean;
 }
 
 export interface Unit {
@@ -36,6 +37,7 @@ export interface TileWithUnit {
   vision?: number;
   noise?: number;
   isSelected?: boolean;
+  possibleMove?: boolean;
 }
 
 /** A factory function that creates Tiles */
@@ -49,6 +51,7 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     unit: params.unit,
     visible: params.visible,
     isSelected: params.isSelected,
+    possibleMove: params.possibleMove,
     ...params
   };
 }

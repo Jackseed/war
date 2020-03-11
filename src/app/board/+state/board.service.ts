@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
 import { createSoldier, Unit, Tile } from './board.model';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Player, createPlayer } from 'src/app/games/+state/game.model';
 
 

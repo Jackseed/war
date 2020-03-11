@@ -35,25 +35,14 @@ export class BoardComponent implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.tiles$ = this.boardService.getGameTiles(this.gameId);
     this.units$ = this.boardService.getGameUnits(this.gameId);
+    // TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
         tiles.map(tile => {
           if (tile.unitId) {
             const unit: Unit = units.find(res => res.id === tile.unitId);
             if (unit.playerId === user.uid) {
-              for (let x = -unit.vision; x <= unit.vision; x++) {
-                for (let y = -unit.vision; y <= unit.vision; y++) {
-                  const X = tile.x + x;
-                  const Y = tile.y + y;
-                  if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
-                    const id = X + this.boardSize * Y;
-                    tiles[id] = {
-                      ...tiles[id],
-                      visible: true,
-                    };
-                  }
-                }
-              }
+              this.switchAdjacentTilesParameter(tiles, tile, 'visibility', -unit.vision, unit.vision);
               return {
                 ...tile,
                 visible: true,
@@ -79,14 +68,19 @@ export class BoardComponent implements OnInit {
   }
 
   play(i: number) {
-    this.visibleTilesWithUnits$ = this.visibleTilesWithUnits$.pipe(
-      map(tiles =>
+    this.visibleTilesWithUnits$ = combineLatest([this.visibleTilesWithUnits$, this.user$]).pipe(
+      map(([tiles, user]) =>
         tiles.map(tile => {
           if (tile.id === i) {
-            return {
-              ...tile,
-              isSelected: true,
-            };
+            if (tile.unit && (tile.unit.playerId === user.uid)) {
+              this.switchAdjacentTilesParameter(tiles, tile, 'move', 0, tile.unit.move);
+              return {
+                ...tile,
+                isSelected: true,
+              };
+            } else {
+              return tile;
+            }
           } else {
             return tile;
           }
@@ -94,6 +88,31 @@ export class BoardComponent implements OnInit {
       )
     );
     this.visibleTilesWithUnits$.subscribe(console.log);
+  }
+
+  switchAdjacentTilesParameter(tiles: Tile[], tile: Tile, parameter: 'visibility' | 'move', start: number, end: number) {
+    for (let x = start; x <= end; x++) {
+      for (let y = start; y <= end; y++) {
+        const X = tile.x + x;
+        const Y = tile.y + y;
+        if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
+          const id = X + this.boardSize * Y;
+          if (parameter === 'visibility') {
+            tiles[id] = {
+              ...tiles[id],
+              visible: true,
+            };
+          }
+          if (parameter === 'move') {
+            tiles[id] = {
+              ...tiles[id],
+              possibleMove: true,
+            };
+          }
+        }
+      }
+    }
+    return tiles;
   }
 
   createUnits(userId: string) {
