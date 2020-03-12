@@ -11,6 +11,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthModule } from './auth/auth.module';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthGuard } from './auth/guard/auth.guard';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { environment } from '../environments/environment';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -36,7 +38,8 @@ const firebaseConfig = {
     GamesModule,
     BoardModule,
     FlexLayoutModule,
-    AuthModule
+    AuthModule,
+    environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
