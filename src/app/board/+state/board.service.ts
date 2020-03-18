@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
-import { createSoldier, Unit, Tile } from './board.model';
+import { Tile } from '../tile/+state';
+import { createSoldier, Unit } from '../unit/+state/unit.model';
 import { Observable } from 'rxjs';
-import { Player, createPlayer } from 'src/app/games/+state/game.model';
-
 
 @Injectable({
   providedIn: 'root'
@@ -22,19 +21,6 @@ export class BoardService {
   public getGameUnits(gameId: string): Observable<Unit[]> {
     return this.db.collection('games').doc(gameId)
       .collection('units').valueChanges();
-  }
-
-  /**
-   * Get player from a game with userId
-   */
-  public async getPlayer(gameId: string, userId: string): Promise<Player> {
-    let player: Player = {};
-    await this.db.collection('games').doc(gameId)
-      .collection('players').doc(userId)
-        .get().toPromise().then(doc => {
-          player = createPlayer(doc.data());
-        });
-    return player;
   }
 
   public createUnits(gameId: string, userId: string) {

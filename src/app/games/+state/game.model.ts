@@ -1,4 +1,4 @@
-import { Tile } from 'src/app/tile/+state';
+import { Tile } from 'src/app/board/tile/+state';
 
 export interface Game {
   id?: string | number;

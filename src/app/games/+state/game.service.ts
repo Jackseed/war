@@ -69,6 +69,7 @@ export class GameService {
   async joinGame(game) {
     const user = await this.afAuth.auth.currentUser;
     this.addPlayer(game.id, user.uid);
+    this.store.setActive(game.id);
     this.router.navigate([`/games/${game.id}`]);
   }
 
