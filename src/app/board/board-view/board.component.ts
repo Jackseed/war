@@ -1,15 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BoardService } from '../+state/board.service';
-import { Unit } from '../unit/+state/unit.model';
-import { Tile } from '../tile/+state/tile.model';
 import { Observable, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/+state/auth.service';
-import { User } from 'src/app/auth/+state/user.model';
+import { User, AuthService } from 'src/app/auth/+state';
 import { GameService } from 'src/app/games/+state/game.service';
-import { TileQuery, TileService } from '../tile/+state';
+import { Tile, TileQuery, TileService } from '../tile/+state';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Unit, UnitQuery, UnitService } from '../unit/+state';
 
 
 @Component({
@@ -20,7 +18,7 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 export class BoardComponent implements OnInit, OnDestroy {
   gameId: string;
   tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
-  units$: Observable<Unit[]>;
+  units$: Observable<Unit[]> = this.unitQuery.selectAll();
   user$: Observable<User>;
   visibleTilesWithUnits$: Observable<Tile[]>;
   boardSize: number;
@@ -32,12 +30,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
+    private unitQuery: UnitQuery,
+    private unitService: UnitService,
   ) {}
 
   ngOnInit() {
-    this.tileService.connect().pipe(
-      untilDestroyed(this)
-    ).subscribe(console.log);
+    this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
+    this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
     this.boardSize = this.gameService.boardSize;
     this.user$ = this.authService.user$;
     this.gameId = this.route.snapshot.paramMap.get('id');
