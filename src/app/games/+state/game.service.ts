@@ -1,19 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { GameStore, GameState } from './game.store';
+import { syncCollection } from '../../syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Game, createGame, createPlayer, Player } from './game.model';
+import { Player, createPlayer } from './game.model';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 
 export class GameService {
+  private collection = this.db.collection('games');
   public boardSize = 3;
 
   constructor(
+    private store: GameStore,
     private db: AngularFirestore,
     private router: Router,
     private afAuth: AngularFireAuth,
-  ) { }
+  ) {
+  }
+
+  connect() {
+    return syncCollection(this.collection, this.store);
+  }
 
   createNewGame(name: string) {
     const id = this.db.createId();
@@ -23,12 +32,12 @@ export class GameService {
       isActive: true,
     });
     // Create the game
-    this.db.collection('games').doc(id).set({id, name});
+    this.collection.doc(id).set({id, name});
     // Create the tiles:
     for (let i = 0; i < this.boardSize; i++) {
       for (let j = 0; j < this.boardSize; j++) {
         const tileId = j + this.boardSize * i;
-        this.db.collection('games').doc(id)
+        this.collection.doc(id)
           .collection('tiles').doc(tileId.toString()).set({
             x: j,
             y: i,
@@ -39,28 +48,10 @@ export class GameService {
       }
     }
     // Create first player:
-    this.db.collection('games').doc(id)
+    this.collection.doc(id)
       .collection('players').doc(user.uid).set(firstPlayer);
 
     return id;
-  }
-
-  /**
-   * Get the game list
-   */
-  getGames() {
-    return this.db.collection('games').valueChanges();
-  }
-
-  /**
-   * Get a game by id
-   */
-
-  public async getGame(id: string): Promise<Game> {
-    const gameSnapShot = await this.db
-    .collection('games').doc(id)
-      .get().toPromise();
-    return createGame(gameSnapShot.data());
   }
   /**
    * Add a player to the game
@@ -69,7 +60,7 @@ export class GameService {
     const secondPlayer: Player = createPlayer({
       userId,
     });
-    return this.db.collection('games').doc(gameId)
+    return this.collection.doc(gameId)
       .collection('players').doc(userId).set(secondPlayer);
   }
   /**

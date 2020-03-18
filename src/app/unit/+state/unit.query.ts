@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
-import { TileStore, TileState } from './tile.store';
+import { UnitStore, UnitState } from './unit.store';
 
 @Injectable({ providedIn: 'root' })
-export class TileQuery extends QueryEntity<TileState> {
+export class UnitQuery extends QueryEntity<UnitState> {
 
-  constructor(protected store: TileStore) {
+  constructor(protected store: UnitStore) {
     super(store);
   }
 

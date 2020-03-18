@@ -13,6 +13,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
+import { TilesModule } from './tile/tiles.module';
+import { UnitsModule } from './unit/units.module';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -37,6 +39,8 @@ const firebaseConfig = {
     NoopAnimationsModule,
     GamesModule,
     BoardModule,
+    UnitsModule,
+    TilesModule,
     FlexLayoutModule,
     AuthModule,
     environment.production ? [] : AkitaNgDevtools.forRoot()
