@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BoardService } from '../+state/board.service';
 import { Observable, combineLatest } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { User, AuthService } from 'src/app/auth/+state';
-import { GameService } from 'src/app/games/+state/game.service';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
+import { GameQuery, GameService } from 'src/app/games/+state';
 
 
 @Component({
@@ -16,7 +14,7 @@ import { Unit, UnitQuery, UnitService } from '../unit/+state';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit, OnDestroy {
-  gameId: string;
+  gameId: string = this.gameQuery.getActiveId();
   tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
   units$: Observable<Unit[]> = this.unitQuery.selectAll();
   user$: Observable<User>;
@@ -24,14 +22,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   boardSize: number;
 
   constructor(
-    private route: ActivatedRoute,
-    private boardService: BoardService,
     private authService: AuthService,
     private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
+    private gameQuery: GameQuery,
   ) {}
 
   ngOnInit() {
@@ -39,8 +36,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
     this.boardSize = this.gameService.boardSize;
     this.user$ = this.authService.user$;
-    this.gameId = this.route.snapshot.paramMap.get('id');
-    this.units$ = this.boardService.getGameUnits(this.gameId);
     // TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
@@ -134,7 +129,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createUnits(userId: string) {
-    this.boardService.createUnits(this.gameId, userId);
+    this.unitService.createUnits(this.gameId, userId);
   }
 
   ngOnDestroy() {
