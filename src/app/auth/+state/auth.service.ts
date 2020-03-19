@@ -3,16 +3,12 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { AuthStore, User } from '.';
 import { GameQuery } from 'src/app/games/+state';
 import { syncCollection } from 'src/app/syncCollection';
-import { Observable, of } from 'rxjs';
-import { switchMap, first } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private gameId = this.gameQuery.getActiveId();
-  private collection = this.db.collection('games').doc(this.gameId).collection('players');
-  user$: Observable<any>;
+  private collection = this.db.collection('users');
 
   constructor(
     private db: AngularFirestore,
@@ -21,27 +17,10 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router
-  ) {
-  // Get the auth state, then fetch the Firestore user document or return null
-  this.user$ = this.afAuth.authState.pipe(
-    switchMap(user => {
-      // Logged in
-      if (user) {
-        return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-      } else {
-        // Logged out
-        return of(null);
-      }
-    })
-  );
-  }
+  ) {}
 
   connect() {
     return syncCollection(this.collection, this.store);
-  }
-
-  public getUser(): Promise<any> {
-    return this.afAuth.authState.pipe(first()).toPromise();
   }
 
   async anonymousLogin() {

@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { User, AuthService } from 'src/app/auth/+state';
+import { User, AuthService, AuthQuery } from 'src/app/auth/+state';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameQuery, GameService } from 'src/app/games/+state';
+import { GameQuery } from 'src/app/games/+state';
+import { PlayerService, PlayerQuery, Player } from '../player/state';
 
 
 @Component({
@@ -17,25 +18,30 @@ export class BoardComponent implements OnInit, OnDestroy {
   gameId: string = this.gameQuery.getActiveId();
   tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
   units$: Observable<Unit[]> = this.unitQuery.selectAll();
-  user$: Observable<User> = this.authService.user$;
+  players$: Observable<Player[]> = this.playerQuery.selectAll();
+  playerId: string = this.playerQuery.getActiveId();
+  user$: Observable<User> = this.authQuery.user$;
   visibleTilesWithUnits$: Observable<Tile[]>;
-  boardSize: number;
+  boardSize: number = this.tileService.boardSize;
 
   constructor(
     private authService: AuthService,
-    private gameService: GameService,
+    private authQuery: AuthQuery,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
     private gameQuery: GameQuery,
+    private playerService: PlayerService,
+    private playerQuery: PlayerQuery,
   ) {}
 
   ngOnInit() {
+    this.authService.connect().pipe(untilDestroyed(this)).subscribe(console.log);
+    this.playerService.connect().pipe(untilDestroyed(this)).subscribe(console.log);
     this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
     this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
-    this.boardSize = this.gameService.boardSize;
-    // TODO: remove unitId from tiles, observable loading problem
+    /* TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
         tiles.map(tile => {
@@ -62,8 +68,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
     );
     this.visibleTilesWithUnits$.subscribe(console.log);
+    */
   }
 
+  /*
   async play(i: number) {
     const user = await this.authService.getUser();
     const selectedUnit$: Observable<Unit> | undefined = this.units$.pipe(
@@ -100,6 +108,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleTilesWithUnits$.subscribe(console.log);
     this.units$.subscribe(console.log);
   }
+  */
 
   switchAdjacentTilesParameter(tiles: Tile[], tile: Tile, parameter: 'visibility' | 'move', start: number, end: number) {
     for (let x = start; x <= end; x++) {
