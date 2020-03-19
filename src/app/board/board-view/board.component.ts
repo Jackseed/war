@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { BoardService } from '../+state/board.service';
-import { Tile, Unit } from '../+state/board.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/+state/auth.service';
-import { User } from 'src/app/auth/+state/user.model';
-import { GameService } from 'src/app/games/+state/game.service';
+import { User, AuthService } from 'src/app/auth/+state';
+import { Tile, TileQuery, TileService } from '../tile/+state';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Unit, UnitQuery, UnitService } from '../unit/+state';
+import { GameQuery, GameService } from 'src/app/games/+state';
 
 
 @Component({
@@ -14,27 +13,29 @@ import { GameService } from 'src/app/games/+state/game.service';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
-  gameId: string;
-  tiles$: Observable<Tile[]>;
-  units$: Observable<Unit[]>;
+export class BoardComponent implements OnInit, OnDestroy {
+  gameId: string = this.gameQuery.getActiveId();
+  tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
+  units$: Observable<Unit[]> = this.unitQuery.selectAll();
   user$: Observable<User>;
   visibleTilesWithUnits$: Observable<Tile[]>;
   boardSize: number;
 
   constructor(
-    private route: ActivatedRoute,
-    private boardService: BoardService,
     private authService: AuthService,
     private gameService: GameService,
+    private tileQuery: TileQuery,
+    private tileService: TileService,
+    private unitQuery: UnitQuery,
+    private unitService: UnitService,
+    private gameQuery: GameQuery,
   ) {}
 
   ngOnInit() {
+    this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
+    this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
     this.boardSize = this.gameService.boardSize;
     this.user$ = this.authService.user$;
-    this.gameId = this.route.snapshot.paramMap.get('id');
-    this.tiles$ = this.boardService.getGameTiles(this.gameId);
-    this.units$ = this.boardService.getGameUnits(this.gameId);
     // TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
@@ -128,7 +129,10 @@ export class BoardComponent implements OnInit {
   }
 
   createUnits(userId: string) {
-    this.boardService.createUnits(this.gameId, userId);
+    this.unitService.createUnits(this.gameId, userId);
+  }
+
+  ngOnDestroy() {
   }
 
 }

@@ -1,7 +1,7 @@
-import { Tile } from '../../board/+state/board.model';
+import { Tile } from 'src/app/board/tile/+state';
 
 export interface Game {
-  id?: string;
+  id?: string | number;
   name?: string;
   tiles?: Tile[];
   players?: Player[];
@@ -11,7 +11,6 @@ export interface Player {
   userId?: string;
   isActive?: boolean;
 }
-
 
 /** A factory function that creates Game */
 export function createGame(params: Partial<Game> = {}): Game {
@@ -30,4 +29,3 @@ export function createPlayer(params: Partial<Player> = {}): Player {
     ...params
   };
 }
-

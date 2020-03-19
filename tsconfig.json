@@ -2,6 +2,17 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@war/game": [
+        "games/+state/index.ts"
+      ],
+      "@war/unit": [
+        "unit/+state/index.ts"
+      ],
+      "@war/tile": [
+        "tile/+state/index.ts"
+      ],
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
