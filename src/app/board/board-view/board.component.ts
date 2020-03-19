@@ -127,8 +127,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     return tiles;
   }
 
-  createUnits(userId: string) {
-    this.unitService.createUnits(this.gameId, userId);
+  createUnits() {
+    this.unitService.createUnits();
   }
 
   ngOnDestroy() {

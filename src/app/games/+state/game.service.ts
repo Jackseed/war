@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameStore, GameState } from './game.store';
+import { GameStore } from './game.store';
 import { syncCollection } from '../../syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Player, createPlayer } from './game.model';
