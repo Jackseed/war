@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { User, AuthService } from 'src/app/auth/+state';
 import { Tile, TileQuery, TileService } from '../tile/+state';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { GameQuery, GameService } from 'src/app/games/+state';
 
@@ -17,7 +17,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   gameId: string = this.gameQuery.getActiveId();
   tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
   units$: Observable<Unit[]> = this.unitQuery.selectAll();
-  user$: Observable<User>;
+  user$: Observable<User> = this.authService.user$;
   visibleTilesWithUnits$: Observable<Tile[]>;
   boardSize: number;
 
@@ -35,7 +35,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
     this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
     this.boardSize = this.gameService.boardSize;
-    this.user$ = this.authService.user$;
     // TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
