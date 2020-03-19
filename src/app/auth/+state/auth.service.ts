@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { AuthStore, User } from '.';
-import { GameQuery } from 'src/app/games/+state';
+import { AuthStore } from './auth.store';
+import { User } from './auth.model';
+import { GameQuery } from 'src/app/games/+state/game.query';
 import { syncCollection } from 'src/app/syncCollection';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -26,6 +27,8 @@ export class AuthService {
   async anonymousLogin() {
     const credential = await this.afAuth.auth.signInAnonymously();
     this.router.navigate(['/games']);
+    console.log('you are logged in');
+    this.store.setActive(credential.user.uid);
     return this.updateUserData(credential.user);
   }
 

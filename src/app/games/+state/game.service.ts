@@ -28,8 +28,9 @@ export class GameService {
     const id = this.db.createId();
     // Create the game
     this.collection.doc(id).set({id, name});
+    this.store.setActive(id);
     this.tileService.createTiles(id);
-    this.playerService.addPlayer(true);
+    this.playerService.addPlayer(id, true);
     return id;
   }
 
@@ -37,7 +38,7 @@ export class GameService {
    * Join a player to a game
    */
   async joinGame(game) {
-    this.playerService.addPlayer(false);
+    this.playerService.addPlayer(game.id, false);
     this.store.setActive(game.id);
     this.router.navigate([`/games/${game.id}`]);
   }

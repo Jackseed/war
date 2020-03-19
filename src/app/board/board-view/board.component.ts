@@ -37,8 +37,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.authService.connect().pipe(untilDestroyed(this)).subscribe(console.log);
-    this.playerService.connect().pipe(untilDestroyed(this)).subscribe(console.log);
+    this.playerService.connect().pipe(untilDestroyed(this)).subscribe();
     this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
     this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
     /* TODO: remove unitId from tiles, observable loading problem
