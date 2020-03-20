@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { User } from 'src/app/auth/+state';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { GameService, GameQuery, GameStore } from 'src/app/games/+state';
@@ -24,7 +23,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   playerId: string = this.playerQuery.getActiveId();
   player: Player = this.playerQuery.getActive();
   visibleTilesWithUnits$: Observable<Tile[]>;
-
 
   constructor(
     private afAuth: AngularFireAuth,
