@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameStore } from './game.store';
 import { syncCollection } from '../../syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { PlayerService } from 'src/app/board/player/+state';
-import { TileService } from 'src/app/board/tile/+state';
+import { PlayerStore } from 'src/app/board/player/+state';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
@@ -18,6 +17,7 @@ export class GameService {
     private db: AngularFirestore,
     private afAuth: AngularFireAuth,
     private router: Router,
+    private playerStore: PlayerStore,
   ) {
   }
 
@@ -27,11 +27,12 @@ export class GameService {
 
   createNewGame(name: string) {
     const id = this.db.createId();
+    const user = this.afAuth.auth.currentUser;
     // Create the game
     this.collection.doc(id).set({id, name});
     this.store.setActive(id);
     this.createTiles(id);
-    this.addPlayer(id, true);
+    this.addPlayer(id, user.uid, true);
     return id;
   }
 
@@ -54,22 +55,23 @@ export class GameService {
   /**
    * Add a player to the game
    */
-  addPlayer(gameId: string, isActive: boolean) {
-    const user = this.afAuth.auth.currentUser;
-    console.log(user.uid);
+  addPlayer(gameId: string, userId, isActive: boolean) {
+    console.log(userId);
     const collection = this.db.collection('games').doc(gameId).collection('players');
-    collection.doc(user.uid).set({
-      userId: user.uid,
+    collection.doc(userId).set({
+      userId,
       isActive,
     });
-    this.store.setActive(user.uid);
+    this.playerStore.setActive(userId);
   }
 
   /**
    * Join a player to a game
    */
   async joinGame(game) {
-    this.addPlayer(game.id, false);
+    const user = this.afAuth.auth.currentUser;
+    this.addPlayer(game.id, user.uid, false);
+    this.playerStore.setActive(user.uid);
     this.router.navigate([`/games/${game.id}`]);
   }
 

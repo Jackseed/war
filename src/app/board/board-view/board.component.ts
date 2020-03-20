@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { User, AuthQuery } from 'src/app/auth/+state';
+import { User } from 'src/app/auth/+state';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService } from 'src/app/games/+state';
-import { PlayerService, PlayerQuery, Player } from '../player/+state';
+import { GameService, GameQuery, GameStore } from 'src/app/games/+state';
+import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
 import { ActivatedRoute } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 @Component({
@@ -15,32 +16,37 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit, OnDestroy {
-  gameId: string;
+  gameId: string = this.gameQuery.getActiveId();
+  boardSize: number = this.gameService.boardSize;
   tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
   units$: Observable<Unit[]> = this.unitQuery.selectAll();
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   playerId: string = this.playerQuery.getActiveId();
-  user$: Observable<User> = this.authQuery.user$;
+  player: Player = this.playerQuery.getActive();
   visibleTilesWithUnits$: Observable<Tile[]>;
-  boardSize: number = this.gameService.boardSize;
+
 
   constructor(
+    private afAuth: AngularFireAuth,
+    private route: ActivatedRoute,
+    private gameStore: GameStore,
+    private gameQuery: GameQuery,
     private gameService: GameService,
-    private authQuery: AuthQuery,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
+    private playerStore: PlayerStore,
     private playerService: PlayerService,
     private playerQuery: PlayerQuery,
-    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
-    this.gameId = this.route.snapshot.paramMap.get('id');
+    this.gameStore.setActive(this.route.snapshot.paramMap.get('id'));
+    this.playerStore.setActive(this.afAuth.auth.currentUser.uid);
     this.playerService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-    this.tileService.connect().pipe(untilDestroyed(this)).subscribe();
-    this.unitService.connect().pipe(untilDestroyed(this)).subscribe();
+    this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
+    this.unitService.connect(this.gameId, this.playerId).pipe(untilDestroyed(this)).subscribe();
     /* TODO: remove unitId from tiles, observable loading problem
     this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
       map(([tiles, user, units]) =>
@@ -137,7 +143,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createUnits() {
-    this.unitService.createUnits();
+    this.unitService.createUnits(this.gameId, this.playerId);
   }
 
   ngOnDestroy() {

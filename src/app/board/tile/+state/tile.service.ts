@@ -16,8 +16,7 @@ export class TileService {
   ) {
   }
 
-  connect() {
-    const gameId = this.gameQuery.getActiveId();
+  connect(gameId) {
     const collection = this.db.collection('games').doc(gameId).collection('tiles');
     return syncCollection(collection, this.store);
   }
