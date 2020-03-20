@@ -7,8 +7,7 @@ import { GameQuery } from 'src/app/games/+state';
 @Injectable({ providedIn: 'root' })
 
 export class TileService {
-  private gameId = this.gameQuery.getActiveId();
-  private collection = this.db.collection('games').doc(this.gameId).collection('tiles');
+
 
   constructor(
     private store: TileStore,
@@ -17,8 +16,10 @@ export class TileService {
   ) {
   }
 
-  connect() {
-    return syncCollection(this.collection, this.store);
+  connect(gameId) {
+    const collection = this.db.collection('games').doc(gameId).collection('tiles');
+    return syncCollection(collection, this.store);
   }
+
 
 }

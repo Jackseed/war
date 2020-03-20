@@ -17,9 +17,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.gameService.connect().pipe(
-      untilDestroyed(this)
-    ).subscribe(console.log);
+    this.gameService.connect().pipe(untilDestroyed(this)).subscribe();
   }
 
   joinGame(game) {
