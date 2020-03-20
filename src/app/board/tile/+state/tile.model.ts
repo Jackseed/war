@@ -1,7 +1,7 @@
 import { Unit } from '../../unit/+state/unit.model';
 
 export interface Tile {
-  id?: number | number;
+  id?: string | number;
   color?: string;
   x?: number;
   y?: number;
@@ -9,6 +9,11 @@ export interface Tile {
   unit?: Unit;
   visible?: boolean;
   possibleMove?: boolean;
+}
+
+export interface TileUI {
+  isVisible?: boolean;
+  isReachable?: boolean;
 }
 
 /** A factory function that creates Tiles */

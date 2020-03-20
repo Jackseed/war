@@ -7,7 +7,7 @@
       [style.background]="tiles[i].color"
       >
       <div class="container">
-        <button mat-button style="width: 100%; height: 100%;">
+        <button (click)="playTest(i)" mat-button style="width: 100%; height: 100%;">
           <div class="imageOne tileElement">
             <img src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.visible, 'possibleMove': tile.possibleMove}">
           </div>

@@ -80,6 +80,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     */
   }
 
+  playTest(i: number) {
+    this.tileService.markAsVisible(i);
+    this.tileService.markAsReachable(i);
+  }
   /*
   async play(i: number) {
     const user = await this.authService.getUser();
