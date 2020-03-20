@@ -5,12 +5,15 @@ export interface Tile {
   color?: string;
   x?: number;
   y?: number;
+  isVisible?: boolean;
+  isReachable?: boolean;
+  unit?: Unit;
 }
 
 export interface TileUI {
   isVisible?: boolean;
   isReachable?: boolean;
-  unit: Unit;
+  unit?: Unit;
 }
 
 /** A factory function that creates Tiles */

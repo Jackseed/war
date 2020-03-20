@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
@@ -50,6 +50,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log('not signed in');
       }
     });
+    // Adds units to tiles UI
     this.units$ = this.units$.pipe(
       map(units =>
         units.map(unit => {
@@ -64,7 +65,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   playTest(i: number) {
-    this.tileService.markAsVisible(i);
     this.tileService.markAsReachable(i);
   }
   /*
@@ -105,33 +105,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.units$.subscribe(console.log);
   }
   */
-  /*
-  switchAdjacentTilesParameter(tiles: Tile[], tile: Tile, parameter: 'visibility' | 'move', start: number, end: number) {
-    for (let x = start; x <= end; x++) {
-      for (let y = start; y <= end; y++) {
-        const X = tile.x + x;
-        const Y = tile.y + y;
-        // verifies that the tile is inside the board
-        if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
-          const id = X + this.boardSize * Y;
-          if (parameter === 'visibility') {
-            tiles[id] = {
-              ...tiles[id],
-              visible: true,
-            };
-          }
-          if (parameter === 'move') {
-            tiles[id] = {
-              ...tiles[id],
-              possibleMove: true,
-            };
-          }
-        }
-      }
-    }
-    return tiles;
-  }
-  */
+
   createUnits() {
     const player: Player = this.playerQuery.getActive();
     this.unitService.createUnits(this.gameId, player.id);

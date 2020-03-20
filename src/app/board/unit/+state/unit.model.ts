@@ -8,6 +8,7 @@ export interface Unit {
   stamina?: number;
   vision?: number;
   noise?: number;
+  isSelected?: boolean;
 }
 
 export interface UnitUI {
