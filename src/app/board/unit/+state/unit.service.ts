@@ -4,7 +4,7 @@ import { syncCollection } from 'src/app/syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { GameQuery } from '../../../games/+state';
 import { createSoldier } from './unit.model';
-import { PlayerQuery } from '../../player/state';
+import { PlayerQuery } from '../../player/+state';
 
 @Injectable({ providedIn: 'root' })
 export class UnitService {
