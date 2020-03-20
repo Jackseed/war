@@ -8,6 +8,9 @@ export interface Unit {
   stamina?: number;
   vision?: number;
   noise?: number;
+}
+
+export interface UnitUI {
   isSelected?: boolean;
 }
 
@@ -21,7 +24,6 @@ export function createSoldier(params: Partial<Unit>): Unit {
     stamina: 1,
     vision: 1,
     noise: 1,
-    isSelected: params.isSelected,
     ...params
   };
 }
