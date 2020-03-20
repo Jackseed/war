@@ -25,12 +25,10 @@ export class UnitService {
     const soldier = createSoldier({
       id,
       quantity,
+      playerId,
     });
     collection.doc(id).set(soldier);
   }
 
-  markAsSelected(unitId: ID) {
-    this.store.ui.update(unitId, entity => ({ isSelected: !entity.isSelected }));
-  }
 
 }

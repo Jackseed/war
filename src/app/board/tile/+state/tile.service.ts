@@ -26,21 +26,26 @@ export class TileService {
   }
 
   markWithUnit(tileId: ID, unit: Unit) {
-    this.store.ui.update(tileId, entity => ({
+    this.store.update(tileId, entity => ({
       unit,
     }));
     this.switchAdjacentTilesParameter(tileId, 'visibility', unit.vision);
   }
 
   markAsVisible(tileId: ID) {
-    this.store.ui.update(tileId, entity => ({ isVisible: !entity.isVisible }));
+    this.store.ui.update(tileId, entity => ({ isVisible: true }));
   }
 
   markAsReachable(tileId: ID) {
-    this.store.ui.update(tileId, entity => ({ isReachable: !entity.isReachable }));
+    this.store.ui.update(tileId, entity => ({ isReachable: true }));
   }
 
-  switchAdjacentTilesParameter(tileId: ID, paramType: 'visibility' | 'move', paramValue: number) {
+  markAsSelected(tileId: ID, unit: Unit) {
+    this.store.ui.update(tileId, entity => ({ isSelected: true }));
+    this.switchAdjacentTilesParameter(tileId, 'reachable', unit.move);
+  }
+
+  switchAdjacentTilesParameter(tileId: ID, paramType: 'visibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
@@ -52,8 +57,10 @@ export class TileService {
           if (paramType === 'visibility') {
             this.markAsVisible(id);
           }
-          if (paramType === 'move') {
-            this.markAsReachable(id);
+          if (paramType === 'reachable') {
+            if (id !== 0) {
+              this.markAsReachable(id);
+            }
           }
         }
       }

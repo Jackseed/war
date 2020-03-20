@@ -18,8 +18,8 @@ import { map } from 'rxjs/operators';
 export class BoardComponent implements OnInit, OnDestroy {
   gameId: string;
   boardSize: number = this.gameService.boardSize;
-  tiles$: Observable<Tile[]> = this.tileQuery.selectAll();
-  units$: Observable<Unit[]> = this.unitQuery.selectAll();
+  tiles$: Observable<Tile[]>;
+  units$: Observable<Unit[]>;
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   visibleTilesWithUnits$: Observable<Tile[]>;
 
@@ -51,7 +51,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     });
     // Adds units to tiles UI
-    this.units$ = this.units$.pipe(
+    this.units$ = this.unitQuery.selectAll().pipe(
       map(units =>
         units.map(unit => {
           if (unit.tileId !== undefined ) {
@@ -61,50 +61,18 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
     ));
     this.tiles$ = this.tileQuery.selectTileWithUI();
+    // TODO Too many calls
     this.tiles$.subscribe(console.log);
   }
 
-  playTest(i: number) {
-    this.tileService.markAsReachable(i);
-  }
-  /*
-  async play(i: number) {
-    const user = await this.authService.getUser();
-    const selectedUnit$: Observable<Unit> | undefined = this.units$.pipe(
-      map(units => units.find(unit => unit.isSelected === true)));
+  play(i: number) {
+    const player: Player = this.playerQuery.getActive();
+    const tile: Tile = this.tileQuery.getEntity(i);
     // If a unit was clicked and belongs to player, turns it selected
-    this.units$ = this.units$.pipe(
-      map(units =>
-        units.map(unit => {
-          if ((unit.tileId === i) && (unit.playerId === user.uid)) {
-            return {
-              ...unit,
-              isSelected: true,
-            };
-          } else {
-            return unit;
-          }
-        })
-      )
-    );
-    // If a unit was selected, turns adjacent tiles to possible moves
-    if (selectedUnit$) {
-      this.visibleTilesWithUnits$ = this.visibleTilesWithUnits$.pipe(
-        map(tiles =>
-          tiles.map(tile => {
-            if (tile.unit && (tile.unit.tileId === i) && (tile.unit.playerId === user.uid)) {
-              this.switchAdjacentTilesParameter(tiles, tile, 'move', -tile.unit.move, tile.unit.move);
-              return tile;
-            }
-            return tile;
-          })
-        )
-      );
+    if (tile.unit && (tile.unit.playerId === player.id)) {
+      this.tileService.markAsSelected(i, tile.unit);
     }
-    this.visibleTilesWithUnits$.subscribe(console.log);
-    this.units$.subscribe(console.log);
   }
-  */
 
   createUnits() {
     const player: Player = this.playerQuery.getActive();

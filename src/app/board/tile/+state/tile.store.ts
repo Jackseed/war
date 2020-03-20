@@ -15,6 +15,7 @@ export class TileStore extends EntityStore<TileState> {
     this.createUIStore().setInitialEntityState(entity => ({
       isVisible: false,
       isReachable: false,
+      isSelected: false,
     }));
   }
 

@@ -9,6 +9,7 @@ export interface Unit {
   vision?: number;
   noise?: number;
   isSelected?: boolean;
+  playerId: string | number;
 }
 
 export interface UnitUI {
@@ -25,6 +26,7 @@ export function createSoldier(params: Partial<Unit>): Unit {
     stamina: 1,
     vision: 1,
     noise: 1,
+    playerId: params.id,
     ...params
   };
 }

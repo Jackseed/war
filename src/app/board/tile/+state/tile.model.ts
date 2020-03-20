@@ -7,13 +7,14 @@ export interface Tile {
   y?: number;
   isVisible?: boolean;
   isReachable?: boolean;
+  isSelected?: boolean;
   unit?: Unit;
 }
 
 export interface TileUI {
   isVisible?: boolean;
   isReachable?: boolean;
-  unit?: Unit;
+  isSelected?: boolean;
 }
 
 /** A factory function that creates Tiles */
