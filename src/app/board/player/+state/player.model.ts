@@ -1,12 +1,12 @@
 export interface Player {
-  userId?: string;
+  id: string;
   isActive?: boolean;
 }
 
 /** A factory function that creates Player */
 export function createPlayer(params: Partial<Player> = {}): Player {
   return {
-    userId: params.userId,
+    id: params.id,
     isActive: false,
     ...params
   };

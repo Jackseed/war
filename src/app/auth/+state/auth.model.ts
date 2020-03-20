@@ -1,5 +1,5 @@
 export interface User {
-  id: string | number;
+  id: string;
 }
 
 export function createUser(params: Partial<User>) {
