@@ -1,14 +1,8 @@
-import { Unit } from '../../unit/+state/unit.model';
-
 export interface Tile {
   id?: string | number;
   color?: string;
   x?: number;
   y?: number;
-  unitId?: string;
-  unit?: Unit;
-  visible?: boolean;
-  possibleMove?: boolean;
 }
 
 export interface TileUI {
@@ -23,10 +17,6 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     color: params.color,
     x: params.x,
     y: params.y,
-    unitId: params.unitId,
-    unit: params.unit,
-    visible: params.visible,
-    possibleMove: params.possibleMove,
     ...params
   };
 }

@@ -18,12 +18,12 @@ export class TileService {
     return syncCollection(collection, this.store);
   }
 
-  markAsVisible(unitId: ID) {
-    this.store.ui.update(unitId, entity => ({ isVisible: !entity.isVisible }));
+  markAsVisible(tileId: ID) {
+    this.store.ui.update(tileId, entity => ({ isVisible: !entity.isVisible }));
   }
 
-  markAsReachable(unitId: ID) {
-    this.store.ui.update(unitId, entity => ({ isReachable: !entity.isReachable }));
+  markAsReachable(tileId: ID) {
+    this.store.ui.update(tileId, entity => ({ isReachable: !entity.isReachable }));
   }
 
 }
