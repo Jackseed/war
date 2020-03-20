@@ -1,3 +1,5 @@
+import { Unit } from '../../unit/+state';
+
 export interface Tile {
   id?: string | number;
   color?: string;
@@ -8,6 +10,7 @@ export interface Tile {
 export interface TileUI {
   isVisible?: boolean;
   isReachable?: boolean;
+  unit: Unit;
 }
 
 /** A factory function that creates Tiles */

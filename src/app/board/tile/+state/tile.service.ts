@@ -3,6 +3,7 @@ import { TileStore } from './tile.store';
 import { syncCollection } from 'src/app/syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ID } from '@datorama/akita';
+import { Unit } from '../../unit/+state';
 
 @Injectable({ providedIn: 'root' })
 
@@ -16,6 +17,11 @@ export class TileService {
   connect(gameId: string) {
     const collection = this.db.collection('games').doc(gameId).collection('tiles');
     return syncCollection(collection, this.store);
+  }
+
+  markWithUnit(tileId: ID, unit: Unit) {
+    console.log('updating tile ', tileId, 'with unit ', unit);
+    this.store.ui.update(tileId, entity => ({ unit }));
   }
 
   markAsVisible(tileId: ID) {

@@ -7,6 +7,7 @@ import { GameService} from 'src/app/games/+state';
 import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -49,35 +50,17 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log('not signed in');
       }
     });
-
-    /* TODO: remove unitId from tiles, observable loading problem
-    this.visibleTilesWithUnits$ = combineLatest([this.tiles$, this.user$, this.units$]).pipe(
-      map(([tiles, user, units]) =>
-        tiles.map(tile => {
-          if (tile.unitId) {
-            const unit: Unit = units.find(res => res.id === tile.unitId);
-            if (unit.playerId === user.uid) {
-              this.switchAdjacentTilesParameter(tiles, tile, 'visibility', -unit.vision, unit.vision);
-              return {
-                ...tile,
-                visible: true,
-                unit,
-              };
-            } else {
-              if (tile.visible) {
-                return {
-                  ...tile,
-                  unit,
-                };
-              }
-            }
+    this.units$ = this.units$.pipe(
+      map(units =>
+        units.map(unit => {
+          if (unit.tileId !== undefined ) {
+            this.tileService.markWithUnit(unit.tileId, unit);
           }
-          return tile;
+          return unit;
         })
-      )
-    );
-    this.visibleTilesWithUnits$.subscribe(console.log);
-    */
+    ));
+    this.tiles$ = this.tileQuery.selectTileWithUI();
+    this.tiles$.subscribe(console.log);
   }
 
   playTest(i: number) {
@@ -122,7 +105,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.units$.subscribe(console.log);
   }
   */
-
+  /*
   switchAdjacentTilesParameter(tiles: Tile[], tile: Tile, parameter: 'visibility' | 'move', start: number, end: number) {
     for (let x = start; x <= end; x++) {
       for (let y = start; y <= end; y++) {
@@ -148,7 +131,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
     return tiles;
   }
-
+  */
   createUnits() {
     const player: Player = this.playerQuery.getActive();
     this.unitService.createUnits(this.gameId, player.id);
