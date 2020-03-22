@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { QueryEntity } from '@datorama/akita';
-import { PlayerStore, PlayerState } from './player.store';
+import { QueryEntity, EntityUIQuery } from '@datorama/akita';
+import { PlayerStore, PlayerState, PlayerUIState } from './player.store';
 import { Player } from './player.model';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerQuery extends QueryEntity<PlayerState> {
+  ui: EntityUIQuery<PlayerUIState>;
 
   constructor(protected store: PlayerStore) {
     super(store);
+    this.createUIQuery();
   }
 
   public get Opponent$(): Observable<Player> {
@@ -21,4 +23,5 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
         })
     );
   }
+  
 }

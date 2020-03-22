@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService, GameStore} from 'src/app/games/+state';
+import { GameService, GameStore, GameQuery} from 'src/app/games/+state';
 import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -24,10 +24,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]> = this.tileQuery.visibleTiles$;
+  opponent: Player;
 
   constructor(
     private afAuth: AngularFireAuth,
     private route: ActivatedRoute,
+    private gameQuery: GameQuery,
     private gameStore: GameStore,
     private gameService: GameService,
     private tileQuery: TileQuery,
@@ -40,7 +42,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.gameId = this.route.snapshot.paramMap.get('id');
+    this.gameId = this.gameQuery.getActiveId();
+    this.opponent = this.playerService.markOpponent();
     this.afAuth.auth.onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
