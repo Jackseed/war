@@ -7,6 +7,7 @@ import { TileQuery } from './tile.query';
 import { TileStore } from './tile.store';
 import { Tile } from './tile.model';
 import { GameService } from 'src/app/games/+state';
+import { PlayerQuery } from '../../player/+state';
 
 @Injectable({ providedIn: 'root' })
 
@@ -18,6 +19,7 @@ export class TileService {
     private query: TileQuery,
     private db: AngularFirestore,
     private gameService: GameService,
+    private playerQuery: PlayerQuery,
   ) {}
 
   connect(gameId: string) {
@@ -29,7 +31,10 @@ export class TileService {
     this.store.update(tileId, entity => ({
       unit,
     }));
-    this.switchAdjacentTilesParameter(tileId, 'visibility', unit.vision);
+    // checks if the unit belongs to the active player and add visibility then
+    if (unit.playerId === this.playerQuery.getActiveId()) {
+      this.switchAdjacentTilesParameter(tileId, 'visibility', unit.vision);
+    }
   }
 
   markAsVisible(tileId: ID) {
@@ -66,4 +71,5 @@ export class TileService {
       }
     }
   }
+
 }

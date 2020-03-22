@@ -3,7 +3,6 @@ import { UnitStore } from './unit.store';
 import { syncCollection } from 'src/app/syncCollection';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { createSoldier } from './unit.model';
-import { ID } from '@datorama/akita';
 
 @Injectable({ providedIn: 'root' })
 export class UnitService {

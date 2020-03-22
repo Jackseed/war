@@ -18,7 +18,7 @@ export class TileQuery extends QueryEntity<TileState> {
     this.createUIQuery();
   }
 
-  selectTileWithUI(): Observable<(Tile & TileUI)[]> {
+  public selectTileWithUI(): Observable<(Tile & TileUI)[]> {
     const tiles = this.selectAll();
     const tilesUI = this.ui.selectAll({ asObject: true });
 
@@ -31,6 +31,12 @@ export class TileQuery extends QueryEntity<TileState> {
         };
       });
     }));
+  }
+
+  public get visibleTiles$(): Observable<Tile[]> {
+    return this.ui.selectAll({
+      filterBy: entity => entity.isVisible === true
+    });
   }
 
 }
