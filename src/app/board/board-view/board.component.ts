@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
@@ -22,7 +22,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   units$: Observable<Unit[]>;
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   visibleTilesWithUnits$: Observable<Tile[]>;
-  visibleOpponentUnits$: Observable<Unit[]>;
+  visibleOpponentUnits$: Observable<Unit[] | {}>;
   visibleTiles$: Observable<Tile[]>;
   opponent: Player;
   player: Player;
@@ -67,6 +67,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
         } else {
           console.log('no visible tiles');
+          return of({});
         }
     }));
 
@@ -84,7 +85,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.tiles$ = this.tileQuery.selectTileWithUI();
     // TODO Too many calls
-    this.tiles$.subscribe(console.log);
+    //this.tiles$.subscribe(console.log);
   }
 
   play(i: number) {
