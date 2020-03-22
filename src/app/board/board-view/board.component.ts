@@ -41,12 +41,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('id');
-    this.gameStore.setActive(this.gameId);
     this.afAuth.auth.onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
-        this.playerService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-        this.playerStore.setActive(user.uid);
+        // this.playerStore.setActive(user.uid);
         this.playerQuery.Opponent$.subscribe(console.log);
         this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
         this.unitService.connect(this.gameId, user.uid).pipe(untilDestroyed(this)).subscribe();

@@ -1,36 +1,27 @@
 import { Injectable } from '@angular/core';
-import { GameStore } from './game.store';
-import { syncCollection } from '../../syncCollection';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { PlayerStore } from 'src/app/board/player/+state';
+import { GameStore, GameState } from './game.store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { CollectionService, CollectionConfig } from 'akita-ng-fire';
 
 @Injectable({ providedIn: 'root' })
+@CollectionConfig({ path: 'games' })
 
-export class GameService {
-  private collection = this.db.collection('games');
+export class GameService extends CollectionService<GameState> {
   public boardSize = 3;
 
   constructor(
-    private store: GameStore,
-    private db: AngularFirestore,
+    store: GameStore,
     private afAuth: AngularFireAuth,
     private router: Router,
-    private playerStore: PlayerStore,
-  ) {
-  }
-
-  connect() {
-    return syncCollection(this.collection, this.store);
-  }
+  ) {super(store); }
 
   createNewGame(name: string) {
     const id = this.db.createId();
     const user = this.afAuth.auth.currentUser;
     // Create the game
     this.collection.doc(id).set({id, name});
-    this.store.setActive(id);
+    // this.store.setActive(id);
     this.createTiles(id);
     this.addPlayer(id, user.uid, true);
     return id;
@@ -56,13 +47,11 @@ export class GameService {
    * Add a player to the game
    */
   addPlayer(gameId: string, userId, isActive: boolean) {
-    console.log(userId);
     const collection = this.db.collection('games').doc(gameId).collection('players');
     collection.doc(userId).set({
       userId,
       isActive,
     });
-    this.playerStore.setActive(userId);
   }
 
   /**
@@ -71,7 +60,6 @@ export class GameService {
   async joinGame(game) {
     const user = this.afAuth.auth.currentUser;
     this.addPlayer(game.id, user.uid, false);
-    this.playerStore.setActive(user.uid);
     this.router.navigate([`/games/${game.id}`]);
   }
 

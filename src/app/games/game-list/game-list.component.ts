@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GameService, Game, GameQuery } from '../+state';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-game-list',
@@ -9,21 +8,24 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   styleUrls: ['./game-list.component.scss'],
 })
 export class GameListComponent implements OnInit, OnDestroy {
-  public games$: Observable<Game[]> = this.gameQuery.selectAll();
+  private sub: Subscription;
+  public games$: Observable<Game[]>;
 
   constructor(
-    private gameService: GameService,
-    private gameQuery: GameQuery,
+    private service: GameService,
+    private query: GameQuery,
   ) { }
 
   ngOnInit() {
-    this.gameService.connect().pipe(untilDestroyed(this)).subscribe();
+    this.sub = this.service.syncCollection().subscribe();
+    this.games$ = this.query.selectAll();
   }
 
   joinGame(game) {
-    this.gameService.joinGame(game);
+    this.service.joinGame(game);
   }
 
   ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

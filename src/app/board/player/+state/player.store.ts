@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Player } from './player.model';
-import { EntityState, ActiveState, EntityStore, StoreConfig } from '@datorama/akita';
+import { ActiveState, EntityStore, StoreConfig } from '@datorama/akita';
+import { CollectionState } from 'akita-ng-fire';
 
-export interface PlayerState extends EntityState<Player>, ActiveState<string> {}
+export interface PlayerState extends CollectionState<Player>, ActiveState<string> {}
 
 const initialState = {
   active: null

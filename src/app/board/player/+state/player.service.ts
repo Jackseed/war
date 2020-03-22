@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
-import { syncCollection } from 'src/app/syncCollection';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { PlayerStore } from './player.store';
+import { PlayerStore, PlayerState } from './player.store';
+import { SubcollectionService, CollectionConfig, CollectionService, pathWithParams } from 'akita-ng-fire';
+import { GameQuery } from 'src/app/games/+state';
+import { distinctUntilChanged, map, tap, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class PlayerService {
+@CollectionConfig({ path: 'games/:gameId/players' })
+export class PlayerService extends SubcollectionService<PlayerState> {
 
   constructor(
-    private store: PlayerStore,
-    private db: AngularFirestore,
-  ) {}
+    store: PlayerStore,
+    private gameQuery: GameQuery,
+  ) {
+    super(store);
+  }
 
-  connect(gameId: string) {
-    const collection = this.db.collection('games').doc(gameId).collection('players');
-    return syncCollection(collection, this.store);
+  get path(): Observable<string> {
+    return this.gameQuery.selectActiveId().pipe(
+      distinctUntilChanged(),
+      map(gameId => pathWithParams(this.constructor['path'], {gameId})),
+    );
+  }
+
+  get currentPath(): string {
+    const id = this.gameQuery.getActiveId();
+    return pathWithParams(this.constructor['path'], {id});
   }
 
 }
