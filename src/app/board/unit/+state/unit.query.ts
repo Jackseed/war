@@ -23,17 +23,9 @@ export class UnitQuery extends QueryEntity<UnitState> {
     super(store);
   }
 
-  public get visibleOpponentUnits$(): Observable<Unit[]> {
-    const gameId$: Observable<string> = this.gameQuery.selectActiveId();
-    const opponent$: Observable<Player> = this.playerQuery.Opponent$;
-    const visibleTiles$: Observable<Tile[]> = this.tileQuery.visibleTiles$;
-    const visibleOpponentUnitsDocuments$: Observable<Unit[]> =
-    combineLatest([gameId$, opponent$, visibleTiles$]).pipe(
-      switchMap(([gameId, opponent, visibleTiles]) => {
-        return this.db.collection('games').doc(gameId).collection('players').doc(opponent.id)
-          .collection('units', ref => ref.where('tileId', 'in', visibleTiles)).valueChanges();
-      })
-    );
-    return visibleOpponentUnitsDocuments$;
+  public visibleOpponentUnits$(gameId: string, opponentId: string, visibleTiles: Tile[]): Observable<Unit[]> {
+    console.log(visibleTiles);
+    return this.db.collection('games').doc(gameId).collection('players').doc(opponentId)
+      .collection('units', ref => ref.where('tileId', 'in', visibleTiles)).valueChanges();
   }
 }

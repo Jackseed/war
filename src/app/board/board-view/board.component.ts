@@ -7,7 +7,7 @@ import { GameService, GameStore, GameQuery} from 'src/app/games/+state';
 import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { map } from 'rxjs/operators';
+import { map, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -23,8 +23,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
-  visibleTiles$: Observable<Tile[]> = this.tileQuery.visibleTiles$;
+  visibleTiles$: Observable<Tile[]>;
   opponent: Player;
+  player: Player;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -43,43 +44,44 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.gameId = this.gameQuery.getActiveId();
+    this.player = this.playerQuery.getActive();
     this.opponent = this.playerService.markOpponent();
-    this.afAuth.auth.onAuthStateChanged(user => {
-      if (user) {
-        // User is signed in.
-        // this.playerStore.setActive(user.uid);
-        this.playerQuery.Opponent$.subscribe(console.log);
-        this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-        this.unitService.connect(this.gameId, user.uid).pipe(untilDestroyed(this)).subscribe();
-            // Adds units to tiles UI
-        this.units$ = this.unitQuery.selectAll().pipe(
-          map(units =>
-            units.map(unit => {
-              if (unit.tileId !== undefined ) {
-                this.tileService.markWithUnit(unit.tileId, unit);
-              }
-              return unit;
-            })
-        ));
-        console.log(2);
-        this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$;
-        this.visibleOpponentUnits$.subscribe(console.log);
-        /* this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$.pipe(
-          map(units =>
-            units.map(unit => {
-              if (unit) {
-                this.tileService.markWithUnit(unit.tileId, unit);
-              }
-              return unit;
-            })
-        ));
-        */
-      } else {
-        // No user is signed in.
-        console.log('not signed in');
-      }
+    this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
+    this.unitService.connect(this.gameId, this.player.id).pipe(untilDestroyed(this)).subscribe();
+    // Adds units to tiles UI
+    this.units$ = this.unitQuery.selectAll().pipe(
+      map(units =>
+        units.map(unit => {
+          if (unit.tileId !== undefined ) {
+            this.tileService.markWithUnit(unit.tileId, unit);
+          }
+          return unit;
+        })
+    ));
+    this.visibleTiles$ = this.tileQuery.visibleTiles$;
+    this.visibleTiles$.subscribe(console.log);
+    this.visibleOpponentUnits$ = this.visibleTiles$.pipe(
+      distinctUntilChanged(),
+      switchMap(tiles => {
+        if (tiles.length !== 0) {
+          return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
+        } else {
+          console.log('no visible tiles');
+        }
+    }));
 
-    });
+    this.visibleOpponentUnits$.subscribe(console.log);
+    /* this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$.pipe(
+      map(units =>
+        units.map(unit => {
+          if (unit) {
+            this.tileService.markWithUnit(unit.tileId, unit);
+          }
+          return unit;
+        })
+    ));
+    */
+
     this.tiles$ = this.tileQuery.selectTileWithUI();
     // TODO Too many calls
     this.tiles$.subscribe(console.log);
