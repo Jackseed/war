@@ -47,7 +47,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       map(units =>
         units.map(unit => {
           if (unit.tileId !== undefined ) {
-            this.tileService.markWithUnit(unit.tileId, unit);
+            this.tileService.markTileWithUnit(unit.tileId, unit);
           }
           return unit;
         })
@@ -68,11 +68,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       map(units =>
           units.map(unit => {
             if (unit.playerId) {
-              this.tileService.markWithUnit(unit.tileId, unit);
+              this.tileService.markTileWithUnit(unit.tileId, unit);
             }
             return unit;
       }))
     );
+    this.visibleOpponentUnits$.subscribe(console.log);
     this.tiles$ = this.tileQuery.selectTileWithUI();
     // TODO Too many calls
     // this.tiles$.subscribe(console.log);
@@ -84,6 +85,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     // If a unit was clicked and belongs to player, turns it selected
     if (tile.unit && (tile.unit.playerId === player.id)) {
       this.tileService.markAsSelected(i, tile.unit);
+    }
+    // If a unit is selected and a tile reachable, the unit moves to the tile
+    if (tile.isReachable && tile.unit.isSelected) {
     }
 
   }

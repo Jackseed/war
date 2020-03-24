@@ -27,7 +27,7 @@ export class TileService {
     return syncCollection(collection, this.store);
   }
 
-  markWithUnit(tileId: ID, unit: Unit) {
+  markTileWithUnit(tileId: ID, unit: Unit) {
     console.log('marking tile ', tileId, 'with unitId ', unit.id);
     this.store.update(tileId, entity => ({
       unit,
@@ -60,6 +60,7 @@ export class TileService {
 
   switchAdjacentTilesParameter(tileId: ID, paramType: 'visibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId);
+    console.log(tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
         const X = tile.x + x;
@@ -71,7 +72,8 @@ export class TileService {
             this.markAsVisible(id);
           }
           if (paramType === 'reachable') {
-            if (id !== 0) {
+            if (id !== tile.id) {
+              console.log('reachable tile id: ', id);
               this.markAsReachable(id);
             }
           }
