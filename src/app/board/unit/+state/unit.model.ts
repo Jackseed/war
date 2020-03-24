@@ -9,10 +9,12 @@ export interface Unit {
   vision?: number;
   noise?: number;
   isSelected?: boolean;
+  isOpponent?: boolean;
   playerId?: string | number;
 }
 
 export interface UnitUI {
+  isOpponent?: boolean;
   isSelected?: boolean;
 }
 

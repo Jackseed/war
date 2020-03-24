@@ -12,7 +12,7 @@
               <img src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable, 'selected': tile.isSelected}">
             </div>
             <div *ngIf="tile.unit" class="imageTwo tileElement">
-              <img src="assets/img/soldier.png">
+              <img src="assets/img/soldier.png" [ngClass]="{'opponent': tile.unit.isOpponent}">
             </div>
           </button>
         </div>

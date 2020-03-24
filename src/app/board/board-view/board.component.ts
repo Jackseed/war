@@ -3,11 +3,9 @@ import { Observable, of } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService, GameStore, GameQuery} from 'src/app/games/+state';
-import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
-import { ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { map, switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { GameService, GameQuery} from 'src/app/games/+state';
+import { PlayerService, PlayerQuery, Player } from '../player/+state';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -22,22 +20,18 @@ export class BoardComponent implements OnInit, OnDestroy {
   units$: Observable<Unit[]>;
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   visibleTilesWithUnits$: Observable<Tile[]>;
-  visibleOpponentUnits$: Observable<Unit[] | {}>;
+  visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
   opponent: Player;
   player: Player;
 
   constructor(
-    private afAuth: AngularFireAuth,
-    private route: ActivatedRoute,
     private gameQuery: GameQuery,
-    private gameStore: GameStore,
     private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
-    private playerStore: PlayerStore,
     private playerService: PlayerService,
     private playerQuery: PlayerQuery,
   ) {}
@@ -48,7 +42,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.opponent = this.playerService.markOpponent();
     this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
     this.unitService.connect(this.gameId, this.player.id).pipe(untilDestroyed(this)).subscribe();
-    // Adds units to tiles UI
+    // Adds player units to tiles UI
     this.units$ = this.unitQuery.selectAll().pipe(
       map(units =>
         units.map(unit => {
@@ -59,33 +53,29 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
     ));
     this.visibleTiles$ = this.tileQuery.visibleTiles$;
-    this.visibleTiles$.subscribe(console.log);
+    // Get opponent units on visible tiles
     this.visibleOpponentUnits$ = this.visibleTiles$.pipe(
-      distinctUntilChanged(),
       switchMap(tiles => {
         if (tiles.length !== 0) {
           return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
         } else {
           console.log('no visible tiles');
-          return of({});
+          return of([{}] as Unit[]);
         }
     }));
-
-    this.visibleOpponentUnits$.subscribe(console.log);
-    /* this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$.pipe(
+    // Mark opponent units on tiles
+    this.visibleOpponentUnits$ = this.visibleOpponentUnits$.pipe(
       map(units =>
-        units.map(unit => {
-          if (unit) {
-            this.tileService.markWithUnit(unit.tileId, unit);
-          }
-          return unit;
-        })
-    ));
-    */
-
+          units.map(unit => {
+            if (unit.playerId) {
+              this.tileService.markWithUnit(unit.tileId, unit);
+            }
+            return unit;
+      }))
+    );
     this.tiles$ = this.tileQuery.selectTileWithUI();
     // TODO Too many calls
-    //this.tiles$.subscribe(console.log);
+    // this.tiles$.subscribe(console.log);
   }
 
   play(i: number) {
