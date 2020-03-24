@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService, GameStore} from 'src/app/games/+state';
-import { PlayerService, PlayerQuery, Player, PlayerStore } from '../player/+state';
-import { ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { map } from 'rxjs/operators';
+import { GameService, GameQuery} from 'src/app/games/+state';
+import { PlayerService, PlayerQuery, Player } from '../player/+state';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -23,65 +21,61 @@ export class BoardComponent implements OnInit, OnDestroy {
   players$: Observable<Player[]> = this.playerQuery.selectAll();
   visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
-  visibleTiles$: Observable<Tile[]> = this.tileQuery.visibleTiles$;
+  visibleTiles$: Observable<Tile[]>;
+  opponent: Player;
+  player: Player;
 
   constructor(
-    private afAuth: AngularFireAuth,
-    private route: ActivatedRoute,
-    private gameStore: GameStore,
+    private gameQuery: GameQuery,
     private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
-    private playerStore: PlayerStore,
     private playerService: PlayerService,
     private playerQuery: PlayerQuery,
   ) {}
 
   ngOnInit() {
-    this.gameId = this.route.snapshot.paramMap.get('id');
-    this.gameStore.setActive(this.gameId);
-    this.afAuth.auth.onAuthStateChanged(user => {
-      if (user) {
-        // User is signed in.
-        this.playerService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-        this.playerStore.setActive(user.uid);
-        this.playerQuery.Opponent$.subscribe(console.log);
-        this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-        this.unitService.connect(this.gameId, user.uid).pipe(untilDestroyed(this)).subscribe();
-            // Adds units to tiles UI
-        this.units$ = this.unitQuery.selectAll().pipe(
-          map(units =>
-            units.map(unit => {
-              if (unit.tileId !== undefined ) {
-                this.tileService.markWithUnit(unit.tileId, unit);
-              }
-              return unit;
-            })
-        ));
-        console.log(2);
-        this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$;
-        this.visibleOpponentUnits$.subscribe(console.log);
-        /* this.visibleOpponentUnits$ = this.unitQuery.visibleOpponentUnits$.pipe(
-          map(units =>
-            units.map(unit => {
-              if (unit) {
-                this.tileService.markWithUnit(unit.tileId, unit);
-              }
-              return unit;
-            })
-        ));
-        */
-      } else {
-        // No user is signed in.
-        console.log('not signed in');
-      }
-
-    });
+    this.gameId = this.gameQuery.getActiveId();
+    this.player = this.playerQuery.getActive();
+    this.opponent = this.playerService.markOpponent();
+    this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
+    this.unitService.connect(this.gameId, this.player.id).pipe(untilDestroyed(this)).subscribe();
+    // Adds player units to tiles UI
+    this.units$ = this.unitQuery.selectAll().pipe(
+      map(units =>
+        units.map(unit => {
+          if (unit.tileId !== undefined ) {
+            this.tileService.markWithUnit(unit.tileId, unit);
+          }
+          return unit;
+        })
+    ));
+    this.visibleTiles$ = this.tileQuery.visibleTiles$;
+    // Get opponent units on visible tiles
+    this.visibleOpponentUnits$ = this.visibleTiles$.pipe(
+      switchMap(tiles => {
+        if (tiles.length !== 0) {
+          return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
+        } else {
+          console.log('no visible tiles');
+          return of([{}] as Unit[]);
+        }
+    }));
+    // Mark opponent units on tiles
+    this.visibleOpponentUnits$ = this.visibleOpponentUnits$.pipe(
+      map(units =>
+          units.map(unit => {
+            if (unit.playerId) {
+              this.tileService.markWithUnit(unit.tileId, unit);
+            }
+            return unit;
+      }))
+    );
     this.tiles$ = this.tileQuery.selectTileWithUI();
     // TODO Too many calls
-    this.tiles$.subscribe(console.log);
+    // this.tiles$.subscribe(console.log);
   }
 
   play(i: number) {

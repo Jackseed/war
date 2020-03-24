@@ -28,12 +28,20 @@ export class TileService {
   }
 
   markWithUnit(tileId: ID, unit: Unit) {
+    console.log('marking tile ', tileId, 'with unitId ', unit.id);
     this.store.update(tileId, entity => ({
       unit,
     }));
     // checks if the unit belongs to the active player and add visibility then
     if (unit.playerId === this.playerQuery.getActiveId()) {
       this.switchAdjacentTilesParameter(tileId, 'visibility', unit.vision);
+    } else {
+      this.store.update(tileId, entity => ({
+        unit: {
+          ...unit,
+          isOpponent: true,
+        }
+      }));
     }
   }
 
