@@ -40,14 +40,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
     this.opponent = this.playerService.markOpponent();
-    this.tileService.connect(this.gameId).pipe(untilDestroyed(this)).subscribe();
-    this.unitService.connect(this.gameId, this.player.id).pipe(untilDestroyed(this)).subscribe();
     // Adds player units to tiles UI
     this.units$ = this.unitQuery.selectAll().pipe(
       map(units =>
         units.map(unit => {
           if (unit.tileId !== undefined ) {
-            this.tileService.markTileWithUnit(unit.tileId, unit);
+            this.tileService.markTileWithUnit(unit);
           }
           return unit;
         })
@@ -59,7 +57,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         if (tiles.length !== 0) {
           return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
         } else {
-          console.log('no visible tiles');
           return of([{}] as Unit[]);
         }
     }));
@@ -68,7 +65,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       map(units =>
           units.map(unit => {
             if (unit.playerId) {
-              this.tileService.markTileWithUnit(unit.tileId, unit);
+              this.tileService.markTileWithUnit(unit);
             }
             return unit;
       }))
@@ -81,20 +78,22 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   play(i: number) {
     const player: Player = this.playerQuery.getActive();
-    const tile: Tile = this.tileQuery.getEntity(i);
+    const tile: Tile = this.tileQuery.getEntity(i.toString());
+    const UItile: Tile = this.tileQuery.ui.getEntity(i);
+    const selectedUnit: Unit = this.unitQuery.getActive();
     // If a unit was clicked and belongs to player, turns it selected
     if (tile.unit && (tile.unit.playerId === player.id)) {
       this.tileService.markAsSelected(i, tile.unit);
     }
     // If a unit is selected and a tile reachable, the unit moves to the tile
-    if (tile.isReachable && tile.unit.isSelected) {
+    if (UItile.isReachable && this.unitQuery.hasActive()) {
+      this.tileService.moveSelectedUnit(selectedUnit, i);
     }
 
   }
 
   createUnits() {
-    const player: Player = this.playerQuery.getActive();
-    this.unitService.createUnits(this.gameId, player.id);
+    this.unitService.createUnits();
   }
 
   ngOnDestroy() {

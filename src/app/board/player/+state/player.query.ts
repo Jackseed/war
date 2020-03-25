@@ -23,5 +23,5 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
         })
     );
   }
-  
+
 }

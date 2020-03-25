@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { GameService, GameState } from '../+state';
+import { TileState, TileService } from '../+state';
 import { CollectionGuard } from 'akita-ng-fire';
 
 @Injectable({providedIn: 'root'})
-export class GameGuard extends CollectionGuard<GameState> {
+export class TileGuard extends CollectionGuard<TileState> {
 
   constructor(
-    service: GameService,
+    service: TileService,
   ) {
     super(service);
   }

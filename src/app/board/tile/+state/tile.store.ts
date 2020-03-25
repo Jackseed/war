@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Tile, TileUI } from './tile.model';
 import { EntityState, ActiveState, EntityStore, StoreConfig, EntityUIStore } from '@datorama/akita';
+import { CollectionState } from 'akita-ng-fire';
 
-export interface TileState extends EntityState<Tile>, ActiveState<string> {}
+export interface TileState extends CollectionState<Tile>, ActiveState<string> {}
 export interface TileUIState extends EntityState<TileUI> {}
 
 @Injectable({ providedIn: 'root' })

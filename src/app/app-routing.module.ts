@@ -5,6 +5,8 @@ import { GameListComponent } from './games/game-list/game-list.component';
 import { GameGuard } from './games/guard/game.guard';
 import { ActiveGameGuard } from './games/guard/active-game.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
+import { UnitGuard } from './board/unit/guard/unit.guard';
+import { TileGuard } from './board/tile/guard/tile.guard';
 
 
 const routes: Routes = [
@@ -18,9 +20,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        canActivate: [PlayerGuard],
-        canDeactivate: [PlayerGuard],
-        component: GameViewComponent,
+        canActivate: [PlayerGuard, TileGuard],
+        canDeactivate: [PlayerGuard, TileGuard],
+        children: [
+          {
+            path: '',
+            canActivate: [UnitGuard],
+            canDeactivate: [UnitGuard],
+            component: GameViewComponent,
+          }
+        ]
+
       }
     ]
   },

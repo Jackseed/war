@@ -1,7 +1,7 @@
 import { Unit } from '../../unit/+state';
 
 export interface Tile {
-  id?: string | number;
+  id?: number;
   color?: string;
   x?: number;
   y?: number;
@@ -12,6 +12,7 @@ export interface Tile {
 }
 
 export interface TileUI {
+  unit?: Unit;
   isVisible?: boolean;
   isReachable?: boolean;
   isSelected?: boolean;

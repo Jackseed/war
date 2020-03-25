@@ -4,7 +4,6 @@ import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng
 import { GameQuery } from 'src/app/games/+state';
 import { distinctUntilChanged, map} from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ID } from '@datorama/akita';
 import { PlayerQuery } from './player.query';
 import { Player } from './player.model';
 

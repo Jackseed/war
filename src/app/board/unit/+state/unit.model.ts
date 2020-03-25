@@ -1,5 +1,5 @@
 export interface Unit {
-  id?: string | number;
+  id?: string;
   tileId?: number;
   type?: string;
   quantity?: number;
