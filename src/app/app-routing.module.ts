@@ -7,6 +7,7 @@ import { ActiveGameGuard } from './games/guard/active-game.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
 import { UnitGuard } from './board/unit/guard/unit.guard';
 import { TileGuard } from './board/tile/guard/tile.guard';
+import { OpponentUnitGuard } from './board/unit/opponent/guard/opponent-unit.guard';
 
 
 const routes: Routes = [
@@ -25,8 +26,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            canActivate: [UnitGuard],
-            canDeactivate: [UnitGuard],
+            canActivate: [UnitGuard, OpponentUnitGuard],
+            canDeactivate: [UnitGuard, OpponentUnitGuard],
             component: GameViewComponent,
           }
         ]

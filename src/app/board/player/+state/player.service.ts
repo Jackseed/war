@@ -33,10 +33,11 @@ export class PlayerService extends SubcollectionService<PlayerState> {
     return pathWithParams(this.constructor[path], {id});
   }
 
-  markOpponent() {
+  markOpponent(): Player {
     const activePlayer: Player = this.query.getActive();
     const opponentPlayers: Player[] = this.query.getAll().filter(player => player.id !== activePlayer.id);
     this.store.ui.update(opponentPlayers[0].id, entity => ({isOpponent: true}));
     return opponentPlayers[0];
   }
+
 }

@@ -14,12 +14,12 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     this.createUIQuery();
   }
 
-  public get Opponent$(): Observable<Player> {
+  public get opponentId$(): Observable<string> {
     const activePlayerId$: Observable<string> = this.selectActiveId();
     const players$: Observable<Player[]> = this.selectAll();
     return combineLatest([activePlayerId$, players$]).pipe(
       map(([id, players]) => {
-        return players.filter(player => player.id !== id)[0];
+        return players.filter(player => player.id !== id)[0].id;
         })
     );
   }
