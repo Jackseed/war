@@ -59,7 +59,7 @@ export class TileService {
   }
 
   switchAdjacentTilesParameter(tileId: ID, paramType: 'visibility' | 'reachable', paramValue: number) {
-    const tile: Tile = this.query.getEntity(tileId);
+    const tile: Tile = this.query.getEntity(tileId.toString());
     console.log(tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
