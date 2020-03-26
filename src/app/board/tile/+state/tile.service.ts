@@ -51,6 +51,10 @@ export class TileService extends SubcollectionService<TileState> {
   }
 
   public moveSelectedUnit(unit: Unit, tileId: number) {
+    this.store.ui.update(null, {
+      isSelected: false,
+      isReachable: false,
+    });
     this.removeUnitfromTile(unit.tileId);
     this.unitService.updatePosition(unit, tileId);
   }
@@ -60,15 +64,15 @@ export class TileService extends SubcollectionService<TileState> {
   }
 
   markAsVisible(tileId: number) {
-    this.store.ui.update(tileId, entity => ({ isVisible: true }));
+    this.store.ui.update(tileId, ({ isVisible: true }));
   }
 
   markAsReachable(tileId: number) {
-    this.store.ui.update(tileId, entity => ({ isReachable: true }));
+    this.store.ui.update(tileId, ({ isReachable: true }));
   }
 
   markAsSelected(tileId: number, unit: Unit) {
-    this.store.ui.update(tileId, entity => ({ isSelected: true }));
+    this.store.ui.update(tileId, tile => ({ isSelected: true }));
     this.switchAdjacentTilesParameter(tileId, 'reachable', unit.move);
     this.unitStore.setActive(unit.id.toString());
   }

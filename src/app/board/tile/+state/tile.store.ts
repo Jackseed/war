@@ -7,7 +7,7 @@ export interface TileState extends CollectionState<Tile>, ActiveState<string> {}
 export interface TileUIState extends EntityState<TileUI> {}
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'tile' })
+@StoreConfig({ name: 'tile'})
 export class TileStore extends EntityStore<TileState> {
   ui: EntityUIStore<TileUIState>;
 
