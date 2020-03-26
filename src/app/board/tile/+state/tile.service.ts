@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Unit, UnitStore, UnitService } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore, TileState } from './tile.store';
-import { Tile, createTile } from './tile.model';
+import { Tile } from './tile.model';
 import { GameService, GameQuery } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
@@ -70,11 +70,12 @@ export class TileService extends SubcollectionService<TileState> {
   markAsSelected(tileId: number, unit: Unit) {
     this.store.ui.update(tileId, entity => ({ isSelected: true }));
     this.switchAdjacentTilesParameter(tileId, 'reachable', unit.move);
-    this.unitStore.setActive(unit.id);
+    this.unitStore.setActive(unit.id.toString());
   }
 
   switchAdjacentTilesParameter(tileId: number, paramType: 'visibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId.toString());
+    console.log(tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
         const X = tile.x + x;

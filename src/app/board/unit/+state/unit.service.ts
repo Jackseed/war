@@ -48,7 +48,7 @@ export class UnitService extends SubcollectionService<UnitState> {
   }
 
   public updatePosition(unit: Unit, tileId: number) {
-    this.db.collection(this.currentPath).doc(unit.id).set({
+    this.db.collection(this.currentPath).doc(unit.id.toString()).set({
       ...unit,
       tileId
     });

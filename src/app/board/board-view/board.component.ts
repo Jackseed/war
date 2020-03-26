@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { Observable, of, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { GameService, GameQuery} from 'src/app/games/+state';
 import { PlayerService, PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
+import { OpponentUnitService } from '../unit/opponent/+state';
 
 @Component({
   selector: 'app-board',
@@ -14,6 +14,7 @@ import { map, switchMap } from 'rxjs/operators';
 })
 
 export class BoardComponent implements OnInit, OnDestroy {
+  private sub: Subscription;
   gameId: string;
   boardSize: number = this.gameService.boardSize;
   tiles$: Observable<Tile[]>;
@@ -34,12 +35,14 @@ export class BoardComponent implements OnInit, OnDestroy {
     private unitService: UnitService,
     private playerService: PlayerService,
     private playerQuery: PlayerQuery,
+    private opponentUnitService: OpponentUnitService,
   ) {}
 
   ngOnInit() {
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
     this.opponent = this.playerService.markOpponent();
+
     // Adds player units to tiles UI
     this.units$ = this.unitQuery.selectAll().pipe(
       map(units =>
@@ -51,29 +54,22 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
     ));
     this.visibleTiles$ = this.tileQuery.visibleTiles$;
-    // Get opponent units on visible tiles
-    this.visibleOpponentUnits$ = this.visibleTiles$.pipe(
-      switchMap(tiles => {
-        if (tiles.length !== 0) {
-          return this.unitQuery.visibleOpponentUnits$(this.gameId, this.opponent.id, tiles);
+
+    // Subscribe to the opponent units collection
+    this.sub = this.visibleTiles$.pipe(
+      map(visibleTiles =>
+        visibleTiles.map(({id}) => id)),
+      switchMap(visibleTileIds => {
+        if (visibleTileIds.length > 0) {
+          return this.opponentUnitService.syncCollection(ref => ref.where('tileId', 'in', visibleTileIds));
         } else {
-          return of([{}] as Unit[]);
+          return of([{}]);
         }
-    }));
-    // Mark opponent units on tiles
-    this.visibleOpponentUnits$ = this.visibleOpponentUnits$.pipe(
-      map(units =>
-          units.map(unit => {
-            if (unit.playerId) {
-              this.tileService.markTileWithUnit(unit);
-            }
-            return unit;
-      }))
-    );
-    this.visibleOpponentUnits$.subscribe(console.log);
-    this.tiles$ = this.tileQuery.selectTileWithUI();
-    // TODO Too many calls
-    // this.tiles$.subscribe(console.log);
+      })
+    ).subscribe();
+
+    // Add UI states and opponent units to tiles
+    this.tiles$ = this.tileQuery.selectTileWithUIandOpponentUnits();
   }
 
   play(i: number) {
@@ -97,6 +93,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
 }
