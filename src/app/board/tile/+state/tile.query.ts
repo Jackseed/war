@@ -4,6 +4,7 @@ import { TileStore, TileState, TileUIState } from './tile.store';
 import { Observable, combineLatest } from 'rxjs';
 import { Tile, TileUI } from '.';
 import { map } from 'rxjs/operators';
+import { OpponentUnitQuery } from '../../unit/opponent/+state';
 
 @QueryConfig({
   sortBy: 'id',
@@ -13,23 +14,38 @@ import { map } from 'rxjs/operators';
 export class TileQuery extends QueryEntity<TileState> {
   ui: EntityUIQuery<TileUIState>;
 
-  constructor(protected store: TileStore) {
+  constructor(
+    protected store: TileStore,
+    private opponentUnitQuery: OpponentUnitQuery,
+  ) {
     super(store);
     this.createUIQuery();
   }
 
-  public selectTileWithUI(): Observable<(Tile & TileUI)[]> {
-    const tiles = this.selectAll();
-    const tilesUI = this.ui.selectAll({ asObject: true });
+  public selectTileWithUIandOpponentUnits(): Observable<(Tile & TileUI)[]> {
+    const tiles$ = this.selectAll();
+    const tilesUI$ = this.ui.selectAll();
+    const opponentUnits$ = this.opponentUnitQuery.selectAll();
 
-    return combineLatest([tiles, tilesUI]).pipe(
-      map(([ts, tsUI]) => {
-      return ts.map(tile => {
+    return combineLatest([tiles$, tilesUI$, opponentUnits$]).pipe(
+      map(([tiles, tilesUI, opponentUnits]) => {
+      tiles = tiles.map(tile => {
         return {
           ...tile,
-          ...tsUI[tile.id]
+          ...tilesUI[tile.id]
         };
       });
+      opponentUnits.map(unit => {
+        tiles[unit.tileId] = {
+          ...tiles[unit.tileId],
+          unit: {
+            ...unit,
+            isOpponent: true,
+          }
+        };
+      });
+      console.log(tiles);
+      return tiles;
     }));
   }
 

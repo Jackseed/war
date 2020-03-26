@@ -7,7 +7,7 @@ import { PlayerQuery, Player } from 'src/app/board/player/+state';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-@CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
+@CollectionConfig({ path: 'games/:gameId/players/:opponentId/units' })
 export class OpponentUnitService extends CollectionService<OpponentUnitState> {
 
   constructor(
