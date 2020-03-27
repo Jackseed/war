@@ -17,6 +17,7 @@ import { TilesModule } from './board/tile/tiles.module';
 import { UnitsModule } from './board/unit/units.module';
 import { FormsModule } from '@angular/forms';
 import { PlayerModule } from './board/player/player.module';
+import { RouterModule } from '@angular/router';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -47,6 +48,7 @@ const firebaseConfig = {
     FlexLayoutModule,
     AuthModule,
     FormsModule,
+    RouterModule,
     environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
   providers: [AuthGuard],
