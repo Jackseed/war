@@ -51,15 +51,19 @@ export class TileService extends SubcollectionService<TileState> {
   }
 
   public moveSelectedUnit(unit: Unit, tileId: number) {
-    this.store.ui.update(null, {
-      isSelected: false,
-      isReachable: false,
-    });
+    this.removeSelected();
     this.removeUnitfromTile(unit.tileId);
     this.unitService.updatePosition(unit, tileId);
   }
 
-  removeUnitfromTile(tileId: number) {
+  public removeSelected() {
+    this.store.ui.update(null, {
+      isSelected: false,
+      isReachable: false,
+    });
+  }
+
+  public removeUnitfromTile(tileId: number) {
     this.store.update(tileId.toString(), {unit: null});
   }
 

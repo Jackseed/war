@@ -79,13 +79,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     const selectedUnit: Unit = this.unitQuery.getActive();
     // If a unit was clicked and belongs to player, turns it selected
     if (tile.unit && (tile.unit.playerId === player.id)) {
+      this.tileService.removeSelected();
       this.tileService.markAsSelected(i, tile.unit);
+    } else {
+      // If a unit is selected..
+      if (this.unitQuery.hasActive()) {
+        // and clicked on a tile reachable, the unit moves to the tile
+        if (UItile.isReachable) {
+          this.tileService.moveSelectedUnit(selectedUnit, i);
+        }
+        //
+      }
     }
-    // If a unit is selected and a tile reachable, the unit moves to the tile
-    if (UItile.isReachable && this.unitQuery.hasActive()) {
-      this.tileService.moveSelectedUnit(selectedUnit, i);
-    }
-
   }
 
   createUnits() {
