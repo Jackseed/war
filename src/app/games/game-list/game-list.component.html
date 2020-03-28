@@ -10,7 +10,7 @@
     <h2 style="text-align: left;">Join a game</h2>
     <div *ngIf="(games$ | async) as games">
       <div *ngFor="let game of games">
-        <button mat-raised-button color='primary'
+        <button mat-flat-button color="warn" class='game-list'
           (click)='joinGame(game)'>{{game.name}}
         </button>
       </div>
