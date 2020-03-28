@@ -1,3 +1,5 @@
+import { guid } from '@datorama/akita';
+
 export interface Unit {
   id?: string;
   tileId?: number;
@@ -20,18 +22,20 @@ export interface UnitUI {
 
 export const unitBoardSize = 3;
 
-export function createSoldier(params: Partial<Unit>): Unit {
+export function createSoldier(id: string, playerId: string, tileId?: number, params?: Partial<Unit>): Unit {
   return {
-    id: params.id,
-    tileId: params.tileId,
+    id,
+    playerId,
+    tileId,
     type: 'soldier',
-    quantity: params.quantity,
+    quantity: 10,
     range: 1,
     move: 1,
     stamina: 1,
     vision: 1,
     noise: 1,
-    playerId: params.id,
     ...params
   };
 }
+
+

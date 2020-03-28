@@ -3,8 +3,9 @@ import { QueryEntity, QueryConfig, Order, EntityUIQuery, ID } from '@datorama/ak
 import { TileStore, TileState, TileUIState } from './tile.store';
 import { Observable, combineLatest } from 'rxjs';
 import { Tile, TileUI } from '.';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { OpponentUnitQuery } from '../../unit/opponent/+state';
+import { Unit } from '../../unit/+state';
 
 @QueryConfig({
   sortBy: 'id',
@@ -22,25 +23,28 @@ export class TileQuery extends QueryEntity<TileState> {
     this.createUIQuery();
   }
 
-  public selectTileWithUIandOpponentUnits(): Observable<(Tile & TileUI)[]> {
-    const tiles$ = this.selectAll();
-    const tilesUI$ = this.ui.selectAll();
-    const opponentUnits$ = this.opponentUnitQuery.selectAll();
+  public combineTileWithUIandUnits(tiles$: Observable<Tile[]>, units$: Observable<Unit[]>, isOpponent: boolean)
+  : Observable<(Tile & TileUI)[]> {
+    const tilesUI$ = tiles$.pipe(
+      map(tiles =>
+        tiles.map(({id}) => id.toString())),
+      switchMap(tileIds => this.selectMany(tileIds))
+    );
 
-    return combineLatest([tiles$, tilesUI$, opponentUnits$]).pipe(
-      map(([tiles, tilesUI, opponentUnits]) => {
+    return combineLatest([tiles$, tilesUI$, units$]).pipe(
+      map(([tiles, tilesUI, units]) => {
       tiles = tiles.map(tile => {
         return {
           ...tile,
           ...tilesUI[tile.id]
         };
       });
-      opponentUnits.map(unit => {
+      units.map(unit => {
         tiles[unit.tileId] = {
           ...tiles[unit.tileId],
           unit: {
             ...unit,
-            isOpponent: true,
+            isOpponent,
           }
         };
       });

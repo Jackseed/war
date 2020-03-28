@@ -36,15 +36,22 @@ export class UnitService extends SubcollectionService<UnitState> {
   }
 
   public createUnits() {
-    const playerId: string = this.playerQuery.getActiveId();
     const id = this.db.createId();
-    const quantity = 100;
-    const soldier = createSoldier({
-      id,
-      quantity,
-      playerId,
-    });
+    const playerId: string = this.playerQuery.getActiveId();
+    const soldier = createSoldier(id, playerId);
     this.db.collection(this.currentPath).doc(id).set(soldier);
+  }
+
+  public addUnit(unitType, tileId: number) {
+    const id = this.db.createId();
+    const playerId: string = this.playerQuery.getActiveId();
+    if (unitType === 'soldier') {
+      this.store.add(createSoldier(id, playerId, tileId));
+    }
+  }
+
+  public removeUnit(unit: Unit) {
+    this.store.remove(unit.id);
   }
 
   public updatePosition(unit: Unit, tileId: number) {

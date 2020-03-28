@@ -1,1 +1,16 @@
-<p>unit board</p>
+<mat-card>
+  <mat-card-title>Army</mat-card-title>
+  <mat-card-subtitle>Prepare your regiments</mat-card-subtitle>
+  <mat-card-content>
+    <img src="assets/img/soldier.png">
+    <div>
+      <button mat-icon-button (click)="removeUnit('soldier')">
+        <mat-icon>remove</mat-icon>
+      </button>
+      {{ (soldiers$ | async).length }}
+      <button mat-icon-button (click)="addUnit('soldier')">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -5,7 +5,7 @@ import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { GameService, GameQuery, boardSize } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
-import { OpponentUnitService } from '../unit/opponent/+state';
+import { OpponentUnitService, OpponentUnitQuery } from '../unit/opponent/+state';
 
 @Component({
   selector: 'app-board',
@@ -19,7 +19,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
   players$: Observable<Player[]> = this.playerQuery.selectAll();
-  visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
   player: Player;
@@ -34,6 +33,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private unitService: UnitService,
     private playerQuery: PlayerQuery,
     private opponentUnitService: OpponentUnitService,
+    private opponentUnitQuery: OpponentUnitQuery,
   ) {}
 
   ngOnInit() {
@@ -65,8 +65,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
 
+    this.visibleOpponentUnits$ = this.opponentUnitQuery.selectAll();
+
     // Add UI states and opponent units to tiles
-    this.tiles$ = this.tileQuery.selectTileWithUIandOpponentUnits();
+    this.tiles$ = this.tileQuery.combineTileWithUIandUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
   }
 
   play(i: number) {
