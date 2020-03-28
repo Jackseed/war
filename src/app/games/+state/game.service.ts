@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameStore, GameState } from './game.store';
+import { boardSize } from './game.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { CollectionService, CollectionConfig } from 'akita-ng-fire';
@@ -8,29 +9,30 @@ import { CollectionService, CollectionConfig } from 'akita-ng-fire';
 @CollectionConfig({ path: 'games' })
 
 export class GameService extends CollectionService<GameState> {
-  public boardSize = 3;
 
   constructor(
     store: GameStore,
     private afAuth: AngularFireAuth,
     private router: Router,
-  ) {super(store); }
+  ) {
+    super(store);
+  }
 
   createNewGame(name: string) {
     const id = this.db.createId();
     const user = this.afAuth.auth.currentUser;
     // Create the game
     this.collection.doc(id).set({id, name});
-    // this.store.setActive(id);
-    this.createTiles(id);
+
+    // this.createTiles(id);
     this.addPlayer(id, user.uid, true);
     return id;
   }
 
   createTiles(gameId) {
-    for (let i = 0; i < this.boardSize; i++) {
-      for (let j = 0; j < this.boardSize; j++) {
-        const tileId = j + this.boardSize * i;
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        const tileId = j + boardSize * i;
         this.db.collection('games').doc(gameId)
           .collection('tiles').doc(tileId.toString()).set({
             x: j,
@@ -62,5 +64,6 @@ export class GameService extends CollectionService<GameState> {
     this.addPlayer(game.id, user.uid, false);
     this.router.navigate([`/games/${game.id}`]);
   }
+
 
 }

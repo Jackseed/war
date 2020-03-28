@@ -3,6 +3,7 @@ export interface Game {
   name?: string;
 }
 
+export const boardSize = 3;
 
 /** A factory function that creates Game */
 export function createGame(params: Partial<Game> = {}): Game {

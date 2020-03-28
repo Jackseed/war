@@ -1,7 +1,7 @@
 export interface Unit {
   id?: string;
   tileId?: number;
-  type?: string;
+  type?: 'soldier' | 'archer' | 'knight' | 'canon';
   quantity?: number;
   range?: number;
   move?: number;
@@ -17,6 +17,8 @@ export interface UnitUI {
   isOpponent?: boolean;
   isSelected?: boolean;
 }
+
+export const unitBoardSize = 3;
 
 export function createSoldier(params: Partial<Unit>): Unit {
   return {

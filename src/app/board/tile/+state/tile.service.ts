@@ -2,23 +2,22 @@ import { Injectable } from '@angular/core';
 import { Unit, UnitStore, UnitService } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore, TileState } from './tile.store';
-import { Tile } from './tile.model';
-import { GameService, GameQuery } from 'src/app/games/+state';
+import { Tile, createTile } from './tile.model';
+import { GameQuery } from 'src/app/games/+state/game.query';
 import { PlayerQuery } from '../../player/+state';
 import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { boardSize } from 'src/app/games/+state/game.model';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/tiles' })
 export class TileService extends SubcollectionService<TileState> {
-  boardSize: number = this.gameService.boardSize;
 
   constructor(
     store: TileStore,
     private query: TileQuery,
     private gameQuery: GameQuery,
-    private gameService: GameService,
     private playerQuery: PlayerQuery,
     private unitStore: UnitStore,
     private unitService: UnitService,
@@ -32,6 +31,19 @@ export class TileService extends SubcollectionService<TileState> {
       distinctUntilChanged(),
       map(gameId => pathWithParams(this.constructor[path], {gameId})),
     );
+  }
+
+  // Unit creation tiles
+  createUnitTiles(unitBoardSize, unitType) {
+    const tiles: Tile[] = [];
+    for (let i = 0; i < unitBoardSize; i++) {
+      for (let j = 0; j < unitBoardSize; j++) {
+        const tileId = j + unitBoardSize * i;
+        const tile: Tile = createTile(tileId, j, i, unitType);
+        tiles.push(tile);
+      }
+    }
+    this.store.set(tiles);
   }
 
   markTileWithUnit(unit: Unit) {
@@ -89,8 +101,8 @@ export class TileService extends SubcollectionService<TileState> {
         const X = tile.x + x;
         const Y = tile.y + y;
         // verifies that the tile is inside the board
-        if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
-          const id = X + this.boardSize * Y;
+        if ((X < boardSize) && (X >= 0) && (Y < boardSize) && (Y >= 0)) {
+          const id = X + boardSize * Y;
           if (paramType === 'visibility') {
             this.markAsVisible(id);
           }

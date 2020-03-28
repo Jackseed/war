@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthModule } from '../auth/auth.module';
 import { UnitsModule } from '../board/unit/units.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { UnitsModule } from '../board/unit/units.module';
     MatInputModule,
     FlexLayoutModule,
     UnitsModule,
+    RouterModule,
   ]
 })
 export class GamesModule { }
