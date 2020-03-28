@@ -1,11 +1,19 @@
-<app-login></app-login>
-<app-game-form></app-game-form>
-<h2>Join a game</h2>
-<div *ngIf="(games$ | async) as games">
-  <div *ngFor="let game of games">
-    <button mat-raised-button color='primary'
-      (click)='joinGame(game)'>{{game.name}}
-    </button>
-  </div>
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-icon-button (click)="auth.signOut()">
+    <mat-icon>power_settings_new</mat-icon>
+  </button>
 </div>
 
+<div fxLayout="row" fxFill fxLayoutAlign="space-evenly stretch" style="padding-top: 10%;">
+  <app-game-form></app-game-form>
+  <div>
+    <h2 style="text-align: left;">Join a game</h2>
+    <div *ngIf="(games$ | async) as games">
+      <div *ngFor="let game of games">
+        <button mat-flat-button color="warn" class='game-list'
+          (click)='joinGame(game)'>{{game.name}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

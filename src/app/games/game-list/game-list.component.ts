@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { GameService, Game, GameQuery } from '../+state';
+import { AuthService } from 'src/app/auth/+state';
 
 @Component({
   selector: 'app-game-list',
@@ -12,6 +13,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   public games$: Observable<Game[]>;
 
   constructor(
+    public auth: AuthService,
     private service: GameService,
     private query: GameQuery,
   ) { }

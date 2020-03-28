@@ -7,14 +7,20 @@ import { ActiveGameGuard } from './games/guard/active-game.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
 import { UnitGuard } from './board/unit/guard/unit.guard';
 import { TileGuard } from './board/tile/guard/tile.guard';
+import { LoginComponent } from './auth/login/login.component';
+import { AuthGuard } from './auth/guard/auth.guard';
 
 
 
 const routes: Routes = [
+  { path: 'welcome',
+  component: LoginComponent,
+},
   { path: 'games',
-    canActivate: [GameGuard],   // start sync (subscribe)
+    canActivate: [AuthGuard, GameGuard],   // start sync (subscribe)
     canDeactivate: [GameGuard], // stop sync (unsubscribe)
-    component: GameListComponent },
+    component: GameListComponent,
+  },
   { path: 'games/:id',
     canActivate: [ActiveGameGuard],
     canDeactivate: [ActiveGameGuard],

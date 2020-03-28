@@ -3,7 +3,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { GameService, GameQuery} from 'src/app/games/+state';
-import { PlayerService, PlayerQuery, Player } from '../player/+state';
+import { PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
 import { OpponentUnitService } from '../unit/opponent/+state';
 
@@ -23,7 +23,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
-  opponent: Player;
   player: Player;
 
   constructor(
@@ -33,7 +32,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private unitService: UnitService,
-    private playerService: PlayerService,
     private playerQuery: PlayerQuery,
     private opponentUnitService: OpponentUnitService,
   ) {}
@@ -41,7 +39,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
-    this.opponent = this.playerService.markOpponent();
 
     // Adds player units to tiles UI
     this.units$ = this.unitQuery.selectAll().pipe(
@@ -79,13 +76,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     const selectedUnit: Unit = this.unitQuery.getActive();
     // If a unit was clicked and belongs to player, turns it selected
     if (tile.unit && (tile.unit.playerId === player.id)) {
+      this.tileService.removeSelected();
       this.tileService.markAsSelected(i, tile.unit);
+    } else {
+      // If a unit is selected..
+      if (this.unitQuery.hasActive()) {
+        // and clicked on a tile reachable, the unit moves to the tile
+        if (UItile.isReachable) {
+          this.tileService.moveSelectedUnit(selectedUnit, i);
+        }
+        //
+      }
     }
-    // If a unit is selected and a tile reachable, the unit moves to the tile
-    if (UItile.isReachable && this.unitQuery.hasActive()) {
-      this.tileService.moveSelectedUnit(selectedUnit, i);
-    }
-
   }
 
   createUnits() {
