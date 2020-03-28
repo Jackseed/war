@@ -1,23 +1,23 @@
 <div *ngIf="(units$ | async) as units">
   <div *ngIf="(tiles$ | async) as tiles">
     <mat-grid-list cols="{{boardSize}}" rowHeight="1:1" gutterSize="0">
-      <mat-grid-tile
-        *ngFor="let tile of tiles; let i = index;"
-        [colspan]=1
-        [rowspan]=1
-        >
-        <div class="container">
-          <button (click)="play(i)" mat-button style="width: 100%; height: 100%;">
-            <div class="imageOne tileElement">
-              <img src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable, 'selected': tile.isSelected}">
-            </div>
-            <div *ngIf="tile.unit" class="imageTwo tileElement">
-              <img src="assets/img/soldier.png" [ngClass]="{'opponent': tile.unit.isOpponent}">
-            </div>
-          </button>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
+    <mat-grid-tile
+      *ngFor="let tile of tiles; let i = index;"
+      [colspan]=1
+      [rowspan]=1
+      >
+      <div class="container">
+        <button (click)="play(i)" mat-button style="width: 100%; height: 100%;">
+          <div class="imageOne tileElement">
+            <img src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable, 'selected': tile.isSelected}">
+          </div>
+          <div *ngIf="tile.unit" class="imageTwo tileElement">
+            <img src="assets/img/soldier.png" [ngClass]="{'opponent': tile.unit.isOpponent}">
+          </div>
+        </button>
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
   </div>
 </div>
 <button mat-raised-button color="primary" (click)="createUnits()">Create units</button>
