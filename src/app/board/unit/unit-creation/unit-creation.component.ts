@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./unit-creation.component.scss']
 })
 export class UnitCreationComponent implements OnInit {
+  unitBoardSize = 3;
+  tiles = Math.pow(this.unitBoardSize, 2);
 
   constructor() { }
 
