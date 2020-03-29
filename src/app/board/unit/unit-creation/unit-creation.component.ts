@@ -20,11 +20,7 @@ export class UnitCreationComponent implements OnInit {
     private tileQuery: TileQuery,
   ) {}
 
-  ngOnInit(): void {
-    for (const unitType of this.unitTypes) {
-      this.tileService.createUnitTiles(unitCols, unitType, unitMaxTiles);
-    }
-  }
+  ngOnInit(): void {}
 
   createUnitTiles(unitType) {
     this.tileService.createUnitTiles(unitCols, unitType, unitMaxTiles);
