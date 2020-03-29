@@ -1,16 +1,15 @@
 <mat-card>
   <mat-card-title>Army</mat-card-title>
   <mat-card-subtitle>Prepare your regiments</mat-card-subtitle>
-  <mat-card-content>
-    <img src="assets/img/soldier.png">
+  <mat-card-content *ngFor="let unitType of unitTypes">
+    <img src="assets/img/{{unitType}}.png">
     <div>
-      <button mat-icon-button (click)="removeUnit('soldier')">
+      <button mat-icon-button (click)="removeUnit(unitType)">
         <mat-icon>remove</mat-icon>
       </button>
-      {{ (soldiers$ | async).length }}
-      <button mat-icon-button (click)="addUnit('soldier')">
+      {{ (selectUnitType(unitType) | async).length }}
+      <button mat-icon-button (click)="addUnit(unitType)">
         <mat-icon>add</mat-icon>
       </button>
     </div>
   </mat-card-content>
-</mat-card>

@@ -9,15 +9,17 @@ import { Observable } from 'rxjs';
 })
 export class UnitBoardComponent implements OnInit {
   soldiers$: Observable<Unit[]>;
-
+  unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
   constructor(
     private query: UnitQuery,
     private service: UnitService,
   ) {}
 
-  ngOnInit(): void {
-    this.soldiers$ = this.query.selectAll({
-      filterBy: unit => unit.type === 'soldier'
+  ngOnInit(): void {}
+
+  selectUnitType(unitType): Observable<Unit[]> {
+    return this.query.selectAll({
+      filterBy: unit => unit.type === unitType
     });
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UnitStore, UnitState } from './unit.store';
-import { createSoldier, Unit } from './unit.model';
+import { createUnit, Unit } from './unit.model';
 import { GameQuery } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { CollectionConfig, pathWithParams, SubcollectionService } from 'akita-ng-fire';
@@ -38,16 +38,14 @@ export class UnitService extends SubcollectionService<UnitState> {
   public createUnits() {
     const id = this.db.createId();
     const playerId: string = this.playerQuery.getActiveId();
-    const soldier = createSoldier(id, playerId);
+    const soldier = createUnit(id, playerId, 'soldier');
     this.db.collection(this.currentPath).doc(id).set(soldier);
   }
 
   public addUnit(unitType, tileId: number) {
     const id = this.db.createId();
     const playerId: string = this.playerQuery.getActiveId();
-    if (unitType === 'soldier') {
-      this.store.add(createSoldier(id, playerId, tileId));
-    }
+    this.store.add(createUnit(id, playerId, unitType, tileId));
   }
 
   public removeUnit(unit: Unit) {
