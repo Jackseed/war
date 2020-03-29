@@ -20,13 +20,11 @@ export interface TileUI {
 }
 
 /** A factory function that creates Tiles */
-export function createTile(id: number, x: number, y: number,
-                           unitCreationType?: 'soldier' | 'archer' | 'knight' | 'canon', params?: Partial<Tile>): Tile {
+export function createTile(id: number, x: number, y: number, params?: Partial<Tile>): Tile {
   return {
     id,
     x,
     y,
-    unitCreationType,
     color: 'grey',
     ...params
   };

@@ -55,7 +55,7 @@ export class TileQuery extends QueryEntity<TileState> {
 
   public get visibleTiles$(): Observable<Tile[]> {
     return this.ui.selectAll({
-      filterBy: entity => entity.isVisible === true
+      filterBy: tile => tile.isVisible === true
     });
   }
 

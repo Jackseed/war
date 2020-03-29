@@ -3,12 +3,11 @@ import { Unit, UnitStore, UnitService } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore, TileState } from './tile.store';
 import { Tile, createTile } from './tile.model';
-import { GameQuery } from 'src/app/games/+state/game.query';
+import { GameQuery, boardCols, boardMaxTiles } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { boardSize } from 'src/app/games/+state/game.model';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/tiles' })
@@ -33,19 +32,30 @@ export class TileService extends SubcollectionService<TileState> {
     );
   }
 
-  // Unit creation tiles
-  createUnitTiles(cols: number, unitType, maxTiles?: number) {
+  prepareGameTiles() {
     const tiles: Tile[] = [];
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < cols; j++) {
-        const tileId = j + cols * i;
-        if ( tileId < maxTiles) {
-          const tile: Tile = createTile(tileId, j, i, unitType);
+    for (let i = 0; i < boardCols; i++) {
+      for (let j = 0; j < boardCols; j++) {
+        const tileId = j + boardCols * i;
+        if ( tileId < boardMaxTiles) {
+          const tile: Tile = createTile(tileId, j, i);
           tiles.push(tile);
         }
       }
     }
-    this.store.set(tiles);
+    this.setDBTiles(tiles);
+  }
+
+  setDBTiles(tiles: Tile[]) {
+    const gameId = this.gameQuery.getActiveId();
+    const collection = this.db.firestore.collection('games').doc(gameId).collection('tiles');
+    const batch = this.db.firestore.batch();
+
+    for (const tile of tiles) {
+      const ref = collection.doc(tile.id.toString());
+      batch.set(ref, tile);
+    }
+    batch.commit();
   }
 
   markTileWithUnit(unit: Unit) {
@@ -103,8 +113,8 @@ export class TileService extends SubcollectionService<TileState> {
         const X = tile.x + x;
         const Y = tile.y + y;
         // verifies that the tile is inside the board
-        if ((X < boardSize) && (X >= 0) && (Y < boardSize) && (Y >= 0)) {
-          const id = X + boardSize * Y;
+        if ((X < boardCols) && (X >= 0) && (Y < boardCols) && (Y >= 0)) {
+          const id = X + boardCols * Y;
           if (paramType === 'visibility') {
             this.markAsVisible(id);
           }

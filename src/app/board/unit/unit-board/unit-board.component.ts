@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UnitQuery, Unit, UnitService } from '../+state';
 import { Observable } from 'rxjs';
+import { GameQuery } from 'src/app/games/+state';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-unit-board',
@@ -10,9 +13,14 @@ import { Observable } from 'rxjs';
 export class UnitBoardComponent implements OnInit {
   soldiers$: Observable<Unit[]>;
   unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
+  gameStatus$ = this.gameQuery.selectActive().pipe(
+    map(game => game.status)
+  );
+
   constructor(
     private query: UnitQuery,
     private service: UnitService,
+    private gameQuery: GameQuery,
   ) {}
 
   ngOnInit(): void {}

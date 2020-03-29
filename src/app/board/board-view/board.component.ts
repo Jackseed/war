@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService, GameQuery, boardSize } from 'src/app/games/+state';
+import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery } from '../unit/opponent/+state';
@@ -22,11 +22,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
   player: Player;
-  boardSize = boardSize;
+  boardSize = boardCols;
 
   constructor(
     private gameQuery: GameQuery,
-    private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,

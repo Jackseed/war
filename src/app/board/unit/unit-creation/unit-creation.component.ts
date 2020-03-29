@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TileService, Tile, TileQuery } from '../../tile/+state';
 import { unitCols, unitMaxTiles, Unit, UnitQuery } from '../+state';
+import { GameService } from 'src/app/games/+state';
 import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-unit-creation',
   templateUrl: './unit-creation.component.html',
@@ -16,15 +18,12 @@ export class UnitCreationComponent implements OnInit {
 
   constructor(
     private query: UnitQuery,
+    private gameService: GameService,
     private tileService: TileService,
     private tileQuery: TileQuery,
   ) {}
 
   ngOnInit(): void {}
-
-  createUnitTiles(unitType) {
-    this.tileService.createUnitTiles(unitCols, unitType, unitMaxTiles);
-  }
 
   selectUnitTiles(unitType): Observable<Tile[]> {
     const unitTiles$: Observable<Tile[]> = this.tileQuery.selectAll({
@@ -34,6 +33,11 @@ export class UnitCreationComponent implements OnInit {
       filterBy: unit => unit.type === unitType
     });
     return this.tileQuery.combineTileWithUIandUnits(unitTiles$, units$, false);
+  }
+
+  goToPlacement() {
+    this.gameService.goToPlacement();
+    this.tileService.prepareGameTiles();
   }
 
 }
