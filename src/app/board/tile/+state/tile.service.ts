@@ -34,13 +34,15 @@ export class TileService extends SubcollectionService<TileState> {
   }
 
   // Unit creation tiles
-  createUnitTiles(unitBoardSize, unitType) {
+  createUnitTiles(cols: number, unitType, maxTiles?: number) {
     const tiles: Tile[] = [];
-    for (let i = 0; i < unitBoardSize; i++) {
-      for (let j = 0; j < unitBoardSize; j++) {
-        const tileId = j + unitBoardSize * i;
-        const tile: Tile = createTile(tileId, j, i, unitType);
-        tiles.push(tile);
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < cols; j++) {
+        const tileId = j + cols * i;
+        if ( tileId < maxTiles) {
+          const tile: Tile = createTile(tileId, j, i, unitType);
+          tiles.push(tile);
+        }
       }
     }
     this.store.set(tiles);

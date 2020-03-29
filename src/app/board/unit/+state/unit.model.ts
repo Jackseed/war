@@ -20,7 +20,8 @@ export interface UnitUI {
   isSelected?: boolean;
 }
 
-export const unitBoardSize = 3;
+export const unitCols = 5;
+export const unitMaxTiles = 10;
 
 export function createUnit(
   id: string, playerId: string, unitType: 'soldier' | 'musketeer' | 'knight' | 'canon',
