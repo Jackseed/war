@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TileService, Tile, TileQuery } from '../../tile/+state';
-import { unitCols, unitMaxTiles, Unit, UnitQuery } from '../+state';
+import { unitCols, UnitService, Unit, UnitQuery } from '../+state';
 import { GameService } from 'src/app/games/+state';
 import { Observable } from 'rxjs';
 
@@ -18,6 +18,7 @@ export class UnitCreationComponent implements OnInit {
 
   constructor(
     private query: UnitQuery,
+    private service: UnitService,
     private gameService: GameService,
     private tileService: TileService,
     private tileQuery: TileQuery,
@@ -35,9 +36,13 @@ export class UnitCreationComponent implements OnInit {
     return this.tileQuery.combineTileWithUIandUnits(unitTiles$, units$, false);
   }
 
-  goToPlacement() {
-    this.gameService.goToPlacement();
-    this.tileService.prepareGameTiles();
+  start() {
+    // Switch game status to 'placement'
+    this.gameService.start();
+    // Save the units created
+    this.service.setUnits();
+    // Create the game tiles
+    this.tileService.setTiles();
   }
 
 }

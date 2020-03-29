@@ -32,7 +32,13 @@ export class TileService extends SubcollectionService<TileState> {
     );
   }
 
-  prepareGameTiles() {
+  get currentPath(): string {
+    const path = 'path';
+    const gameId = this.gameQuery.getActiveId();
+    return pathWithParams(this.constructor[path], {gameId});
+  }
+
+  setTiles() {
     const tiles: Tile[] = [];
     for (let i = 0; i < boardCols; i++) {
       for (let j = 0; j < boardCols; j++) {
@@ -47,8 +53,7 @@ export class TileService extends SubcollectionService<TileState> {
   }
 
   setDBTiles(tiles: Tile[]) {
-    const gameId = this.gameQuery.getActiveId();
-    const collection = this.db.firestore.collection('games').doc(gameId).collection('tiles');
+    const collection = this.db.firestore.collection(this.currentPath);
     const batch = this.db.firestore.batch();
 
     for (const tile of tiles) {

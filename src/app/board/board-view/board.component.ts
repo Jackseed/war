@@ -91,10 +91,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  createUnits() {
-    this.unitService.createUnits();
-  }
-
   ngOnDestroy() {
     this.sub.unsubscribe();
   }

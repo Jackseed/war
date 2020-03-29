@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GameStore, GameState } from './game.store';
-import { boardCols } from './game.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { CollectionService, CollectionConfig } from 'akita-ng-fire';
@@ -30,22 +29,6 @@ export class GameService extends CollectionService<GameState> {
     return id;
   }
 
-  createTiles(gameId) {
-    for (let i = 0; i < boardCols; i++) {
-      for (let j = 0; j < boardCols; j++) {
-        const tileId = j + boardCols * i;
-        this.db.collection('games').doc(gameId)
-          .collection('tiles').doc(tileId.toString()).set({
-            x: j,
-            y: i,
-            color: 'grey',
-            id: tileId,
-            visible: false,
-        });
-      }
-    }
-  }
-
   /**
    * Add a player to the game
    */
@@ -66,9 +49,11 @@ export class GameService extends CollectionService<GameState> {
     this.router.navigate([`/games/${game.id}`]);
   }
 
-  goToPlacement() {
+  /**
+   * Switch active game status to 'placement'
+   */
+  start() {
     const game = this.query.getActive();
-    //this.createTiles(game.id);
     const doc = this.db.collection('games').doc(game.id);
     doc.update({
       status: 'placement'
