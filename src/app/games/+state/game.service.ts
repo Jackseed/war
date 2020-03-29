@@ -20,9 +20,10 @@ export class GameService extends CollectionService<GameState> {
 
   createNewGame(name: string) {
     const id = this.db.createId();
+    const status = 'unit creation';
     const user = this.afAuth.auth.currentUser;
     // Create the game
-    this.collection.doc(id).set({id, name});
+    this.collection.doc(id).set({id, name, status});
 
     // this.createTiles(id);
     this.addPlayer(id, user.uid, true);

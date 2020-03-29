@@ -1,6 +1,7 @@
 export interface Game {
   id?: string | number;
   name?: string;
+  status?: 'unit creation' | 'placement' | 'battle' | 'finished';
 }
 
 export const boardSize = 3;
