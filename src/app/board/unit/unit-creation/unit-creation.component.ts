@@ -37,12 +37,12 @@ export class UnitCreationComponent implements OnInit {
   }
 
   start() {
-    // Switch game status to 'placement'
-    this.gameService.start();
-    // Save the units created
-    this.service.setUnits();
     // Create the game tiles
     this.tileService.setTiles();
+    // Save the units created
+    this.service.setUnits();
+    // Switch game status to 'placement'
+    this.gameService.switchStatus('placement');
   }
 
 }

@@ -52,11 +52,11 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Switch active game status to 'placement'
    */
-  start() {
+  switchStatus(status) {
     const game = this.query.getActive();
     const doc = this.db.collection('games').doc(game.id);
     doc.update({
-      status: 'placement'
+      status
     });
   }
 

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { QueryEntity, QueryConfig, Order, EntityUIQuery, ID } from '@datorama/akita';
+import { QueryEntity, QueryConfig, Order, EntityUIQuery } from '@datorama/akita';
 import { TileStore, TileState, TileUIState } from './tile.store';
 import { Observable, combineLatest } from 'rxjs';
 import { Tile, TileUI } from '.';
 import { map, switchMap } from 'rxjs/operators';
-import { OpponentUnitQuery } from '../../unit/opponent/+state';
 import { Unit } from '../../unit/+state';
 
 @QueryConfig({
@@ -17,7 +16,6 @@ export class TileQuery extends QueryEntity<TileState> {
 
   constructor(
     protected store: TileStore,
-    private opponentUnitQuery: OpponentUnitQuery,
   ) {
     super(store);
     this.createUIQuery();
@@ -28,7 +26,7 @@ export class TileQuery extends QueryEntity<TileState> {
     const tilesUI$ = tiles$.pipe(
       map(tiles =>
         tiles.map(({id}) => id.toString())),
-      switchMap(tileIds => this.selectMany(tileIds))
+      switchMap(tileIds => this.ui.selectMany(tileIds))
     );
 
     return combineLatest([tiles$, tilesUI$, units$]).pipe(
@@ -39,6 +37,7 @@ export class TileQuery extends QueryEntity<TileState> {
           ...tilesUI[tile.id]
         };
       });
+      console.log(tilesUI);
       units.map(unit => {
         tiles[unit.tileId] = {
           ...tiles[unit.tileId],
