@@ -5,13 +5,12 @@ import { TileStore, TileState } from './tile.store';
 import { Tile, createTile } from './tile.model';
 import { GameQuery, boardCols, boardMaxTiles } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
-import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { CollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
+import { tap, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/tiles' })
-export class TileService extends SubcollectionService<TileState> {
+export class TileService extends CollectionService<TileState> {
 
   constructor(
     store: TileStore,
@@ -24,15 +23,14 @@ export class TileService extends SubcollectionService<TileState> {
     super(store);
   }
 
-  get path(): Observable<string> {
-    const path = 'path';
+  sync() {
     return this.gameQuery.selectActiveId().pipe(
-      distinctUntilChanged(),
-      map(gameId => pathWithParams(this.constructor[path], {gameId})),
+      tap(_ => this.store.reset()),
+      switchMap(movieId => this.syncCollection({ params: { movieId }}))
     );
   }
 
-  get currentPath(): string {
+  get path(): string {
     const path = 'path';
     const gameId = this.gameQuery.getActiveId();
     return pathWithParams(this.constructor[path], {gameId});

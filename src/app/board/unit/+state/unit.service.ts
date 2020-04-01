@@ -3,14 +3,14 @@ import { UnitStore, UnitState } from './unit.store';
 import { createUnit, Unit } from './unit.model';
 import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
-import { CollectionConfig, pathWithParams, SubcollectionService } from 'akita-ng-fire';
+import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
 import { map } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { UnitQuery } from './unit.query';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
-export class UnitService extends SubcollectionService<UnitState> {
+export class UnitService extends CollectionService<UnitState> {
   unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
 
   constructor(
@@ -22,16 +22,7 @@ export class UnitService extends SubcollectionService<UnitState> {
     super(store);
   }
 
-  get path(): Observable<string> {
-    const gameId$ = this.gameQuery.selectActiveId();
-    const playerId$ = this.playerQuery.selectActiveId();
-    const path = 'path';
-    return combineLatest([gameId$, playerId$]).pipe(
-      map(([gameId, playerId]) => pathWithParams(this.constructor[path], {gameId, playerId}))
-    );
-  }
-
-  get currentPath(): string {
+  get path(): string {
     const path = 'path';
     const gameId = this.gameQuery.getActiveId();
     const playerId = this.playerQuery.getActiveId();
