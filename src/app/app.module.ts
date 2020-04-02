@@ -10,7 +10,7 @@ import { BoardModule } from './board/board.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthModule } from './auth/auth.module';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AuthGuard } from './auth/guard/auth.guard';
+import { ActiveAuthGuard } from './auth/guard/active-auth.guard';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
 import { TilesModule } from './board/tile/tiles.module';
@@ -18,6 +18,12 @@ import { UnitsModule } from './board/unit/units.module';
 import { FormsModule } from '@angular/forms';
 import { PlayerModule } from './board/player/player.module';
 import { RouterModule } from '@angular/router';
+import { ActiveGameGuard } from './games/guard/active-game.guard';
+import { UnitGuard } from './board/unit/guard/unit.guard';
+import { TileGuard } from './board/tile/guard/tile.guard';
+import { PlayerGuard } from './board/player/guard/player.guard';
+import { GameGuard } from './games/guard/game.guard';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -51,7 +57,7 @@ const firebaseConfig = {
     RouterModule,
     environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
-  providers: [AuthGuard],
+  providers: [ActiveAuthGuard, AngularFireAuthGuard, UnitGuard, TileGuard, PlayerGuard, GameGuard, ActiveGameGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
