@@ -5,7 +5,7 @@ import { Unit, UnitQuery } from '../unit/+state';
 import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
-import { OpponentUnitService, OpponentUnitQuery } from '../unit/opponent/+state';
+import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 
 @Component({
   selector: 'app-board',
@@ -30,6 +30,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private playerQuery: PlayerQuery,
+    private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
   ) {}
@@ -91,6 +92,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.opponentUnitStore.reset();
     this.sub.unsubscribe();
   }
 

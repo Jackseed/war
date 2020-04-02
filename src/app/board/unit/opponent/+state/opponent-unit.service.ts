@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { CollectionConfig, CollectionService, pathWithParams } from 'akita-ng-fire';
-import { Observable, combineLatest } from 'rxjs';
 import { GameQuery } from 'src/app/games/+state';
-import { PlayerQuery, Player } from 'src/app/board/player/+state';
-import { map } from 'rxjs/operators';
+import { PlayerQuery } from 'src/app/board/player/+state';
+
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:opponentId/units' })
