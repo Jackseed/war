@@ -23,13 +23,6 @@ export class TileService extends CollectionService<TileState> {
     super(store);
   }
 
-  sync() {
-    return this.gameQuery.selectActiveId().pipe(
-      tap(_ => this.store.reset()),
-      switchMap(movieId => this.syncCollection({ params: { movieId }}))
-    );
-  }
-
   get path(): string {
     const path = 'path';
     const gameId = this.gameQuery.getActiveId();

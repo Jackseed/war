@@ -10,15 +10,13 @@ import { TileGuard } from './board/tile/guard/tile.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/guard/auth.guard';
 
-
-
 const routes: Routes = [
   { path: 'welcome',
   component: LoginComponent,
 },
   { path: 'games',
-    canActivate: [AuthGuard, GameGuard],   // start sync (subscribe)
-    canDeactivate: [GameGuard], // stop sync (unsubscribe)
+    canActivate: [AuthGuard, GameGuard],
+    canDeactivate: [GameGuard],
     component: GameListComponent,
   },
   { path: 'games/:id',
