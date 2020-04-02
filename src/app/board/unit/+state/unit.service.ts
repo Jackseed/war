@@ -4,8 +4,6 @@ import { createUnit, Unit } from './unit.model';
 import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
-import { map } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
 import { UnitQuery } from './unit.query';
 
 @Injectable({ providedIn: 'root' })

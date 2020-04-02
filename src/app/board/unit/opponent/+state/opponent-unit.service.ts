@@ -18,13 +18,11 @@ export class OpponentUnitService extends CollectionService<OpponentUnitState> {
     super(store);
   }
 
-  get path(): Observable<string> {
-    const gameId$: Observable<string> = this.gameQuery.selectActiveId();
-    const opponentId$: Observable<string> = this.playerQuery.opponentId$;
+  get path(): string {
+    const gameId: string = this.gameQuery.getActiveId();
+    const opponentId: string = this.playerQuery.opponentId;
     const path = 'path';
-    return combineLatest([gameId$, opponentId$]).pipe(
-      map(([gameId, opponentId]) => pathWithParams(this.constructor[path], {gameId, opponentId}))
-    );
+    return pathWithParams(this.constructor[path], {gameId, opponentId});
   }
 
 }
