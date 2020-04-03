@@ -20,7 +20,9 @@ export class GameFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit() { this.submitted = true; }
+  onSubmit() {
+    this.submitted = true;
+  }
 
   public createNewGame() {
     const gameName = this.game.name;

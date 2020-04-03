@@ -6,7 +6,6 @@ import { Tile, createTile } from './tile.model';
 import { GameQuery, boardCols, boardMaxTiles } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { CollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
-import { tap, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/tiles' })
@@ -31,6 +30,7 @@ export class TileService extends CollectionService<TileState> {
 
   setTiles() {
     const tiles: Tile[] = [];
+    this.store.reset();
     for (let i = 0; i < boardCols; i++) {
       for (let j = 0; j < boardCols; j++) {
         const tileId = j + boardCols * i;
@@ -57,6 +57,7 @@ export class TileService extends CollectionService<TileState> {
   markTileWithUnit(unit: Unit) {
     // checks if the unit belongs to the active player and add visibility then
     if (unit.playerId === this.playerQuery.getActiveId()) {
+      console.log(unit);
       this.store.update(unit.tileId.toString(), { unit });
       this.switchAdjacentTilesParameter(unit.tileId, 'visibility', unit.vision);
     // if the unit is enemy, marks it opponent
@@ -103,7 +104,8 @@ export class TileService extends CollectionService<TileState> {
 
   switchAdjacentTilesParameter(tileId: number, paramType: 'visibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId.toString());
-    console.log(tile);
+    console.log(this.query.getAll());
+    console.log(tileId, tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
         const X = tile.x + x;

@@ -37,7 +37,6 @@ export class TileQuery extends QueryEntity<TileState> {
           ...tilesUI[tile.id]
         };
       });
-      console.log(tilesUI);
       units.map(unit => {
         tiles[unit.tileId] = {
           ...tiles[unit.tileId],
@@ -47,7 +46,6 @@ export class TileQuery extends QueryEntity<TileState> {
           }
         };
       });
-      console.log(tiles);
       return tiles;
     }));
   }
