@@ -1,17 +1,27 @@
 <mat-card>
   <mat-card-content *ngFor="let unitType of unitTypes">
-    <img src="assets/img/{{unitType}}.png">
-    <div>
-      <div *ngIf="(gameStatus$ | async) === 'unit creation'">
-        <button mat-icon-button (click)="removeUnit(unitType)">
-          <mat-icon>remove</mat-icon>
-        </button>
+    <div fxLayout="row" fxLayoutAlign="center center">
+
+      <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+        <img src="assets/img/{{unitType}}.png">
+        <div *ngIf="(gameStatus$ | async) === 'unit creation'; else battle">
+          <button mat-icon-button (click)="removeUnit(unitType)">
+            <mat-icon>remove</mat-icon>
+          </button>
+          {{ (selectUnitType(unitType) | async).length }}
+          <button mat-icon-button (click)="addUnit(unitType)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <ng-template #battle>
+          <div>
+            {{ (selectUnitType(unitType) | async).length }}
+          </div>
+        </ng-template>
       </div>
-      {{ (selectUnitType(unitType) | async).length }}
-      <div *ngIf="(gameStatus$ | async) === 'unit creation'">
-        <button mat-icon-button (click)="addUnit(unitType)">
-          <mat-icon>add</mat-icon>
-        </button>
+
+      <div fxFlex="100">
+        coucou
       </div>
     </div>
   </mat-card-content>
