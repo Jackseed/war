@@ -1,50 +1,77 @@
 import { Injectable } from '@angular/core';
 import { UnitStore, UnitState } from './unit.store';
-import { createSoldier, Unit } from './unit.model';
-import { GameQuery } from 'src/app/games/+state';
+import { createUnit, Unit } from './unit.model';
+import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
-import { CollectionConfig, pathWithParams, SubcollectionService } from 'akita-ng-fire';
-import { map } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
+import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
+import { UnitQuery } from './unit.query';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
-export class UnitService extends SubcollectionService<UnitState> {
+export class UnitService extends CollectionService<UnitState> {
+  unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
 
   constructor(
     store: UnitStore,
+    private query: UnitQuery,
     private gameQuery: GameQuery,
     private playerQuery: PlayerQuery,
   ) {
     super(store);
   }
 
-  get path(): Observable<string> {
-    const gameId$ = this.gameQuery.selectActiveId();
-    const playerId$ = this.playerQuery.selectActiveId();
-    const path = 'path';
-    return combineLatest([gameId$, playerId$]).pipe(
-      map(([gameId, playerId]) => pathWithParams(this.constructor[path], {gameId, playerId}))
-    );
-  }
-
-  get currentPath(): string {
+  get path(): string {
     const path = 'path';
     const gameId = this.gameQuery.getActiveId();
     const playerId = this.playerQuery.getActiveId();
     return pathWithParams(this.constructor[path], {gameId, playerId});
   }
 
-  public createUnits() {
-    const playerId: string = this.playerQuery.getActiveId();
+  public setUnits() {
+    const units = this.defaultPositionUnits;
+    const collection = this.db.firestore.collection(this.currentPath);
+    const batch = this.db.firestore.batch();
+
+    this.store.reset();
+
+    for (const unit of units) {
+      const ref = collection.doc(unit.id);
+      batch.set(ref, unit);
+    }
+    batch.commit();
+  }
+
+  get defaultPositionUnits(): Unit[] {
+    const units: Unit[] = [];
+    let i = 0;
+    for (const unitType of this.unitTypes) {
+      const typedUnits = this.query.getAll({
+        filterBy: unit => unit.type === unitType
+      });
+      for (let unit of typedUnits) {
+        unit = {
+          ...unit,
+          tileId: i
+        };
+        units.push(unit);
+        if (i < (boardCols * boardCols - boardCols)) {
+          i = i + boardCols;
+        } else {
+          i = i % boardCols + 1;
+        }
+      }
+    }
+    return units;
+  }
+
+  public addUnit(unitType, tileId: number) {
     const id = this.db.createId();
-    const quantity = 100;
-    const soldier = createSoldier({
-      id,
-      quantity,
-      playerId,
-    });
-    this.db.collection(this.currentPath).doc(id).set(soldier);
+    const playerId: string = this.playerQuery.getActiveId();
+    this.store.add(createUnit(id, playerId, unitType, tileId));
+  }
+
+  public removeUnit(unit: Unit) {
+    this.store.remove(unit.id);
   }
 
   public updatePosition(unit: Unit, tileId: number) {

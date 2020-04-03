@@ -9,6 +9,7 @@ export interface Tile {
   isReachable?: boolean;
   isSelected?: boolean;
   unit?: Unit;
+  unitCreationType?: 'soldier' | 'archer' | 'knight' | 'canon';
 }
 
 export interface TileUI {
@@ -19,12 +20,12 @@ export interface TileUI {
 }
 
 /** A factory function that creates Tiles */
-export function createTile(params: Partial<Tile> = {}): Tile {
+export function createTile(id: number, x: number, y: number, params?: Partial<Tile>): Tile {
   return {
-    id: params.id,
-    color: params.color,
-    x: params.x,
-    y: params.y,
+    id,
+    x,
+    y,
+    color: 'grey',
     ...params
   };
 }

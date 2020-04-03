@@ -8,22 +8,35 @@ import { PlayerGuard } from './board/player/guard/player.guard';
 import { UnitGuard } from './board/unit/guard/unit.guard';
 import { TileGuard } from './board/tile/guard/tile.guard';
 import { LoginComponent } from './auth/login/login.component';
-import { AuthGuard } from './auth/guard/auth.guard';
+import { ActiveAuthGuard } from './auth/guard/active-auth.guard';
+import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['welcome']);
 
-
-const routes: Routes = [
-  { path: 'welcome',
-  component: LoginComponent,
-},
-  { path: 'games',
-    canActivate: [AuthGuard, GameGuard],   // start sync (subscribe)
-    canDeactivate: [GameGuard], // stop sync (unsubscribe)
-    component: GameListComponent,
+export const routes: Routes = [
+  {
+    path: 'welcome',
+    component: LoginComponent,
   },
-  { path: 'games/:id',
-    canActivate: [ActiveGameGuard],
-    canDeactivate: [ActiveGameGuard],
+  {
+    path: 'games',
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    children: [
+      {
+        path: '',
+        canActivate: [GameGuard, ActiveAuthGuard],
+        canDeactivate: [GameGuard, ActiveAuthGuard],
+        component: GameListComponent,
+      }
+    ]
+  },
+  {
+    path: 'games/:id',
+    canActivate: [ActiveGameGuard, AngularFireAuthGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [ActiveGameGuard, ActiveAuthGuard],
     children: [
       {
         path: '',
@@ -41,7 +54,8 @@ const routes: Routes = [
       }
     ]
   },
-  { path: '',
+  {
+    path: '',
     redirectTo: '/games',
     pathMatch: 'full'
   },

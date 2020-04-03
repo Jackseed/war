@@ -12,6 +12,7 @@ const initialState = {
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'game', idKey: 'id' })
 export class GameStore extends EntityStore<GameState> {
+  public boardSize = 3;
 
   constructor() {
     super(initialState);

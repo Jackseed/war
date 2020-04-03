@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Unit, UnitUI } from './unit.model';
-import { EntityState, ActiveState, EntityStore, StoreConfig, EntityUIStore } from '@datorama/akita';
+import { EntityState, ActiveState, EntityStore, StoreConfig, EntityUIStore, guid } from '@datorama/akita';
 import { CollectionState } from 'akita-ng-fire';
 
 export interface UnitState extends CollectionState<Unit>, ActiveState<string> {}

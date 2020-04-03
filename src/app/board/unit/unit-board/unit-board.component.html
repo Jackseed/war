@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-content *ngFor="let unitType of unitTypes">
+    <img src="assets/img/{{unitType}}.png">
+    <div>
+      <div *ngIf="(gameStatus$ | async) === 'unit creation'">
+        <button mat-icon-button (click)="removeUnit(unitType)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+      {{ (selectUnitType(unitType) | async).length }}
+      <div *ngIf="(gameStatus$ | async) === 'unit creation'">
+        <button mat-icon-button (click)="addUnit(unitType)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+

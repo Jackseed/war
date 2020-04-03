@@ -3,44 +3,30 @@ import { GameStore, GameState } from './game.store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { CollectionService, CollectionConfig } from 'akita-ng-fire';
+import { GameQuery } from './game.query';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games' })
 
 export class GameService extends CollectionService<GameState> {
-  public boardSize = 3;
 
   constructor(
     store: GameStore,
+    private query: GameQuery,
     private afAuth: AngularFireAuth,
     private router: Router,
-  ) {super(store); }
+  ) {
+    super(store);
+  }
 
   createNewGame(name: string) {
     const id = this.db.createId();
+    const status = 'unit creation';
     const user = this.afAuth.auth.currentUser;
     // Create the game
-    this.collection.doc(id).set({id, name});
-    // this.store.setActive(id);
-    this.createTiles(id);
+    this.collection.doc(id).set({id, name, status});
     this.addPlayer(id, user.uid, true);
     return id;
-  }
-
-  createTiles(gameId) {
-    for (let i = 0; i < this.boardSize; i++) {
-      for (let j = 0; j < this.boardSize; j++) {
-        const tileId = j + this.boardSize * i;
-        this.db.collection('games').doc(gameId)
-          .collection('tiles').doc(tileId.toString()).set({
-            x: j,
-            y: i,
-            color: 'grey',
-            id: tileId,
-            visible: false,
-        });
-      }
-    }
   }
 
   /**
@@ -61,6 +47,17 @@ export class GameService extends CollectionService<GameState> {
     const user = this.afAuth.auth.currentUser;
     this.addPlayer(game.id, user.uid, false);
     this.router.navigate([`/games/${game.id}`]);
+  }
+
+  /**
+   * Switch active game status to 'placement'
+   */
+  switchStatus(status) {
+    const game = this.query.getActive();
+    const doc = this.db.collection('games').doc(game.id);
+    doc.update({
+      status
+    });
   }
 
 }

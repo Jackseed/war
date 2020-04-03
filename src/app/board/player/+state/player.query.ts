@@ -24,4 +24,9 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     );
   }
 
+  public get opponentId(): string {
+    const activePlayerId: string = this.getActiveId();
+    const players: Player[] = this.getAll();
+    return players.filter(player => player.id !== activePlayerId)[0].id;
+  }
 }

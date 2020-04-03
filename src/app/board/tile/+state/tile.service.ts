@@ -2,23 +2,19 @@ import { Injectable } from '@angular/core';
 import { Unit, UnitStore, UnitService } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore, TileState } from './tile.store';
-import { Tile } from './tile.model';
-import { GameService, GameQuery } from 'src/app/games/+state';
+import { Tile, createTile } from './tile.model';
+import { GameQuery, boardCols, boardMaxTiles } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
-import { SubcollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { CollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/tiles' })
-export class TileService extends SubcollectionService<TileState> {
-  boardSize: number = this.gameService.boardSize;
+export class TileService extends CollectionService<TileState> {
 
   constructor(
     store: TileStore,
     private query: TileQuery,
     private gameQuery: GameQuery,
-    private gameService: GameService,
     private playerQuery: PlayerQuery,
     private unitStore: UnitStore,
     private unitService: UnitService,
@@ -26,17 +22,42 @@ export class TileService extends SubcollectionService<TileState> {
     super(store);
   }
 
-  get path(): Observable<string> {
+  get path(): string {
     const path = 'path';
-    return this.gameQuery.selectActiveId().pipe(
-      distinctUntilChanged(),
-      map(gameId => pathWithParams(this.constructor[path], {gameId})),
-    );
+    const gameId = this.gameQuery.getActiveId();
+    return pathWithParams(this.constructor[path], {gameId});
+  }
+
+  setTiles() {
+    const tiles: Tile[] = [];
+    this.store.reset();
+    for (let i = 0; i < boardCols; i++) {
+      for (let j = 0; j < boardCols; j++) {
+        const tileId = j + boardCols * i;
+        if ( tileId < boardMaxTiles) {
+          const tile: Tile = createTile(tileId, j, i);
+          tiles.push(tile);
+        }
+      }
+    }
+    this.setDBTiles(tiles);
+  }
+
+  setDBTiles(tiles: Tile[]) {
+    const collection = this.db.firestore.collection(this.currentPath);
+    const batch = this.db.firestore.batch();
+
+    for (const tile of tiles) {
+      const ref = collection.doc(tile.id.toString());
+      batch.set(ref, tile);
+    }
+    batch.commit();
   }
 
   markTileWithUnit(unit: Unit) {
     // checks if the unit belongs to the active player and add visibility then
     if (unit.playerId === this.playerQuery.getActiveId()) {
+      console.log(unit);
       this.store.update(unit.tileId.toString(), { unit });
       this.switchAdjacentTilesParameter(unit.tileId, 'visibility', unit.vision);
     // if the unit is enemy, marks it opponent
@@ -83,14 +104,15 @@ export class TileService extends SubcollectionService<TileState> {
 
   switchAdjacentTilesParameter(tileId: number, paramType: 'visibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId.toString());
-    console.log(tile);
+    console.log(this.query.getAll());
+    console.log(tileId, tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
         const X = tile.x + x;
         const Y = tile.y + y;
         // verifies that the tile is inside the board
-        if ((X < this.boardSize) && (X >= 0) && (Y < this.boardSize) && (Y >= 0)) {
-          const id = X + this.boardSize * Y;
+        if ((X < boardCols) && (X >= 0) && (Y < boardCols) && (Y >= 0)) {
+          const id = X + boardCols * Y;
           if (paramType === 'visibility') {
             this.markAsVisible(id);
           }

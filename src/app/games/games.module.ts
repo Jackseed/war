@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthModule } from '../auth/auth.module';
+import { UnitsModule } from '../board/unit/units.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { AuthModule } from '../auth/auth.module';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    UnitsModule,
+    RouterModule,
   ]
 })
 export class GamesModule { }

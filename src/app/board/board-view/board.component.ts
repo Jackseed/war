@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
-import { Tile, TileQuery, TileService } from '../tile/+state';
-import { Unit, UnitQuery, UnitService } from '../unit/+state';
-import { GameService, GameQuery} from 'src/app/games/+state';
+import { Observable, of, Subscription, combineLatest } from 'rxjs';
+import { Tile, TileQuery, TileService, TileStore } from '../tile/+state';
+import { Unit, UnitQuery, UnitStore } from '../unit/+state';
+import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
 import { map, switchMap } from 'rxjs/operators';
-import { OpponentUnitService } from '../unit/opponent/+state';
+import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 
 @Component({
   selector: 'app-board',
@@ -15,30 +15,40 @@ import { OpponentUnitService } from '../unit/opponent/+state';
 
 export class BoardComponent implements OnInit, OnDestroy {
   private sub: Subscription;
+  public loading$: Observable<boolean>;
   gameId: string;
-  boardSize: number = this.gameService.boardSize;
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
   players$: Observable<Player[]> = this.playerQuery.selectAll();
-  visibleTilesWithUnits$: Observable<Tile[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
   player: Player;
+  boardSize = boardCols;
 
   constructor(
     private gameQuery: GameQuery,
-    private gameService: GameService,
+    private tileStore: TileStore,
     private tileQuery: TileQuery,
     private tileService: TileService,
+    private unitStore: UnitStore,
     private unitQuery: UnitQuery,
-    private unitService: UnitService,
     private playerQuery: PlayerQuery,
+    private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
+    private opponentUnitQuery: OpponentUnitQuery,
   ) {}
 
   ngOnInit() {
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
+    // turn loading to true while the unit & tille stores are loading
+    this.tileStore.setLoading(true);
+    this.unitStore.setLoading(true);
+    this.loading$ = combineLatest([this.tileQuery.selectLoading(), this.unitQuery.selectLoading()]).pipe(
+      map(([tileLoading, unitLoading]) => {
+        return tileLoading && unitLoading;
+      })
+    );
 
     // Adds player units to tiles UI
     this.units$ = this.unitQuery.selectAll().pipe(
@@ -65,8 +75,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
 
+    this.visibleOpponentUnits$ = this.opponentUnitQuery.selectAll();
+
     // Add UI states and opponent units to tiles
-    this.tiles$ = this.tileQuery.selectTileWithUIandOpponentUnits();
+    this.tiles$ = this.tileQuery.combineTileWithUIandUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
+
+    // display the board
+    this.tileStore.setLoading(false);
+    this.unitStore.setLoading(false);
   }
 
   play(i: number) {
@@ -90,11 +106,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  createUnits() {
-    this.unitService.createUnits();
-  }
-
   ngOnDestroy() {
+    this.opponentUnitStore.reset();
     this.sub.unsubscribe();
   }
 
