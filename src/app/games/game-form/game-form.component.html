@@ -2,8 +2,8 @@
 <form (ngSubmit)="onSubmit()" #gameForm="ngForm">
   <div>
     <mat-form-field appearance="legacy" color="warn">
-      <mat-label>Game name</mat-label>
-      <input matInput type="text" name="name" required [(ngModel)]="game.name">
+      <mat-label id="text">Game name</mat-label>
+      <input matInput id="text" type="text" name="name" required [(ngModel)]="game.name">
     </mat-form-field>
     <button
     type="button"

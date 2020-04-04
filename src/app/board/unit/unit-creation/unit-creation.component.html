@@ -1,26 +1,35 @@
-<mat-card>
-  <mat-card-title>Choose your army</mat-card-title>
-  <mat-card-subtitle>Be wise, your opponent is doing the same.</mat-card-subtitle>
-  <div *ngFor="let unitType of unitTypes">
-    <div *ngIf="(selectUnitTiles(unitType) | async) as unitTiles">
-      <mat-grid-list cols="{{cols}}" rowHeight="1:1" gutterSize="0">
-        <mat-grid-tile
-          *ngFor="let tile of unitTiles; let i = index;"
-          [colspan]=1
-          [rowspan]=1
-        >
-          <div class="container">
-            <button mat-button style="width: 100%; height: 100%;">
-              <div *ngIf="tile.unit" class="imageTwo tileElement">
-                <img src="assets/img/{{unitType}}.png">
-              </div>
-            </button>
-          </div>
-        </mat-grid-tile>
-      </mat-grid-list>
+<div fxLayout="column" fxLayoutAlign="start center">
+
+  <h1>CREATE YOUR ARMY</h1>
+  <p>Be wise, your opponent is doing the same.</p>
+
+  <div fxFill>
+    <div *ngFor="let unitType of unitTypes">
+      <div *ngIf="(selectUnitTiles(unitType) | async) as unitTiles">
+        <mat-grid-list cols="{{cols}}" rowHeight="1:1" gutterSize="0">
+          <mat-grid-tile
+            *ngFor="let tile of unitTiles; let i = index;"
+            [colspan]=1
+            [rowspan]=1
+          >
+
+            <div class="container">
+              <button mat-button style="width: 100%; height: 100%;">
+                <div *ngIf="tile.unit" class="imageTwo tileElement">
+                  <img src="assets/img/{{unitType}}.png">
+                </div>
+              </button>
+            </div>
+
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
     </div>
   </div>
-</mat-card>
-<button mat-button color="warn" (click)="start()">
-  Ready
-</button>
+
+  <button mat-raised-button color="warn" (click)="start()">
+    <span>Ready</span>
+  </button>
+
+</div>
+

@@ -1,3 +1,7 @@
+.ready {
+  font-size: 15px;
+  font-weight: bold;
+}
 .container {
   position: relative;
   width: 100%;
@@ -13,9 +17,6 @@
 img {
   max-width:100%;
   max-height:100%;
-}
-.imageOne {
-  z-index: 0;
 }
 .imageTwo {
   z-index: 1;
