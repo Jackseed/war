@@ -20,7 +20,7 @@ export interface UnitUI {
   isSelected?: boolean;
 }
 
-export const unitCols = 5;
+export const unitCols = 10;
 export const unitMaxTiles = 10;
 
 export function createUnit(

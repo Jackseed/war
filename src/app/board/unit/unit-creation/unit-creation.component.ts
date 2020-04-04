@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TileService, Tile, TileQuery } from '../../tile/+state';
 import { unitCols, UnitService, Unit, UnitQuery } from '../+state';
 import { GameService } from 'src/app/games/+state';
@@ -17,12 +19,19 @@ export class UnitCreationComponent implements OnInit {
   unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
 
   constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
     private query: UnitQuery,
     private service: UnitService,
     private gameService: GameService,
     private tileService: TileService,
     private tileQuery: TileQuery,
-  ) {}
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      'fight',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/fight.svg')
+    );
+  }
 
   ngOnInit(): void {}
 

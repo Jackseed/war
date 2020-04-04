@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { UnitCreationComponent } from './unit-creation/unit-creation.component';
 import { UnitBoardComponent } from './unit-board/unit-board.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -15,6 +16,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatGridListModule,
     MatCardModule,
     MatButtonModule,
