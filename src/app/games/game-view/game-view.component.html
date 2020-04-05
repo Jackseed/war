@@ -1,18 +1,46 @@
-<div class="container" fxLayout="row" fxLayoutAlign="start none">
+<div *ngIf="(gameStatus$ | async) === 'unit creation'; else board"
+  class="container" fxLayout="column wrap" fxLayoutAlign="center center">
 
-  <div fxFlex="30">
-    <app-unit-board></app-unit-board>
+  <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
+    <app-top-bar></app-top-bar>
   </div>
 
-  <div fxFlex="70" *ngIf="(gameStatus$ | async) === 'unit creation'; else board">
-    <app-unit-creation></app-unit-creation>
-  </div>
+  <div fxFlex="70" fxFill>
 
-  <ng-template #board>
-    <div fxFlex="40">
-      <app-board></app-board>
+    <div class="container" fxLayout="row" fxLayoutAlign="start none">
+
+      <div fxFlex="20">
+        <app-unit-board></app-unit-board>
+      </div>
+
+      <div fxFlex="80" *ngIf="(gameStatus$ | async) === 'unit creation'; else board">
+        <app-unit-creation></app-unit-creation>
+      </div>
+
     </div>
-  </ng-template>
+  </div>
+
+  <div fxFlex="10"  fxLayoutAlign="start start">
+    <app-bottom-bar></app-bottom-bar>
+  </div>
 
 </div>
 
+<ng-template #board>
+  <div class="container" fxFill fxLayout="column wrap" fxLayoutAlign="center center">
+
+    <div fxFlex="80" fxFlexOffset="5" fxFlexFill>
+
+      <div class="container" fxLayout="row" fxLayoutAlign="start none">
+        <div fxFlex="10" fxFill>
+        </div>
+
+        <div fxFlex="80">
+          <app-board></app-board>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</ng-template>

@@ -1,11 +1,6 @@
-<div class="container" fxLayout="column wrap" fxLayoutAlign="center center">
+<div class="container" fxLayout="row" fxLayoutAlign="start center">
 
-  <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
-    <h1>CREATE YOUR ARMY</h1>
-    <p>Be wise, your opponent is doing the same.</p>
-  </div>
-
-  <div fxFlex="70" fxFill>
+  <div fxFlex="75" fxFill>
     <div fxLayout="column" fxFill fxLayoutAlign="start center">
 
       <div fxFlex="25" fxFill *ngFor="let unitType of unitTypes">
@@ -23,13 +18,6 @@
       </div>
 
     </div>
-  </div>
-
-  <div fxFlex="10"  fxLayoutAlign="center center">
-    <button mat-raised-button color="warn" (click)="start()">
-      <span>Fight</span>
-      <mat-icon svgIcon="fight" style="margin-left: 5px;"></mat-icon>
-    </button>
   </div>
 
 </div>

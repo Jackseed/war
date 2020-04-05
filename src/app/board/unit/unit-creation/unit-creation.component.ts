@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TileService, Tile, TileQuery } from '../../tile/+state';
-import { unitCols, UnitService, Unit, UnitQuery } from '../+state';
-import { GameService } from 'src/app/games/+state';
+import { Tile, TileQuery } from '../../tile/+state';
+import { unitCols, Unit, UnitQuery } from '../+state';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -19,19 +16,9 @@ export class UnitCreationComponent implements OnInit {
   unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
 
   constructor(
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private query: UnitQuery,
-    private service: UnitService,
-    private gameService: GameService,
-    private tileService: TileService,
     private tileQuery: TileQuery,
-  ) {
-    this.matIconRegistry.addSvgIcon(
-      'fight',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/fight.svg')
-    );
-  }
+  ) {}
 
   ngOnInit(): void {}
 
@@ -43,15 +30,6 @@ export class UnitCreationComponent implements OnInit {
       filterBy: unit => unit.type === unitType
     });
     return this.tileQuery.combineTileWithUIandUnits(unitTiles$, units$, false);
-  }
-
-  start() {
-    // Switch game status to 'placement'
-    this.gameService.switchStatus('placement');
-    // Create the game tiles
-    this.tileService.setTiles();
-    // Save the units created
-    this.service.setUnits();
   }
 
 }

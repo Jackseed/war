@@ -1,29 +1,39 @@
-<mat-card>
-  <mat-card-content *ngFor="let unitType of unitTypes">
-    <div fxLayout="row" fxLayoutAlign="center center">
+<div class="container" fxLayout="column wrap">
 
-      <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
-        <img src="assets/img/{{unitType}}.png">
-        <div *ngIf="(gameStatus$ | async) === 'unit creation'; else battle">
-          <button mat-icon-button (click)="removeUnit(unitType)">
-            <mat-icon>remove</mat-icon>
-          </button>
-          {{ (selectUnitType(unitType) | async).length }}
-          <button mat-icon-button (click)="addUnit(unitType)">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-        <ng-template #battle>
-          <div>
-            {{ (selectUnitType(unitType) | async).length }}
+  <div fxFlex="100" fxFlexFill>
+    <div fxLayout="column" fxFill fxLayoutAlign="center center">
+
+      <div *ngFor="let unitType of unitTypes" fxFlex="25">
+        <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+
+              <div fxFlex="100">
+                <img src="assets/img/{{unitType}}.png">
+              </div>
+
+              <div fxFlex="100">
+                <div *ngIf="(gameStatus$ | async) === 'unit creation'; else battle">
+                  <button mat-icon-button (click)="removeUnit(unitType)">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                    <span>{{ (selectUnitType(unitType) | async).length }}</span>
+                  <button mat-icon-button (click)="addUnit(unitType)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+                <ng-template #battle>
+                  <div>
+                    <span>{{ (selectUnitType(unitType) | async).length }}</span>
+                  </div>
+                </ng-template>
+
+
           </div>
-        </ng-template>
-      </div>
+        </div>
 
-      <div fxFlex="100">
-        <!-- colonne de droite  -->
+
       </div>
     </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>
 
