@@ -5,13 +5,25 @@
 </div>
 
 <div fxLayout="row" fxFill fxLayoutAlign="space-evenly stretch" style="padding-top: 10%;">
-  <app-game-form></app-game-form>
+  <div fxLayout="column">
+    <div fxFlex *ngIf="(playerGames$ | async).length">
+      <h2 style="text-align: left;">Your current games</h2>
+      <div *ngFor="let playerGame of playerGames$ | async">
+        <button mat-flat-button color="warn" (click)='joinGame(playerGame)' class='game-list'>
+          <span>{{playerGame.name}} {{playerGame.playerIds.length}}/2</span>
+        </button>
+      </div>
+    </div>
+    <div fxFlex>
+      <app-game-form></app-game-form>
+    </div>
+  </div>
   <div>
-    <h2 style="text-align: left;">Join a game</h2>
-    <div *ngIf="(games$ | async) as games">
-      <div *ngFor="let game of games">
-        <button mat-flat-button color="warn" (click)='joinGame(game)' class='game-list'>
-          <span>{{game.name}}</span>
+    <div *ngIf="(otherGames$ | async).length">
+      <h2 style="text-align: left;">Join a game</h2>
+      <div *ngFor="let otherGame of otherGames$ | async">
+        <button mat-flat-button color="warn" (click)='joinGame(otherGame)' class='game-list'>
+          <span>{{otherGame.name}} {{otherGame.playerIds.length}}/2</span>
         </button>
       </div>
     </div>
