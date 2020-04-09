@@ -57,7 +57,6 @@ export class TileService extends CollectionService<TileState> {
   markTileWithUnit(unit: Unit) {
     // checks if the unit belongs to the active player and add visibility then
     if (unit.playerId === this.playerQuery.getActiveId()) {
-      console.log(unit);
       this.store.update(unit.tileId.toString(), { unit });
       this.switchAdjacentTilesParameter(unit.tileId, 'visibility', unit.vision);
     // if the unit is enemy, marks it opponent
@@ -74,6 +73,8 @@ export class TileService extends CollectionService<TileState> {
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.removeSelected();
     this.removeUnitfromTile(unit.tileId);
+    console.log('moving');
+    this.switchAdjacentTilesParameter(unit.tileId, 'invisibility', unit.vision);
     this.unitService.updatePosition(unit, tileId);
   }
 
@@ -92,6 +93,10 @@ export class TileService extends CollectionService<TileState> {
     this.store.ui.update(tileId, ({ isVisible: true }));
   }
 
+  markInvisible(tileId: number) {
+    this.store.ui.update(tileId, ({ isVisible: false }));
+  }
+
   markAsReachable(tileId: number) {
     this.store.ui.update(tileId, ({ isReachable: true }));
   }
@@ -102,10 +107,8 @@ export class TileService extends CollectionService<TileState> {
     this.unitStore.setActive(unit.id.toString());
   }
 
-  switchAdjacentTilesParameter(tileId: number, paramType: 'visibility' | 'reachable', paramValue: number) {
+  switchAdjacentTilesParameter(tileId: number, paramType: 'visibility' |'invisibility' | 'reachable', paramValue: number) {
     const tile: Tile = this.query.getEntity(tileId.toString());
-    console.log(this.query.getAll());
-    console.log(tileId, tile);
     for (let x = -paramValue; x <= paramValue; x++) {
       for (let y = -paramValue; y <= paramValue; y++) {
         const X = tile.x + x;
@@ -115,6 +118,9 @@ export class TileService extends CollectionService<TileState> {
           const id = X + boardCols * Y;
           if (paramType === 'visibility') {
             this.markAsVisible(id);
+          }
+          if (paramType === 'invisibility') {
+            this.markInvisible(id);
           }
           if (paramType === 'reachable') {
             if (id !== tile.id) {
