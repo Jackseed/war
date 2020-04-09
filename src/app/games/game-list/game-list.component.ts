@@ -23,7 +23,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.games$ = this.query.selectAll();
   }
 
-  joinGame(game) {
+  joinGame(game: Game) {
     this.service.joinGame(game);
   }
 

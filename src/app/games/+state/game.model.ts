@@ -2,6 +2,7 @@ export interface Game {
   id?: string;
   name?: string;
   status?: 'unit creation' | 'placement' | 'battle' | 'finished';
+  playerIds?: string[];
 }
 
 export const boardCols = 10;
