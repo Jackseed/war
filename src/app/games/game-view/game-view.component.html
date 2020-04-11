@@ -1,5 +1,4 @@
-<div *ngIf="(gameStatus$ | async) === 'unit creation'; else board"
-  class="container" fxLayout="column wrap" fxLayoutAlign="center center">
+<div class="container" fxLayout="column wrap" fxLayoutAlign="center center">
 
   <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
     <app-top-bar></app-top-bar>
@@ -7,17 +6,33 @@
 
   <div fxFlex="70" fxFill>
 
-    <div class="container" fxLayout="row" fxLayoutAlign="start none">
-
-      <div fxFlex="20">
-        <app-unit-board></app-unit-board>
+    <!-- Waiting Room -->
+    <ng-container *ngIf="(players$ | async).length === 1; else unitCreation">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <iframe fxFlex=50 src="https://www.dinogame.net/game/index.html" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
       </div>
+    </ng-container>
 
-      <div fxFlex="80" *ngIf="(gameStatus$ | async) === 'unit creation'; else board">
-        <app-unit-creation></app-unit-creation>
-      </div>
+    <!-- Unit Creation -->
+    <ng-template #unitCreation>
+      <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" class="container" fxLayout="row" fxLayoutAlign="start none">
 
-    </div>
+        <div fxFlex="20">
+          <app-unit-board></app-unit-board>
+        </div>
+
+        <div fxFlex="80">
+          <app-unit-creation></app-unit-creation>
+        </div>
+
+      </ng-container>
+    </ng-template>
+
+    <!-- Board -->
+    <ng-template #board>
+      <app-board></app-board>
+    </ng-template>
+
   </div>
 
   <div fxFlex="10"  fxLayoutAlign="start start">
@@ -25,9 +40,3 @@
   </div>
 
 </div>
-
-<ng-template #board>
-
-  <app-board></app-board>
-
-</ng-template>

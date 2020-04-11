@@ -1,4 +1,18 @@
-<div style="text-align: center;">
-  <h1>CREATE YOUR ARMY</h1>
-  <p>Be wise, your opponent is doing the same.</p>
-</div>
+<ng-container *ngIf="(players$ | async).length === 1; else unitCreation">
+  <div style="text-align: center;">
+    <h1>WAITING FOR AN OPPONENT</h1>
+    <p>Prepare yourself with the dino :)</p>
+  </div>
+</ng-container>
+
+<ng-template #unitCreation>
+  <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" style="text-align: center;">
+    <h1>CREATE YOUR ARMY</h1>
+    <p>Be wise, your opponent is doing the same.</p>
+  </ng-container >
+</ng-template>
+
+<ng-template #board>
+</ng-template>
+
+

@@ -19,7 +19,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   gameId: string;
   tiles$: Observable<Tile[]>;
   units$: Observable<Unit[]>;
-  players$: Observable<Player[]> = this.playerQuery.selectAll();
+  players$: Observable<Player[]>;
   visibleOpponentUnits$: Observable<Unit[]>;
   visibleTiles$: Observable<Tile[]>;
   player: Player;
@@ -39,6 +39,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.players$ = this.playerQuery.selectAll();
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
     // turn loading to true while the unit & tille stores are loading
