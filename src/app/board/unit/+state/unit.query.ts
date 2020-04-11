@@ -22,4 +22,10 @@ export class UnitQuery extends QueryEntity<UnitState> {
     return this.db.collection('games').doc(gameId).collection('players').doc(opponentId)
       .collection('units', ref => ref.where('tileId', 'in', visibleTileIds)).valueChanges();
   }
+
+  public unitsByType(unitType: 'soldier' | 'musketeer' | 'knight' | 'cannon'): Observable<Unit[]> {
+    return this.selectAll({
+      filterBy: unit => unit.type === unitType
+    });
+  }
 }
