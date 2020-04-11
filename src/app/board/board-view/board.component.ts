@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, of, Subscription, combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService, TileStore } from '../tile/+state';
 import { Unit, UnitQuery, UnitStore } from '../unit/+state';
 import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 
 @Component({
@@ -64,19 +64,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleTiles$ = this.tileQuery.visibleTiles$;
 
     // Subscribe to the opponent units collection
-    this.sub = this.visibleTiles$.pipe(
-      map(visibleTiles =>
-        visibleTiles.map(({id}) => id)),
-      switchMap(visibleTileIds => {
-        if (visibleTileIds.length > 0) {
-          return this.opponentUnitService.syncCollection(ref => ref.where('tileId', 'in', visibleTileIds));
-        } else {
-          return of([{}]);
-        }
-      })
-    ).subscribe();
+    this.sub = this.opponentUnitService.syncCollection().subscribe();
 
-    this.visibleOpponentUnits$ = this.opponentUnitQuery.selectAll();
+    this.visibleOpponentUnits$ = this.opponentUnitQuery.visibleUnits$;
 
     // Add UI states and opponent units to tiles
     this.tiles$ = this.tileQuery.combineTileWithUIandUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
