@@ -73,7 +73,6 @@ export class TileService extends CollectionService<TileState> {
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.removeSelected();
     this.removeUnitfromTile(unit.tileId);
-    console.log('moving');
     this.switchAdjacentTilesParameter(unit.tileId, 'invisibility', unit.vision);
     this.unitService.updatePosition(unit, tileId);
   }

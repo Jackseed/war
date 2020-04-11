@@ -42,8 +42,14 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   get defaultPositionUnits(): Unit[] {
+    const player = this.playerQuery.getActive();
     const units: Unit[] = [];
     let i = 0;
+    let x = 1;
+    if (player.color === 'black') {
+      i = 9;
+      x = -1;
+    }
     for (const unitType of this.unitTypes) {
       const typedUnits = this.query.getAll({
         filterBy: unit => unit.type === unitType
@@ -57,7 +63,7 @@ export class UnitService extends CollectionService<UnitState> {
         if (i < (boardCols * boardCols - boardCols)) {
           i = i + boardCols;
         } else {
-          i = i % boardCols + 1;
+          i = i % boardCols + 1 * x;
         }
       }
     }

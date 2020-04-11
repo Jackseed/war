@@ -4,8 +4,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UnitService } from '../../unit/+state';
 import { GameService, GameQuery } from 'src/app/games/+state';
 import { TileService } from '../../tile/+state';
-import { PlayerQuery } from '../../player/+state';
+import { PlayerQuery, Player } from '../../player/+state';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-bottom-bar',
@@ -13,10 +14,9 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./bottom-bar.component.scss']
 })
 export class BottomBarComponent implements OnInit {
-  public gameStatus$ = this.gameQuery.selectActive().pipe(
-    map(game => game.status)
-  );
-  public players$ = this.playerQuery.selectAll();
+  public gameStatus$: Observable<'unit creation' | 'placement' | 'battle' | 'finished'>;
+  public players$: Observable<Player[]>;
+  public isPlayerReady$: Observable<boolean>;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -27,6 +27,11 @@ export class BottomBarComponent implements OnInit {
     private tileService: TileService,
     private playerQuery: PlayerQuery,
   ) {
+    this.gameStatus$ = this.gameQuery.selectActive().pipe(
+      map(game => game.status)
+    );
+    this.players$  = this.playerQuery.selectAll();
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(
       'fight',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/fight.svg')
@@ -36,13 +41,20 @@ export class BottomBarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  start() {
-    // Switch game status to 'placement'
-    this.gameService.switchStatus('placement');
-    // Create the game tiles
-    this.tileService.setTiles();
-    // Save the units created
-    this.unitService.setUnits();
+  setReady() {
+    const playerId = this.playerQuery.getActiveId();
+    // Mark the player as ready & get the count
+    const playersReadyCount = this.gameService.markReady(playerId);
+
+    if (playersReadyCount === 1) {
+      // Create the game tiles when the first player is ready
+      this.tileService.setTiles();
+      // Save the units created
+      this.unitService.setUnits();
+    } else if (playersReadyCount === 2) {
+      // Save the units created
+      this.unitService.setUnits();
+    }
   }
 
 }

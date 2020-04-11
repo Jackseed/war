@@ -4,6 +4,7 @@ import { GameStore, GameState } from './game.store';
 import { Game } from './game.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameQuery extends QueryEntity<GameState> {
@@ -27,6 +28,19 @@ export class GameQuery extends QueryEntity<GameState> {
     return this.selectAll({
       filterBy: game => !game.playerIds.includes(user.uid)
     });
+  }
+
+  get playersReadyCount(): Observable<number> {
+    return this.selectActive().pipe(
+      map(game => game.playersReady.length)
+    );
+  }
+
+  get isPlayerReady(): Observable<boolean> {
+    const user = this.afAuth.auth.currentUser;
+    return this.selectActive().pipe(
+      map(game => game.playersReady.includes(user.uid))
+    );
   }
 
 }

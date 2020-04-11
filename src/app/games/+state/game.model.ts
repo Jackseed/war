@@ -3,6 +3,7 @@ export interface Game {
   name?: string;
   status?: 'unit creation' | 'placement' | 'battle' | 'finished';
   playerIds?: string[];
+  playersReady?: string[];
 }
 
 export const boardCols = 10;
@@ -13,6 +14,9 @@ export function createGame(params: Partial<Game> = {}): Game {
   return {
     id: params.id,
     name: params.name,
+    status: 'unit creation',
+    playersReady: [],
+    playerIds: params.playerIds,
     ...params
   };
 }
