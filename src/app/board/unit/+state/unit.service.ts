@@ -9,7 +9,7 @@ import { UnitQuery } from './unit.query';
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
 export class UnitService extends CollectionService<UnitState> {
-  unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
+  unitTypes = ['soldier', 'musketeer', 'knight', 'cannon'];
 
   constructor(
     store: UnitStore,
@@ -72,8 +72,8 @@ export class UnitService extends CollectionService<UnitState> {
 
   public addUnit(unitType, tileId: number) {
     const id = this.db.createId();
-    const playerId: string = this.playerQuery.getActiveId();
-    this.store.add(createUnit(id, playerId, unitType, tileId));
+    const player = this.playerQuery.getActive();
+    this.store.add(createUnit(id, player.id, player.color, unitType, tileId));
   }
 
   public removeUnit(unit: Unit) {

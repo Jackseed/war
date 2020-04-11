@@ -13,7 +13,7 @@ export class UnitCreationComponent implements OnInit {
   soldierTiles$: Observable<Tile[]>;
   soldierTilesWithUnits$: Observable<Tile[]>;
   soldiers$: Observable<Unit[]>;
-  unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
+  unitTypes = ['soldier', 'musketeer', 'knight', 'cannon'];
 
   constructor(
     private query: UnitQuery,

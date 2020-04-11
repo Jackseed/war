@@ -16,7 +16,7 @@
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>
             <div class="unit">
-              <img class="img-unit" src="assets/img/{{tile.unit.type}}.png" [ngClass]="{'opponent': tile.unit.isOpponent}">
+              <img class="img-unit" src="assets/img/{{tile.unit.color}}_{{tile.unit.type}}.png">
             </div>
           </div>
 

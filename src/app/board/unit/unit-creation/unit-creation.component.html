@@ -9,7 +9,7 @@
 
           <div *ngIf="(selectUnitTiles(unitType) | async) as unitTiles">
             <mat-grid-tile *ngFor="let tile of unitTiles; let i = index;">
-              <img fxFlexFill src="assets/img/{{unitType}}.png">
+              <img fxFlexFill src="assets/img/black_{{unitType}}.png">
             </mat-grid-tile>
           </div>
 

@@ -9,7 +9,7 @@ export interface Tile {
   isReachable?: boolean;
   isSelected?: boolean;
   unit?: Unit;
-  unitCreationType?: 'soldier' | 'archer' | 'knight' | 'canon';
+  unitCreationType?: 'soldier' | 'archer' | 'knight' | 'cannon';
 }
 
 export interface TileUI {

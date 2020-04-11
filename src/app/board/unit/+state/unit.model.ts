@@ -1,7 +1,8 @@
 export interface Unit {
   id?: string;
   tileId?: number;
-  type?: 'soldier' | 'musketeer' | 'knight' | 'canon';
+  color?: 'white' | 'black';
+  type?: 'soldier' | 'musketeer' | 'knight' | 'cannon';
   quantity?: number;
   range?: number;
   move?: number;
@@ -24,12 +25,13 @@ export const unitCols = 10;
 export const unitMaxTiles = 10;
 
 export function createUnit(
-  id: string, playerId: string, unitType: 'soldier' | 'musketeer' | 'knight' | 'canon',
+  id: string, playerId: string, color: 'white' | 'black', unitType: 'soldier' | 'musketeer' | 'knight' | 'cannon',
   tileId?: number, params?: Partial<Unit>): Unit {
   if (unitType === 'soldier') {
       return {
       id,
       playerId,
+      color,
       tileId,
       type: 'soldier',
       quantity: 10,
@@ -46,6 +48,7 @@ export function createUnit(
     return {
       id,
       playerId,
+      color,
       tileId,
       type: 'musketeer',
       quantity: 10,
@@ -62,6 +65,7 @@ export function createUnit(
     return {
       id,
       playerId,
+      color,
       tileId,
       type: 'knight',
       quantity: 10,
@@ -74,12 +78,13 @@ export function createUnit(
       noise: 1,
       ...params
     };
-  } else if (unitType === 'canon') {
+  } else if (unitType === 'cannon') {
     return {
       id,
       playerId,
+      color,
       tileId,
-      type: 'canon',
+      type: 'cannon',
       quantity: 5,
       hp: 1,
       range: 3,
