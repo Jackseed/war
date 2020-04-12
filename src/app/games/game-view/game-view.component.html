@@ -15,7 +15,7 @@
 
     <!-- Unit Creation -->
     <ng-template #unitCreation>
-      <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" class="container" fxLayout="row" fxLayoutAlign="start none">
+      <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" class="container">
 
         <div fxFlex="20">
           <app-unit-board></app-unit-board>
