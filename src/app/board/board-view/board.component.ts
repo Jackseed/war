@@ -14,7 +14,8 @@ import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../un
 })
 
 export class BoardComponent implements OnInit, OnDestroy {
-  private sub: Subscription;
+  private oppUnitsub: Subscription;
+  private unitsub: Subscription;
   public loading$: Observable<boolean>;
   gameId: string;
   tiles$: Observable<Tile[]>;
@@ -61,10 +62,11 @@ export class BoardComponent implements OnInit, OnDestroy {
           return unit;
         })
     ));
+    this.unitsub = this.units$.subscribe();
     this.visibleTiles$ = this.tileQuery.visibleTiles$;
 
     // Subscribe to the opponent units collection
-    this.sub = this.opponentUnitService.syncCollection().subscribe();
+    this.oppUnitsub = this.opponentUnitService.syncCollection().subscribe();
 
     this.visibleOpponentUnits$ = this.opponentUnitQuery.visibleUnits$;
 
@@ -99,7 +101,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.opponentUnitStore.reset();
-    this.sub.unsubscribe();
+    this.oppUnitsub.unsubscribe();
+    this.unitsub.unsubscribe();
   }
 
 }
