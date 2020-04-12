@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/auth/+state';
 export class GameListComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   public games$: Observable<Game[]>;
+  public playerGames$: Observable<Game[]>;
+  public otherGames$: Observable<Game[]>;
 
   constructor(
     public auth: AuthService,
@@ -21,9 +23,11 @@ export class GameListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.service.syncCollection().subscribe();
     this.games$ = this.query.selectAll();
+    this.playerGames$ = this.query.playerGames;
+    this.otherGames$ = this.query.otherGames;
   }
 
-  joinGame(game) {
+  joinGame(game: Game) {
     this.service.joinGame(game);
   }
 

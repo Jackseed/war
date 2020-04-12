@@ -6,13 +6,9 @@
       <div fxFlex="25" fxFill *ngFor="let unitType of unitTypes">
 
         <mat-grid-list fxFlexFill cols="{{cols}}" gutterSize="0" rowHeight="fit">
-
-          <div *ngIf="(selectUnitTiles(unitType) | async) as unitTiles">
-            <mat-grid-tile *ngFor="let tile of unitTiles; let i = index;">
-              <img fxFlexFill src="assets/img/{{unitType}}.png">
-            </mat-grid-tile>
-          </div>
-
+          <mat-grid-tile *ngFor="let unit of (selectUnitByType(unitType) | async); let i = index;">
+            <img fxFlexFill src="assets/img/black_{{unitType}}.png">
+          </mat-grid-tile>
         </mat-grid-list>
 
       </div>

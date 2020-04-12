@@ -4,19 +4,19 @@
 
 <ng-template #loaded>
 
-  <div *ngIf="(units$ | async) as units" fxLayout="column" fxLayoutAlign="center" class="container">
-    <div *ngIf="(tiles$ | async) as tiles" fxFlex="80" fxLayout="row" fxLayoutAlign="center" class="container">
+  <div fxLayout="column" fxLayoutAlign="center" class="container">
+    <div fxFlex="80" fxLayout="row" fxLayoutAlign="center" class="container">
 
       <mat-grid-list fxFlex="80" class="container" cols="{{boardSize}}" gutterSize="0" rowHeight="fit">
 
-        <mat-grid-tile *ngFor="let tile of tiles; let i = index;">
+        <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;">
 
           <div *ngIf="tile.unit; else ground" (click)="play(i)" class="container unit-ground">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>
             <div class="unit">
-              <img class="img-unit" src="assets/img/{{tile.unit.type}}.png" [ngClass]="{'opponent': tile.unit.isOpponent}">
+              <img class="img-unit" src="assets/img/{{tile.unit.color}}_{{tile.unit.type}}.png">
             </div>
           </div>
 

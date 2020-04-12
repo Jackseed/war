@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class UnitBoardComponent implements OnInit {
   soldiers$: Observable<Unit[]>;
-  unitTypes = ['soldier', 'musketeer', 'knight', 'canon'];
+  unitTypes = ['soldier', 'musketeer', 'knight', 'cannon'];
   gameStatus$ = this.gameQuery.selectActive().pipe(
     map(game => game.status)
   );

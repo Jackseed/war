@@ -29,27 +29,18 @@ export class TileService extends CollectionService<TileState> {
   }
 
   setTiles() {
-    const tiles: Tile[] = [];
-    this.store.reset();
+    const collection = this.db.firestore.collection(this.currentPath);
+    const batch = this.db.firestore.batch();
+
     for (let i = 0; i < boardCols; i++) {
       for (let j = 0; j < boardCols; j++) {
         const tileId = j + boardCols * i;
         if ( tileId < boardMaxTiles) {
           const tile: Tile = createTile(tileId, j, i);
-          tiles.push(tile);
+          const ref = collection.doc(tile.id.toString());
+          batch.set(ref, tile);
         }
       }
-    }
-    this.setDBTiles(tiles);
-  }
-
-  setDBTiles(tiles: Tile[]) {
-    const collection = this.db.firestore.collection(this.currentPath);
-    const batch = this.db.firestore.batch();
-
-    for (const tile of tiles) {
-      const ref = collection.doc(tile.id.toString());
-      batch.set(ref, tile);
     }
     batch.commit();
   }
@@ -73,7 +64,6 @@ export class TileService extends CollectionService<TileState> {
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.removeSelected();
     this.removeUnitfromTile(unit.tileId);
-    console.log('moving');
     this.switchAdjacentTilesParameter(unit.tileId, 'invisibility', unit.vision);
     this.unitService.updatePosition(unit, tileId);
   }

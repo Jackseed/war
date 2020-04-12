@@ -56,4 +56,11 @@ export class TileQuery extends QueryEntity<TileState> {
     });
   }
 
+  public get visibleTileIds$(): Observable<number[]> {
+    return this.visibleTiles$.pipe(
+      map(visibleTiles =>
+        visibleTiles.map(({id}) => id))
+    );
+  }
+
 }
