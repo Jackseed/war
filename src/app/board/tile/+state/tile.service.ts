@@ -1,52 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Unit, UnitStore, UnitService } from '../../unit/+state';
 import { TileQuery } from './tile.query';
-import { TileStore, TileState } from './tile.store';
+import { TileStore } from './tile.store';
 import { Tile, createTile } from './tile.model';
-import { GameQuery, boardCols, boardMaxTiles } from 'src/app/games/+state';
+import { boardCols, boardMaxTiles } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
-import { CollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
 
 @Injectable({ providedIn: 'root' })
-@CollectionConfig({ path: 'games/:gameId/tiles' })
-export class TileService extends CollectionService<TileState> {
+export class TileService {
 
   constructor(
-    store: TileStore,
+    private store: TileStore,
     private query: TileQuery,
-    private gameQuery: GameQuery,
     private playerQuery: PlayerQuery,
     private unitStore: UnitStore,
     private unitService: UnitService,
-  ) {
-    super(store);
-  }
-
-  get path(): string {
-    const path = 'path';
-    const gameId = this.gameQuery.getActiveId();
-    return pathWithParams(this.constructor[path], {gameId});
-  }
+  ) {}
 
   setTiles() {
-    const collection = this.db.firestore.collection(this.currentPath);
-    const batch = this.db.firestore.batch();
-
+    const tiles: Tile[] = [];
     for (let i = 0; i < boardCols; i++) {
       for (let j = 0; j < boardCols; j++) {
         const tileId = j + boardCols * i;
         if ( tileId < boardMaxTiles) {
-          const tile: Tile = createTile(tileId, j, i);
-          const ref = collection.doc(tile.id.toString());
-          batch.set(ref, tile);
+          const tile = createTile(tileId, j, i);
+          tiles.push(tile);
         }
       }
     }
-    batch.commit();
+    this.store.set(tiles);
   }
 
   markTileWithUnit(unit: Unit) {
-    // checks if the unit belongs to the active player and add visibility then
+    // checks if the unit belongs to the active player and the unit to the tile and add visibility to adjacent ones
     if (unit.playerId === this.playerQuery.getActiveId()) {
       this.store.update(unit.tileId.toString(), { unit });
       this.switchAdjacentTilesParameter(unit.tileId, 'visibility', unit.vision);
@@ -69,7 +55,7 @@ export class TileService extends CollectionService<TileState> {
   }
 
   public removeSelected() {
-    this.store.ui.update(null, {
+    this.store.update(null, {
       isSelected: false,
       isReachable: false,
     });
@@ -80,19 +66,19 @@ export class TileService extends CollectionService<TileState> {
   }
 
   markAsVisible(tileId: number) {
-    this.store.ui.update(tileId, ({ isVisible: true }));
+    this.store.update(tileId, ({ isVisible: true }));
   }
 
   markInvisible(tileId: number) {
-    this.store.ui.update(tileId, ({ isVisible: false }));
+    this.store.update(tileId, ({ isVisible: false }));
   }
 
   markAsReachable(tileId: number) {
-    this.store.ui.update(tileId, ({ isReachable: true }));
+    this.store.update(tileId, ({ isReachable: true }));
   }
 
   markAsSelected(tileId: number, unit: Unit) {
-    this.store.ui.update(tileId, tile => ({ isSelected: true }));
+    this.store.update(tileId, tile => ({ isSelected: true }));
     this.switchAdjacentTilesParameter(tileId, 'reachable', unit.move);
     this.unitStore.setActive(unit.id.toString());
   }

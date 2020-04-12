@@ -40,6 +40,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.tileService.setTiles();
     this.players$ = this.playerQuery.selectAll();
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
@@ -71,7 +72,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleOpponentUnits$ = this.opponentUnitQuery.visibleUnits$;
 
     // Add UI states and opponent units to tiles
-    this.tiles$ = this.tileQuery.combineTileWithUIandUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
+    this.tiles$ = this.tileQuery.combineTileWithUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
     this.tiles$.subscribe(console.log);
     // display the board
     this.tileStore.setLoading(false);

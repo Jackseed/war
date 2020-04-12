@@ -6,7 +6,6 @@ import { GameGuard } from './games/guard/game.guard';
 import { ActiveGameGuard } from './games/guard/active-game.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
 import { UnitGuard } from './board/unit/guard/unit.guard';
-import { TileGuard } from './board/tile/guard/tile.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { ActiveAuthGuard } from './auth/guard/active-auth.guard';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
@@ -40,8 +39,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        canActivate: [PlayerGuard, TileGuard],
-        canDeactivate: [PlayerGuard, TileGuard],
+        canActivate: [PlayerGuard],
+        canDeactivate: [PlayerGuard],
         children: [
           {
             path: '',

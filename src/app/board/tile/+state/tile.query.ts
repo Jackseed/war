@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { QueryEntity, QueryConfig, Order, EntityUIQuery } from '@datorama/akita';
-import { TileStore, TileState, TileUIState } from './tile.store';
+import { QueryEntity, QueryConfig, Order } from '@datorama/akita';
+import { TileStore, TileState } from './tile.store';
 import { Observable, combineLatest } from 'rxjs';
-import { Tile, TileUI } from '.';
-import { map, switchMap } from 'rxjs/operators';
+import { Tile } from '.';
+import { map } from 'rxjs/operators';
 import { Unit } from '../../unit/+state';
+import { Injectable } from '@angular/core';
 
 @QueryConfig({
   sortBy: 'id',
@@ -12,31 +12,18 @@ import { Unit } from '../../unit/+state';
 })
 @Injectable({ providedIn: 'root' })
 export class TileQuery extends QueryEntity<TileState> {
-  ui: EntityUIQuery<TileUIState>;
 
   constructor(
     protected store: TileStore,
   ) {
     super(store);
-    this.createUIQuery();
   }
 
-  public combineTileWithUIandUnits(tiles$: Observable<Tile[]>, units$: Observable<Unit[]>, isOpponent: boolean)
-  : Observable<(Tile & TileUI)[]> {
-    const tilesUI$ = tiles$.pipe(
-      map(tiles =>
-        tiles.map(({id}) => id.toString())),
-      switchMap(tileIds => this.ui.selectMany(tileIds))
-    );
+  public combineTileWithUnits(tiles$: Observable<Tile[]>, units$: Observable<Unit[]>, isOpponent: boolean)
+  : Observable<(Tile)[]> {
 
-    return combineLatest([tiles$, tilesUI$, units$]).pipe(
-      map(([tiles, tilesUI, units]) => {
-      tiles = tiles.map(tile => {
-        return {
-          ...tile,
-          ...tilesUI[tile.id]
-        };
-      });
+  return combineLatest([tiles$, units$]).pipe(
+    map(([tiles, units]) => {
       units.map(unit => {
         tiles[unit.tileId] = {
           ...tiles[unit.tileId],
@@ -48,10 +35,11 @@ export class TileQuery extends QueryEntity<TileState> {
       });
       return tiles;
     }));
+
   }
 
   public get visibleTiles$(): Observable<Tile[]> {
-    return this.ui.selectAll({
+    return this.selectAll({
       filterBy: tile => tile.isVisible === true
     });
   }
