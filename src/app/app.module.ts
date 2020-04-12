@@ -20,7 +20,6 @@ import { PlayerModule } from './board/player/player.module';
 import { RouterModule } from '@angular/router';
 import { ActiveGameGuard } from './games/guard/active-game.guard';
 import { UnitGuard } from './board/unit/guard/unit.guard';
-import { TileGuard } from './board/tile/guard/tile.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
 import { GameGuard } from './games/guard/game.guard';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
@@ -57,7 +56,7 @@ const firebaseConfig = {
     RouterModule,
     environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
-  providers: [ActiveAuthGuard, AngularFireAuthGuard, UnitGuard, TileGuard, PlayerGuard, GameGuard, ActiveGameGuard],
+  providers: [ActiveAuthGuard, AngularFireAuthGuard, UnitGuard, PlayerGuard, GameGuard, ActiveGameGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
