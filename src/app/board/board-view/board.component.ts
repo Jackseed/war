@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription, combineLatest } from 'rxjs';
-import { Tile, TileQuery, TileService, TileStore } from '../tile/+state';
-import { Unit, UnitQuery, UnitStore } from '../unit/+state';
+import { Tile, TileQuery, TileService } from '../tile/+state';
+import { Unit, UnitQuery } from '../unit/+state';
 import { GameQuery, boardCols } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../player/+state';
 import { map } from 'rxjs/operators';
@@ -28,10 +28,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   constructor(
     private gameQuery: GameQuery,
-    private tileStore: TileStore,
     private tileQuery: TileQuery,
     private tileService: TileService,
-    private unitStore: UnitStore,
     private unitQuery: UnitQuery,
     private playerQuery: PlayerQuery,
     private opponentUnitStore: OpponentUnitStore,
@@ -44,8 +42,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameId = this.gameQuery.getActiveId();
     this.player = this.playerQuery.getActive();
     // turn loading to true while the unit & tille stores are loading
-    this.tileStore.setLoading(true);
-    this.unitStore.setLoading(true);
+
     this.loading$ = combineLatest([this.tileQuery.selectLoading(), this.unitQuery.selectLoading()]).pipe(
       map(([tileLoading, unitLoading]) => {
         return tileLoading && unitLoading;
@@ -74,8 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.tiles$ = this.tileQuery.combineTileWithUIandUnits(this.tileQuery.selectAll(), this.visibleOpponentUnits$, true);
 
     // display the board
-    this.tileStore.setLoading(false);
-    this.unitStore.setLoading(false);
+
   }
 
   play(i: number) {

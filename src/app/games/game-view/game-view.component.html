@@ -4,34 +4,34 @@
     <app-top-bar></app-top-bar>
   </div>
 
-  <div fxFlex="70" fxFill>
+  <div [ngSwitch]="(gameStatus$ | async)" fxFlex="70" fxFill>
 
     <!-- Waiting Room -->
-    <ng-container *ngIf="(players$ | async).length === 1; else unitCreation">
+    <ng-container *ngSwitchCase="'battle'">
       <div fxLayout="row" fxLayoutAlign="center center">
         <iframe fxFlex=50 src="https://www.dinogame.net/game/index.html" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
       </div>
     </ng-container>
 
     <!-- Unit Creation -->
-    <ng-template #unitCreation>
-      <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" class="container">
 
-        <div fxFlex="20">
-          <app-unit-board></app-unit-board>
-        </div>
+    <ng-container *ngSwitchCase="'unit creation'" class="container">
 
-        <div fxFlex="80">
-          <app-unit-creation></app-unit-creation>
-        </div>
+      <div fxFlex="20">
+        <app-unit-board></app-unit-board>
+      </div>
 
-      </ng-container>
-    </ng-template>
+      <div fxFlex="80">
+        <app-unit-creation></app-unit-creation>
+      </div>
+
+    </ng-container>
+
 
     <!-- Board -->
-    <ng-template #board>
+    <ng-container *ngSwitchCase="'placement'">
       <app-board></app-board>
-    </ng-template>
+    </ng-container>
 
   </div>
 
