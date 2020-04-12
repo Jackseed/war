@@ -32,13 +32,13 @@ export class UnitService extends CollectionService<UnitState> {
     const collection = this.db.firestore.collection(this.currentPath);
     const batch = this.db.firestore.batch();
 
-    this.store.reset();
-
     for (const unit of units) {
       const ref = collection.doc(unit.id);
       batch.set(ref, unit);
     }
+
     batch.commit();
+
   }
 
   get defaultPositionUnits(): Unit[] {
