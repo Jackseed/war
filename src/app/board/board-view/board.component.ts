@@ -51,19 +51,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
     );
 
-    // remove the unit tile ids from the visible tile ids
-    this.visibleTileIdsWithoutUnits$ = combineLatest([this.visibleTileIds$, this.unitTileIds$, this.visibleOpponentUnitTileIds$]).pipe(
-      map(([visibleTileIds, unitTileIds, opponentTileIds]) => {
-        for (const unitTileId of unitTileIds) {
-          visibleTileIds = visibleTileIds.filter(tileId => tileId !== unitTileId);
-        }
-        for (const opponentTileId of opponentTileIds) {
-          visibleTileIds = visibleTileIds.filter(tileId => tileId !== opponentTileId);
-        }
-        return visibleTileIds;
-      })
-    );
-
     // Sync tiles & units
     this.tileWithUnitSub = this.unitQuery.selectAll().pipe(
       map(units =>
