@@ -29,10 +29,18 @@ export class TileQuery extends QueryEntity<TileState> {
   public get visibleTileIds2$(): Observable<number[]> {
     return this.unitQuery.selectAll().pipe(
       map(units => {
-        const idsArray: number[][] = units.map(unit => this.getAdjacentTiles(unit.tileId, unit.vision));
+        // gets the adjacent tiles visible by the unit
+        const unitTileIdsArray: number[][] = units.map(
+          unit => this.getAdjacentTiles(unit.tileId, unit.vision)
+        );
         const visibleIds: number[] = [];
-        for (const ids of idsArray) {
-          visibleIds.concat(ids);
+        // flatten the array of each unit into one, without duplicate
+        for (const ids of unitTileIdsArray) {
+          for (const id of ids) {
+            if (!visibleIds.includes(id)) {
+              visibleIds.push(id);
+            }
+          }
         }
         return visibleIds;
       })

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
 import { boardCols } from 'src/app/games/+state';
@@ -21,6 +21,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public visibleOpponentUnitTileIds$: Observable<number[]>;
   public boardSize = boardCols;
   public visibleTileIds$: Observable<number[]>;
+  public visibleTileIdsWithoutUnits$: Observable<number[]>;
 
   constructor(
     private tileQuery: TileQuery,
@@ -36,14 +37,31 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.tileService.setTiles();
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
+
+    // get the visible tile ids
     this.visibleTileIds$ = this.tileQuery.visibleTileIds2$;
-    this.visibleTileIds$.subscribe(console.log);
+
     // get unit tile ids
     this.unitTileIds$ = this.unitQuery.unitTileIds$;
+
+    // get opponent visible unit tile ids
     this.visibleOpponentUnitTileIds$ = this.opponentUnitQuery.visibleUnits$.pipe(
       map(units =>
         units.map(({tileId}) => tileId)
       )
+    );
+
+    // remove the unit tile ids from the visible tile ids
+    this.visibleTileIdsWithoutUnits$ = combineLatest([this.visibleTileIds$, this.unitTileIds$, this.visibleOpponentUnitTileIds$]).pipe(
+      map(([visibleTileIds, unitTileIds, opponentTileIds]) => {
+        for (const unitTileId of unitTileIds) {
+          visibleTileIds = visibleTileIds.filter(tileId => tileId !== unitTileId);
+        }
+        for (const opponentTileId of opponentTileIds) {
+          visibleTileIds = visibleTileIds.filter(tileId => tileId !== opponentTileId);
+        }
+        return visibleTileIds;
+      })
     );
 
     // Sync tiles & units

@@ -19,8 +19,6 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
   public get visibleUnits$(): Observable<Unit[]> {
     const visibleTileIds$ = this.tileQuery.visibleTileIds$;
     const units$ = this.selectAll();
-    visibleTileIds$.subscribe(console.log);
-    units$.subscribe(console.log);
 
     return combineLatest([visibleTileIds$, units$]).pipe(
       map(([visibleTileIds, units]) => {
