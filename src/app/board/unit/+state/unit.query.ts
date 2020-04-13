@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { QueryEntity, EntityUIQuery } from '@datorama/akita';
-import { UnitStore, UnitState, UnitUIState } from './unit.store';
+import { QueryEntity } from '@datorama/akita';
+import { UnitStore, UnitState } from './unit.store';
 import { Observable } from 'rxjs';
 import { Unit } from './unit.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UnitQuery extends QueryEntity<UnitState> {
-  ui: EntityUIQuery<UnitUIState>;
 
   constructor(
     protected store: UnitStore,

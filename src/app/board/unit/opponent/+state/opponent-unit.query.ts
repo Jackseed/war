@@ -4,7 +4,7 @@ import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { Observable, combineLatest } from 'rxjs';
 import { Unit } from '../../+state';
 import { TileQuery } from 'src/app/board/tile/+state';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
@@ -12,7 +12,7 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
   constructor(
     protected store: OpponentUnitStore,
     private tileQuery: TileQuery,
-    ) {
+  ) {
     super(store);
   }
 

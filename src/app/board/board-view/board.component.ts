@@ -3,7 +3,6 @@ import { Observable, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
 import { boardCols } from 'src/app/games/+state';
-import { PlayerQuery } from '../player/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 
@@ -25,7 +24,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
-    private playerQuery: PlayerQuery,
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,

@@ -1,27 +1,14 @@
 import { Injectable } from '@angular/core';
-import { QueryEntity, EntityUIQuery } from '@datorama/akita';
-import { PlayerStore, PlayerState, PlayerUIState } from './player.store';
+import { QueryEntity } from '@datorama/akita';
+import { PlayerStore, PlayerState } from './player.store';
 import { Player } from './player.model';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerQuery extends QueryEntity<PlayerState> {
-  ui: EntityUIQuery<PlayerUIState>;
 
   constructor(protected store: PlayerStore) {
     super(store);
     this.createUIQuery();
-  }
-
-  public get opponentId$(): Observable<string> {
-    const activePlayerId$: Observable<string> = this.selectActiveId();
-    const players$: Observable<Player[]> = this.selectAll();
-    return combineLatest([activePlayerId$, players$]).pipe(
-      map(([id, players]) => {
-        return players.filter(player => player.id !== id)[0].id;
-        })
-    );
   }
 
   public get opponentId(): string {
@@ -29,4 +16,5 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     const players: Player[] = this.getAll();
     return players.filter(player => player.id !== activePlayerId)[0].id;
   }
+
 }

@@ -3,9 +3,7 @@ export interface Player {
   color?: 'white' | 'black';
   isActive?: boolean;
 }
-export interface PlayerUI {
-  isOpponent: boolean;
-}
+
 /** A factory function that creates Player */
 export function createPlayer(params: Partial<Player> = {}): Player {
   return {
