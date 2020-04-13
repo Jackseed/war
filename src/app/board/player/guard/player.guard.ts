@@ -21,7 +21,6 @@ export class PlayerGuard extends CollectionGuard<PlayerState> {
   sync() {
     return this.gameQuery.selectActiveId().pipe(
       tap(_ => this.store.reset()),
-      tap(_ => this.store.ui.reset()),
       tap(_ => this.store.setActive(this.authQuery.getActiveId())),
       switchMap(gameId => this.service.syncCollection({ params: { gameId }}))
     );

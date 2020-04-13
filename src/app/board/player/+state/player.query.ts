@@ -6,9 +6,10 @@ import { Player } from './player.model';
 @Injectable({ providedIn: 'root' })
 export class PlayerQuery extends QueryEntity<PlayerState> {
 
-  constructor(protected store: PlayerStore) {
+  constructor(
+    protected store: PlayerStore
+  ) {
     super(store);
-    this.createUIQuery();
   }
 
   public get opponentId(): string {

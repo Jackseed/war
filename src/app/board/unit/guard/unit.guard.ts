@@ -19,7 +19,6 @@ export class UnitGuard extends CollectionGuard<UnitState> {
   sync() {
     return this.gameQuery.selectActiveId().pipe(
       tap(_ => this.store.reset()),
-      tap(_ => this.store.ui.reset()),
       switchMap(gameId => this.service.syncCollection({ params: { gameId }}))
     );
   }
