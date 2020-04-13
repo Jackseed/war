@@ -18,7 +18,7 @@ export class UnitCreationComponent implements OnInit {
   ngOnInit(): void {}
 
   public selectUnitByType(unitType): Observable<Unit[]> {
-    return this.query.unitsByType(unitType);
+    return this.query.unitsByType$(unitType);
   }
 
 }

@@ -1,38 +1,41 @@
-<ng-container *ngIf="loading$ | async; else loaded">
-  Loading
-</ng-container>
 
-<ng-template #loaded>
+<div fxLayout="column" fxLayoutAlign="center" class="container">
+  <div fxFlex="80" fxLayout="row" fxLayoutAlign="center" class="container">
 
-  <div fxLayout="column" fxLayoutAlign="center" class="container">
-    <div fxFlex="80" fxLayout="row" fxLayoutAlign="center" class="container">
+    <mat-grid-list fxFlex="80" class="container" cols="{{boardSize}}" gutterSize="0" rowHeight="fit">
 
-      <mat-grid-list fxFlex="80" class="container" cols="{{boardSize}}" gutterSize="0" rowHeight="fit">
-
-        <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;">
-
-          <div *ngIf="tile.unit; else ground" (click)="play(i)" class="container unit-ground">
+      <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;" (click)="play(i)">
+        <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnits" class="container unit-ground">
+          <div class="ground">
+            <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
+          </div>
+          <div class="unit">
+            <img class="img-unit" src="assets/img/{{getUnitbyTileId(i).color}}_{{getUnitbyTileId(i).type}}.png">
+          </div>
+        </div>
+        <ng-template #opponentUnits>
+          <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else ground" class="container unit-ground">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>
             <div class="unit">
-              <img class="img-unit" src="assets/img/{{tile.unit.color}}_{{tile.unit.type}}.png">
+              <img class="img-unit" src="assets/img/{{getOpponentUnitbyTileId(i).color}}_{{getOpponentUnitbyTileId(i).type}}.png">
             </div>
           </div>
-
-          <ng-template #ground>
-            <div class="container" (click)="play(i)">
-              <div class="ground">
-                <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable, 'selected': tile.isSelected}">
-              </div>
+        </ng-template>
+        <ng-template #ground>
+          <div class="container">
+            <div class="ground">
+              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable, 'selected': tile.isSelected}">
             </div>
-          </ng-template>
+          </div>
+        </ng-template>
 
-          </mat-grid-tile>
-      </mat-grid-list>
 
-    </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+
   </div>
+</div>
 
 
-</ng-template>
