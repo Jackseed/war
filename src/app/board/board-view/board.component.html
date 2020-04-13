@@ -1,28 +1,30 @@
-
 <div fxLayout="column" fxLayoutAlign="center" class="container">
   <div fxFlex="80" fxLayout="row" fxLayoutAlign="center" class="container">
 
     <mat-grid-list fxFlex="80" class="container" cols="{{boardSize}}" gutterSize="0" rowHeight="fit">
 
       <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;" (click)="play(i)">
+
         <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnits" class="container unit-ground">
           <div class="ground">
-            <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
+            <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
           </div>
           <div class="unit">
             <img class="img-unit" src="assets/img/{{getUnitbyTileId(i).color}}_{{getUnitbyTileId(i).type}}.png">
           </div>
         </div>
+
         <ng-template #opponentUnits>
           <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else visibleGround" class="container unit-ground">
             <div class="ground">
-              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !tile.isVisible, 'reachable': tile.isReachable,'selected': tile.isSelected}">
+              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable}">
             </div>
             <div class="unit">
               <img class="img-unit" src="assets/img/{{getOpponentUnitbyTileId(i).color}}_{{getOpponentUnitbyTileId(i).type}}.png">
             </div>
           </div>
         </ng-template>
+
         <ng-template #visibleGround>
           <div *ngIf="(visibleTileIds$ | async).includes(i); else invisibleGround" class="container">
             <div class="ground">
@@ -30,6 +32,7 @@
             </div>
           </div>
         </ng-template>
+
         <ng-template #invisibleGround>
           <div class="container">
             <div class="ground">
@@ -38,8 +41,8 @@
           </div>
         </ng-template>
 
+      </mat-grid-tile>
 
-        </mat-grid-tile>
     </mat-grid-list>
 
   </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, combineLatest } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
 import { boardCols } from 'src/app/games/+state';
@@ -15,13 +15,11 @@ import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../un
 
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
-  private tileWithUnitSub: Subscription;
+  public boardSize = boardCols;
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;
-  public boardSize = boardCols;
   public visibleTileIds$: Observable<number[]>;
-  public visibleTileIdsWithoutUnits$: Observable<number[]>;
 
   constructor(
     private tileQuery: TileQuery,
@@ -39,7 +37,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.tiles$ = this.tileQuery.selectAll();
 
     // get the visible tile ids
-    this.visibleTileIds$ = this.tileQuery.visibleTileIds2$;
+    this.visibleTileIds$ = this.tileQuery.visibleTileIds$;
 
     // get unit tile ids
     this.unitTileIds$ = this.unitQuery.unitTileIds$;
@@ -50,28 +48,17 @@ export class BoardComponent implements OnInit, OnDestroy {
         units.map(({tileId}) => tileId)
       )
     );
-
-    // Sync tiles & units
-    this.tileWithUnitSub = this.unitQuery.selectAll().pipe(
-      map(units =>
-        units.map(unit => {
-          if (unit.tileId !== undefined ) {
-            this.tileService.markTileWithUnit(unit);
-          }
-          return unit;
-        })
-    )).subscribe();
-
   }
 
   play(i: number) {
     const tile: Tile = this.tileQuery.getEntity(i.toString());
+    const unitTileIds = this.unitQuery.unitTileIds;
     const selectedUnit: Unit = this.unitQuery.getActive();
-    const player = this.playerQuery.getActive();
     // If a unit was clicked and belongs to player, turns it selected
-    if (tile.unit && (tile.unit.playerId === player.id)) {
+    if (unitTileIds.includes(i)) {
+      const unit = this.getUnitbyTileId(i);
       this.tileService.removeSelected();
-      this.tileService.markAsSelected(i, tile.unit);
+      this.tileService.markAsSelected(i, unit);
     } else {
       // If a unit is selected..
       if (this.unitQuery.hasActive()) {
@@ -94,7 +81,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.opponentUnitStore.reset();
     this.oppUnitsync.unsubscribe();
-    this.tileWithUnitSub.unsubscribe();
   }
 
 }

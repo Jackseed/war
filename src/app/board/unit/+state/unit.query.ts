@@ -29,6 +29,10 @@ export class UnitQuery extends QueryEntity<UnitState> {
     );
   }
 
+  public get unitTileIds(): number[] {
+    return this.getAll().map(({tileId}) => tileId);
+  }
+
   public getUnitbyTileId(tileId: number): Unit {
     const units = this.getAll();
     return units.find(unit => unit.tileId === tileId);

@@ -31,22 +31,6 @@ export class TileService {
     this.store.set(tiles);
   }
 
-  markTileWithUnit(unit: Unit) {
-    // checks if the unit belongs to the active player and the unit to the tile and add visibility to adjacent ones
-    if (unit.playerId === this.playerQuery.getActiveId()) {
-      this.store.update(unit.tileId.toString(), { unit });
-      this.switchAdjacentTilesParameter(unit.tileId, 'visibility', unit.vision);
-    // if the unit is enemy, marks it opponent
-    } else {
-      this.store.update(unit.tileId.toString(), {
-        unit: {
-          ...unit,
-          isOpponent: true,
-        }
-      });
-    }
-  }
-
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.removeSelected();
     this.removeUnitfromTile(unit.tileId);
@@ -78,7 +62,7 @@ export class TileService {
   }
 
   markAsSelected(tileId: number, unit: Unit) {
-    this.store.update(tileId, tile => ({ isSelected: true }));
+    this.store.update(tileId, ({ isSelected: true }));
     this.switchAdjacentTilesParameter(tileId, 'reachable', unit.move);
     this.unitStore.setActive(unit.id.toString());
   }

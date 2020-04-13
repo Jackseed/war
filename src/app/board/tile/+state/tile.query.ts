@@ -5,7 +5,7 @@ import { Tile } from '.';
 import { map } from 'rxjs/operators';
 import { UnitQuery } from '../../unit/+state';
 import { Injectable } from '@angular/core';
-import { boardCols, boardMaxTiles } from 'src/app/games/+state';
+import { boardCols } from 'src/app/games/+state';
 
 @QueryConfig({
   sortBy: 'id',
@@ -21,12 +21,7 @@ export class TileQuery extends QueryEntity<TileState> {
     super(store);
   }
 
-  public get visibleTiles$(): Observable<Tile[]> {
-    return this.selectAll({
-      filterBy: tile => tile.isVisible === true
-    });
-  }
-  public get visibleTileIds2$(): Observable<number[]> {
+  public get visibleTileIds$(): Observable<number[]> {
     return this.unitQuery.selectAll().pipe(
       map(units => {
         // gets the adjacent tiles visible by the unit
@@ -44,13 +39,6 @@ export class TileQuery extends QueryEntity<TileState> {
         }
         return visibleIds;
       })
-    );
-  }
-
-  public get visibleTileIds$(): Observable<number[]> {
-    return this.visibleTiles$.pipe(
-      map(visibleTiles =>
-        visibleTiles.map(({id}) => id))
     );
   }
 
