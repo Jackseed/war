@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./bottom-bar.component.scss']
 })
 export class BottomBarComponent implements OnInit {
-  public gameStatus$: Observable<'unit creation' | 'placement' | 'battle' | 'finished'>;
+  public gameStatus$: Observable<'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished'>;
   public players$: Observable<Player[]>;
   public isPlayerReady$: Observable<boolean>;
 

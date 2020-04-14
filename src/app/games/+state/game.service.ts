@@ -49,9 +49,10 @@ export class GameService extends CollectionService<GameState> {
    */
   async joinGame(game: Game) {
     const user = this.afAuth.auth.currentUser;
-
+      // check if the player is already included in the game
     if (game.playerIds.includes(user.uid)) {
       this.router.navigate([`/games/${game.id}`]);
+      // if not, check if the game is not full
     } else if (game.playerIds.length < 2) {
       const playerIds: string[] = game.playerIds.concat([user.uid]);
       // add the player to the game playerIds
@@ -67,29 +68,14 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Switch active game status to 'placement'
    */
-  switchStatus(): boolean {
+  switchStatus(status: string) {
     const game = this.query.getActive();
-    let status = game.status;
     const doc = this.db.collection('games').doc(game.id);
-
-    if (status === 'unit creation') {
-      status = 'placement';
-      doc.update({
-        status,
-        playersReady: []
-      });
-      return true;
-    } else if (status === 'placement') {
-      status = 'battle';
-      doc.update({
-        status,
-        playersReady: []
-      });
-      return true;
-    } else {
-      return false;
-    }
-
+    console.log('switching status');
+    doc.update({
+      status,
+      playersReady: []
+    });
   }
 
   /**

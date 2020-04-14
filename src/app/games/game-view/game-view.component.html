@@ -7,14 +7,13 @@
   <div [ngSwitch]="(gameStatus$ | async)" fxFlex="70" fxFill>
 
     <!-- Waiting Room -->
-    <ng-container *ngSwitchCase="'battle'">
+    <ng-container *ngSwitchCase="'waiting'">
       <div fxLayout="row" fxLayoutAlign="center center">
         <iframe fxFlex=50 src="https://www.dinogame.net/game/index.html" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
       </div>
     </ng-container>
 
     <!-- Unit Creation -->
-
     <ng-container *ngSwitchCase="'unit creation'" class="container">
 
       <div fxFlex="20">
