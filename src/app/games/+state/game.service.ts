@@ -71,7 +71,6 @@ export class GameService extends CollectionService<GameState> {
   switchStatus(status: string) {
     const game = this.query.getActive();
     const doc = this.db.collection('games').doc(game.id);
-    console.log('switching status');
     doc.update({
       status,
       playersReady: []
