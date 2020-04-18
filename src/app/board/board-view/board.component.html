@@ -9,10 +9,10 @@
           <div class="ground">
             <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !(visibleTileIds$ | async).includes(i),'reachable': tile.isReachable,'selected': tile.isSelected}">
           </div>
-          <div class="unit" *ngIf="i === whiteCastleId">
+          <div class="unit" *ngIf="i === whiteCastle.tileId">
             <img class="img-unit" [ngClass]="{'fog': !(visibleTileIds$ | async).includes(i)}" src="assets/img/white_castle.png">
           </div>
-          <div class="unit" *ngIf="i === blackCastleId">
+          <div class="unit" *ngIf="i === whiteCastle.tileId">
             <img class="img-unit" [ngClass]="{'fog': !(visibleTileIds$ | async).includes(i)}" src="assets/img/black_castle.png">
           </div>
         </div>

@@ -28,6 +28,7 @@ export class TileQuery extends QueryEntity<TileState> {
         const unitTileIdsArray: number[][] = units.map(
           unit => this.getAdjacentTiles(unit.tileId, unit.vision)
         );
+        const castleIds: number[]
         const visibleIds: number[] = [];
         // flatten the array of each unit into one, without duplicate
         for (const ids of unitTileIdsArray) {
