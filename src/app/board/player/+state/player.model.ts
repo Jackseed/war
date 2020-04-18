@@ -2,6 +2,7 @@ export interface Player {
   id: string;
   color?: 'white' | 'black';
   isActive?: boolean;
+  isVictorious?: boolean;
 }
 
 /** A factory function that creates Player */

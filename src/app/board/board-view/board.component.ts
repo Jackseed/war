@@ -5,7 +5,7 @@ import { Unit, UnitQuery } from '../unit/+state';
 import { boardCols, Castle, GameService, GameQuery } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
-import { Player, PlayerQuery } from '../player/+state';
+import { Player, PlayerQuery, PlayerService } from '../player/+state';
 
 @Component({
   selector: 'app-board',
@@ -37,6 +37,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private tileService: TileService,
     private unitQuery: UnitQuery,
     private playerQuery: PlayerQuery,
+    private playerService: PlayerService,
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
@@ -68,9 +69,12 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.victorySub = this.unitTileIds$.pipe(
       map(unitTileIds =>
-        unitTileIds.map(unitTileId =>
-          unitTileId === this.opponentCastle.tileId ? this.gameService.switchStatus('finished') : false
-        )
+        unitTileIds.map(unitTileId => {
+          if (unitTileId === this.opponentCastle.tileId) {
+            this.gameService.switchStatus('finished');
+            this.playerService.setVictorious();
+          }
+        })
       )
     ).subscribe();
 

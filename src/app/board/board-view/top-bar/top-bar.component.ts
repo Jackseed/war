@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class TopBarComponent implements OnInit {
   public gameStatus$: Observable<'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished'>;
-  public players$: Observable<Player[]>;
+  public player$: Observable<Player>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -19,7 +19,7 @@ export class TopBarComponent implements OnInit {
 
   ngOnInit() {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.players$ = this.playerQuery.selectAll();
+    this.player$ = this.playerQuery.selectActive();
   }
 
 }
