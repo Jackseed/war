@@ -18,8 +18,8 @@ export class OpponentUnitService extends CollectionService<OpponentUnitState> {
   }
 
   get path(): string {
-    const gameId: string = this.gameQuery.getActiveId();
-    const opponentId: string = this.playerQuery.opponentId;
+    const gameId = this.gameQuery.getActiveId();
+    const opponentId = this.playerQuery.opponent.id;
     const path = 'path';
     return pathWithParams(this.constructor[path], {gameId, opponentId});
   }

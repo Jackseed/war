@@ -12,10 +12,10 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     super(store);
   }
 
-  public get opponentId(): string {
+  public get opponent(): Player {
     const activePlayerId: string = this.getActiveId();
     const players: Player[] = this.getAll();
-    return players.filter(player => player.id !== activePlayerId)[0].id;
+    return players.filter(player => player.id !== activePlayerId)[0];
   }
 
 }

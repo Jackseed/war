@@ -5,6 +5,7 @@ import { Unit, UnitQuery } from '../unit/+state';
 import { boardCols, Castle } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
+import { Player, PlayerQuery } from '../player/+state';
 
 @Component({
   selector: 'app-board',
@@ -15,28 +16,36 @@ import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../un
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
   public boardSize = boardCols;
-  public blackCastle = Castle('black');
-  public whiteCastle = Castle('white');
-  public castlesId = [this.whiteCastle.tileId, this.blackCastle.tileId];
+  public player: Player;
+  public opponentPlayer: Player;
+  public castle: Castle;
+  public opponentCastle: Castle;
+  public castleIds: number[];
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;
   public visibleTileIds$: Observable<number[]>;
 
+
   constructor(
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
+    private playerQuery: PlayerQuery,
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
   ) {}
 
   ngOnInit() {
-    console.log(this.whiteCastle.tileId, this.blackCastle.tileId);
     this.tileService.setTiles();
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
+    this.player = this.playerQuery.getActive();
+    this.opponentPlayer = this.playerQuery.opponent;
+    this.castle = Castle(this.player.color);
+    this.opponentCastle = Castle(this.opponentPlayer.color);
+    this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
 
     // get the visible tile ids
     this.visibleTileIds$ = this.tileQuery.visibleTileIds$;
