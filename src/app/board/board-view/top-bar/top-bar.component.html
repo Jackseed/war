@@ -12,8 +12,17 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
-    <h1>VICTORY</h1>
-    <p>Well done, General.</p>
+
+    <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
+      <h1>VICTORY</h1>
+      <p>Well done, General.</p>
+    </ng-container>
+
+    <ng-template #defeat>
+      <h1>DEFEAT</h1>
+      <p>Try again.</p>
+    </ng-template>
+    
   </ng-container>
 
 </div>
