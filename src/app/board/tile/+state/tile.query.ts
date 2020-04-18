@@ -71,4 +71,12 @@ export class TileQuery extends QueryEntity<TileState> {
     return tileIds;
   }
 
+  public get tileIds$(): Observable<number[]> {
+    return this.selectAll().pipe(
+      map(tiles =>
+        tiles.map(({id}) => id)
+      )
+    );
+  }
+
 }

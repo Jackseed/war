@@ -1,18 +1,19 @@
-<ng-container *ngIf="(players$ | async).length === 1; else unitCreation">
-  <div style="text-align: center;">
-    <h1>WAITING FOR AN OPPONENT</h1>
-    <p>Prepare yourself with the dino :)</p>
-  </div>
-</ng-container>
+<div [ngSwitch]="true" class="center">
 
-<ng-template #unitCreation>
-  <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" style="text-align: center;">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
+      <h1>WAITING FOR AN OPPONENT</h1>
+      <p>Prepare yourself with the dino :)</p>
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
     <h1>CREATE YOUR ARMY</h1>
     <p>Be wise, your opponent is doing the same.</p>
-  </ng-container >
-</ng-template>
+  </ng-container>
 
-<ng-template #board>
-</ng-template>
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
+    <h1>VICTORY</h1>
+    <p>Well done, General.</p>
+  </ng-container>
 
-
+</div>

@@ -39,4 +39,12 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
     const units = this.getAll();
     return units.find(unit => unit.tileId === tileId);
   }
+
+  public get unitTileIds$(): Observable<number[]> {
+    return this.selectAll().pipe(
+      map(units =>
+        units.map(({tileId}) => tileId)
+      )
+    );
+  }
 }

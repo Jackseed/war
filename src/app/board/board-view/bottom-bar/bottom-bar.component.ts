@@ -25,9 +25,7 @@ export class BottomBarComponent implements OnInit {
     private gameService: GameService,
     private playerQuery: PlayerQuery,
   ) {
-    this.gameStatus$ = this.gameQuery.selectActive().pipe(
-      map(game => game.status)
-    );
+    this.gameStatus$ = this.gameQuery.gameStatus$;
     this.players$  = this.playerQuery.selectAll();
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(

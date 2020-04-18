@@ -42,5 +42,9 @@ export class GameQuery extends QueryEntity<GameState> {
       map(game => game.playersReady.includes(user.uid))
     );
   }
-
+  get gameStatus$(): Observable<'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished'> {
+    return this.selectActive().pipe(
+      map(game => game.status)
+    );
+  }
 }

@@ -24,11 +24,11 @@
               <img class="img-unit" [ngClass]="{'fog': !(visibleTileIds$ | async).includes(i), 'reachable': tile.isReachable}" src="assets/img/{{opponentCastle.color}}_castle.png">
             </div>
           </div>
-          
+
         </div>
 
         <ng-template #unit>
-          <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit" (click)="play(i)" class="container unit-ground">
+          <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit" (click)="play(i)" class="container" [ngClass]="{'unit-ground': (gameStatus$ | async) === 'placement'}">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>
