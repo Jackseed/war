@@ -5,16 +5,30 @@
 
       <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;" (click)="play(i)">
 
-        <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnits" class="container unit-ground">
+        <div *ngIf="castlesId.includes(i); else unit" class="container unit-ground">
           <div class="ground">
-            <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
+            <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !(visibleTileIds$ | async).includes(i),'reachable': tile.isReachable,'selected': tile.isSelected}">
           </div>
-          <div class="unit">
-            <img class="img-unit" src="assets/img/{{getUnitbyTileId(i).color}}_{{getUnitbyTileId(i).type}}.png">
+          <div class="unit" *ngIf="i === whiteCastleId">
+            <img class="img-unit" src="assets/img/white_castle.png">
+          </div>
+          <div class="unit" *ngIf="i === blackCastleId">
+            <img class="img-unit" src="assets/img/black_castle.png">
           </div>
         </div>
 
-        <ng-template #opponentUnits>
+        <ng-template #unit>
+          <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit" class="container unit-ground">
+            <div class="ground">
+              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
+            </div>
+            <div class="unit">
+              <img class="img-unit" src="assets/img/{{getUnitbyTileId(i).color}}_{{getUnitbyTileId(i).type}}.png">
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #opponentUnit>
           <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else visibleGround" class="container unit-ground">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable}">

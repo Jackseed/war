@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
-import { boardCols } from 'src/app/games/+state';
+import { boardCols, blackCastleId, whiteCastleId } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 
@@ -15,6 +15,9 @@ import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../un
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
   public boardSize = boardCols;
+  public blackCastleId = blackCastleId;
+  public whiteCastleId = whiteCastleId;
+  public castlesId = [whiteCastleId, blackCastleId];
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;

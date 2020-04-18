@@ -6,8 +6,10 @@ export interface Game {
   playersReady?: string[];
 }
 
-export const boardCols = 10;
+export const boardCols = 11;
 export const boardMaxTiles = 1000;
+export const whiteCastleId = 1 + Math.round(boardCols / 2 - 1) * boardCols;
+export const blackCastleId = boardCols - Math.round(boardCols / 5) + Math.round(boardCols / 2 - 1) * boardCols;
 
 /** A factory function that creates Game */
 export function createGame(params: Partial<Game> = {}): Game {
