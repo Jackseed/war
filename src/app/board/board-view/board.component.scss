@@ -31,6 +31,9 @@
 .invisible {
   filter: grayscale(1);
 }
+.fog {
+  filter: opacity(50%);
+}
 .selected {
   filter: brightness(125%);
 }
