@@ -29,7 +29,7 @@
         </ng-template>
 
         <ng-template #opponentUnit>
-          <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else visibleGround" class="container unit-ground">
+          <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else ground" class="container unit-ground">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable}">
             </div>
@@ -39,18 +39,10 @@
           </div>
         </ng-template>
 
-        <ng-template #visibleGround>
-          <div *ngIf="(visibleTileIds$ | async).includes(i); else invisibleGround" class="container">
-            <div class="ground">
-              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable, 'selected': tile.isSelected}">
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template #invisibleGround>
+        <ng-template #ground>
           <div class="container">
             <div class="ground">
-              <img fxFlexFill src="assets/img/grass.jpg" class="invisible" [ngClass]="{'reachable': tile.isReachable, 'selected': tile.isSelected}">
+              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'invisible': !(visibleTileIds$ | async).includes(i), 'reachable': tile.isReachable, 'selected': tile.isSelected}">
             </div>
           </div>
         </ng-template>
