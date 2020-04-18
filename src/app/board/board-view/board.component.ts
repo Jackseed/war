@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
-import { boardCols, Castle } from 'src/app/games/+state';
+import { boardCols, Castle, GameService } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 import { Player, PlayerQuery } from '../player/+state';
@@ -15,6 +15,7 @@ import { Player, PlayerQuery } from '../player/+state';
 
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
+  private victorySub: Subscription;
   public boardSize = boardCols;
   public player: Player;
   public opponentPlayer: Player;
@@ -28,6 +29,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private gameService: GameService,
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
@@ -59,6 +61,14 @@ export class BoardComponent implements OnInit, OnDestroy {
         units.map(({tileId}) => tileId)
       )
     );
+
+    this.victorySub = this.unitTileIds$.pipe(
+      map(unitTileIds =>
+        unitTileIds.map(unitTileId =>
+          unitTileId === this.opponentCastle.tileId ? this.gameService.switchStatus('finished') : false
+        )
+      )
+    ).subscribe();
   }
 
   play(i: number) {
@@ -92,6 +102,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.opponentUnitStore.reset();
     this.oppUnitsync.unsubscribe();
+    this.victorySub.unsubscribe();
   }
 
 }
