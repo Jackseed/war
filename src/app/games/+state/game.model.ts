@@ -10,6 +10,7 @@ export interface Castle {
   x: number;
   y: number;
   tileId: number;
+  vision: number;
 }
 
 export const boardCols = 11;
@@ -29,6 +30,7 @@ export function Castle(color: 'white' | 'black'): Castle {
     get tileId(): number {
       return this.x + this.y;
     },
+    vision: 2,
   };
 }
 

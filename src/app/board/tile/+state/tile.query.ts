@@ -5,7 +5,8 @@ import { Tile } from '.';
 import { map } from 'rxjs/operators';
 import { UnitQuery } from '../../unit/+state';
 import { Injectable } from '@angular/core';
-import { boardCols } from 'src/app/games/+state';
+import { boardCols, Castle } from 'src/app/games/+state';
+import { Player, PlayerQuery } from '../../player/+state';
 
 @QueryConfig({
   sortBy: 'id',
@@ -17,6 +18,7 @@ export class TileQuery extends QueryEntity<TileState> {
   constructor(
     protected store: TileStore,
     private unitQuery: UnitQuery,
+    private playerQuery: PlayerQuery,
   ) {
     super(store);
   }
@@ -24,12 +26,21 @@ export class TileQuery extends QueryEntity<TileState> {
   public get visibleTileIds$(): Observable<number[]> {
     return this.unitQuery.selectAll().pipe(
       map(units => {
+        const visibleIds: number[] = [];
+        const player: Player = this.playerQuery.getActive();
+        const castle: Castle = Castle(player.color);
+
+        // add the castle visibility
+        const castleVisibleIds: number[] = this.getAdjacentTiles(castle.tileId, castle.vision);
+        for (const id of castleVisibleIds) {
+          visibleIds.push(id);
+        }
+
         // gets the adjacent tiles visible by the unit
         const unitTileIdsArray: number[][] = units.map(
           unit => this.getAdjacentTiles(unit.tileId, unit.vision)
         );
-        const castleIds: number[]
-        const visibleIds: number[] = [];
+
         // flatten the array of each unit into one, without duplicate
         for (const ids of unitTileIdsArray) {
           for (const id of ids) {

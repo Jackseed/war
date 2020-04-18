@@ -17,7 +17,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public boardSize = boardCols;
   public blackCastle = Castle('black');
   public whiteCastle = Castle('white');
-  public castlesId = [this.whiteCastle.tileId, this.whiteCastle.tileId];
+  public castlesId = [this.whiteCastle.tileId, this.blackCastle.tileId];
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;
@@ -33,6 +33,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log(this.whiteCastle.tileId, this.blackCastle.tileId);
     this.tileService.setTiles();
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
