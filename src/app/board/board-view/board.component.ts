@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery } from '../unit/+state';
-import { boardCols, Castle, GameService, GameQuery } from 'src/app/games/+state';
+import { boardCols, Castle, actionsPerTurn, GameService, GameQuery } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
 import { Player, PlayerQuery, PlayerService } from '../player/+state';
@@ -67,6 +67,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
     );
 
+    // check if a player unit is on the opponent castle, if so stop the game
     this.victorySub = this.unitTileIds$.pipe(
       map(unitTileIds =>
         unitTileIds.map(unitTileId => {
@@ -78,6 +79,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
     ).subscribe();
 
+    // when the game is finished, turn all the tiles & units visible
     this.finishedSub = this.gameStatus$.pipe(
       map(gameStatus => {
         if (gameStatus === 'finished') {
@@ -93,23 +95,35 @@ export class BoardComponent implements OnInit, OnDestroy {
     const unitTileIds = this.unitQuery.unitTileIds;
     const selectedUnit = this.unitQuery.getActive();
     const game = this.gameQuery.getActive();
+    const player = this.playerQuery.getActive();
 
     // Check if the game is ongoing
     if (game.status !== 'finished') {
-      // If a unit was clicked and belongs to player, turns it selected
-      if (unitTileIds.includes(i)) {
-        const unit = this.getUnitbyTileId(i);
-        this.tileService.removeSelected();
-        this.tileService.markAsSelected(i, unit);
-      } else {
-        // If a unit is selected..
-        if (this.unitQuery.hasActive()) {
-          // and clicked on a tile reachable, the unit moves to the tile
-          if (tile.isReachable) {
-            this.tileService.moveSelectedUnit(selectedUnit, i);
+
+      // Check if the player is active & has not made too many actions
+      if (player.isActive && (player.actionCount < actionsPerTurn)) {
+
+        // If a unit was clicked and belongs to player, turns it selected
+        if (unitTileIds.includes(i)) {
+          const unit = this.getUnitbyTileId(i);
+          this.tileService.removeSelected();
+          this.tileService.markAsSelected(i, unit);
+        } else {
+          // If a unit is selected..
+          if (this.unitQuery.hasActive()) {
+            // and clicked on a tile reachable, the unit moves to the tile
+            if (tile.isReachable) {
+              this.tileService.moveSelectedUnit(selectedUnit, i);
+
+              // increment action count and switch active player if needed
+              this.playerService.actionPlayed();
+            }
           }
         }
+      } else {
+        console.log('not your turn');
       }
+
     } else {
       console.log('game is over');
     }
