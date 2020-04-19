@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UnitStore, UnitState } from './unit.store';
 import { createUnit, Unit } from './unit.model';
-import { GameQuery, boardCols } from 'src/app/games/+state';
+import { GameQuery, boardCols, unitPlacementMargin, xCastle, yCastle } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
 import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
 import { UnitQuery } from './unit.query';
@@ -44,26 +44,40 @@ export class UnitService extends CollectionService<UnitState> {
   get defaultPositionUnits(): Unit[] {
     const player = this.playerQuery.getActive();
     const units: Unit[] = [];
-    let i = 0;
-    let x = 1;
+    let y = unitPlacementMargin;
+    let x = unitPlacementMargin;
+    let i = 1;
     if (player.color === 'black') {
-      i = 9;
-      x = -1;
+      x = boardCols - (unitPlacementMargin + 1);
     }
     for (const unitType of this.unitTypes) {
       const typedUnits = this.query.getAll({
         filterBy: unit => unit.type === unitType
       });
       for (let unit of typedUnits) {
+        // avoid the castle
+        if (x === xCastle && y === yCastle) {
+          y++;
+        }
+        // give unit coordinates and push
         unit = {
           ...unit,
-          tileId: i
+          tileId: x + y * boardCols,
         };
         units.push(unit);
-        if (i < (boardCols * boardCols - boardCols)) {
-          i = i + boardCols;
+
+        // increment y
+        if (y < (boardCols - (unitPlacementMargin + 1))) {
+          y++;
+        // respect the margin and start a new line
         } else {
-          i = i % boardCols + 1 * x;
+          if (player.color === 'black') {
+            x = boardCols - (unitPlacementMargin + 1) + i;
+          } else {
+            x = unitPlacementMargin - i;
+          }
+          y = unitPlacementMargin;
+          i++;
         }
       }
     }
