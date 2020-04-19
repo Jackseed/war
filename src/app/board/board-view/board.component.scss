@@ -29,7 +29,7 @@
   filter: brightness(92%);
 }
 .invisible {
-  filter: grayscale(1);
+  filter: grayscale(100%);
 }
 .fog {
   filter: opacity(50%);
@@ -44,4 +44,7 @@
 }
 .reachable:hover {
   filter: hue-rotate(60deg);
+}
+.finished {
+  filter: brightness(70%);
 }
