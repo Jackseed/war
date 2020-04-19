@@ -16,15 +16,21 @@
     <ng-container *ngIf="(player$ | async).isActive; else unactive">
       <ng-container *ngIf="(player$ | async) as player">
         <h1>YOUR TURN</h1>
-        <p>You have {{actionsPerTurn - player.actionCount}} actions left</p>
+        <p [ngPlural]="actionsPerTurn - player.actionCount">
+          <ng-template ngPluralCase="=1">You have {{actionsPerTurn - player.actionCount}} action left</ng-template>
+          <ng-template ngPluralCase="other">You have {{actionsPerTurn - player.actionCount}} actions left</ng-template>
+        </p>
       </ng-container>
     </ng-container>
 
     <ng-template #unactive>
-
+      <ng-container *ngIf="(opponent$ | async) as opponent">
         <h1>OPPONENT'S TURN</h1>
-        <p>Opponent has {{actionsPerTurn - (opponent$ | async).actionCount}} actions left</p>
-
+        <p [ngPlural]="actionsPerTurn - opponent.actionCount">
+          <ng-template ngPluralCase="=1">Opponent has {{actionsPerTurn - opponent.actionCount}} action left</ng-template>
+          <ng-template ngPluralCase="other">Opponent has {{actionsPerTurn - opponent.actionCount}} actions left</ng-template>
+        </p>
+      </ng-container>
     </ng-template>
 
   </ng-container>

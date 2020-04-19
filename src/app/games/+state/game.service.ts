@@ -42,7 +42,6 @@ export class GameService extends CollectionService<GameState> {
       color,
       isActive,
     });
-    console.log(player);
     // set the player in the game subcollection
     playerCollection.doc(id).set(player);
   }
