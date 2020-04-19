@@ -4,6 +4,7 @@ export interface Game {
   status?: 'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished';
   playerIds?: string[];
   playersReady?: string[];
+  turnCount: number;
 }
 export interface Castle {
   color: 'white' | 'black';
@@ -15,6 +16,7 @@ export interface Castle {
 
 export const boardCols = 11;
 export const boardMaxTiles = 1000;
+export const actionsPerTurn = 3;
 
 export function Castle(color: 'white' | 'black'): Castle {
   return {
@@ -42,6 +44,7 @@ export function createGame(params: Partial<Game> = {}): Game {
     status: 'waiting',
     playersReady: [],
     playerIds: params.playerIds,
+    turnCount: 0,
     ...params
   };
 }

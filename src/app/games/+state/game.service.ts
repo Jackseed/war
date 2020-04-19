@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CollectionService, CollectionConfig } from 'akita-ng-fire';
 import { GameQuery } from './game.query';
 import { Game, createGame } from './game.model';
+import { createPlayer } from 'src/app/board/player/+state/player.model';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games' })
@@ -34,14 +35,15 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Add a player to the game
    */
-  addPlayer(gameId: string, userId, color: 'white' | 'black', isActive: boolean) {
+  addPlayer(gameId: string, id: string, color: 'white' | 'black', isActive: boolean) {
     const playerCollection = this.db.collection('games').doc(gameId).collection('players');
-    // set the player in the game subcollection
-    playerCollection.doc(userId).set({
-      userId,
+    const player = createPlayer({
+      id,
       color,
       isActive,
     });
+    // set the player in the game subcollection
+    playerCollection.doc(id).set(player);
   }
 
   /**
@@ -49,17 +51,22 @@ export class GameService extends CollectionService<GameState> {
    */
   async joinGame(game: Game) {
     const user = this.afAuth.auth.currentUser;
+
       // check if the player is already included in the game
     if (game.playerIds.includes(user.uid)) {
       this.router.navigate([`/games/${game.id}`]);
+
       // if not, check if the game is not full
     } else if (game.playerIds.length < 2) {
       const playerIds: string[] = game.playerIds.concat([user.uid]);
+
       // add the player to the game playerIds
       this.db.collection('games').doc(game.id).update({playerIds});
+
       // add the player to the player collection
       this.addPlayer(game.id, user.uid, 'black', false);
       this.router.navigate([`/games/${game.id}`]);
+
     } else {
       console.log('Game is full');
     }
