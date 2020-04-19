@@ -101,7 +101,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (game.status !== 'finished') {
 
       // Check if the player is active & has not made too many actions
-      if (player.isActive && (player.actionPlayed < actionsPerTurn)) {
+      if (player.isActive && (player.actionCount < actionsPerTurn)) {
 
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
