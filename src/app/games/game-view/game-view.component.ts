@@ -11,8 +11,8 @@ import { Observable, Subscription, combineLatest } from 'rxjs';
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished'>;
-  private playersReadyCount$: Subscription;
-  private playersCount$: Subscription;
+  private playersReadyCountSub$: Subscription;
+  private playersCountSub$: Subscription;
 
   constructor(
     private gameQuery: GameQuery,
@@ -21,20 +21,18 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.gameStatus$ = this.gameQuery.selectActive().pipe(
-      map(game => game.status)
-    );
-    this.playersCount$ = combineLatest([this.playerQuery.selectCount(), this.gameStatus$]).pipe(
+    this.gameStatus$ = this.gameQuery.gameStatus$;
+    this.playersCountSub$ = combineLatest([this.playerQuery.selectCount(), this.gameStatus$]).pipe(
       tap(([count, gameStatus]) => (count === 2 && gameStatus === 'waiting' ? this.gameService.switchStatus('unit creation') : false))
     ).subscribe();
-    this.playersReadyCount$ = this.gameQuery.playersReadyCount.pipe(
+    this.playersReadyCountSub$ = this.gameQuery.playersReadyCount.pipe(
       tap(count => (count === 2 ? this.gameService.switchStatus('placement') : false))
     ).subscribe();
   }
 
   ngOnDestroy() {
-    this.playersCount$.unsubscribe();
-    this.playersReadyCount$.unsubscribe();
+    this.playersCountSub$.unsubscribe();
+    this.playersReadyCountSub$.unsubscribe();
   }
 
 }
