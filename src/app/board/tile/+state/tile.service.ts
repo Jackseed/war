@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Unit, UnitStore, UnitService } from '../../unit/+state';
+import { Unit, UnitStore, UnitService, UnitQuery } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore } from './tile.store';
 import { Tile, createTile } from './tile.model';
@@ -14,6 +14,7 @@ export class TileService {
     private query: TileQuery,
     private gameQuery: GameQuery,
     private playerQuery: PlayerQuery,
+    private unitQuery: UnitQuery,
     private unitStore: UnitStore,
     private unitService: UnitService,
   ) {}
@@ -70,16 +71,20 @@ export class TileService {
     this.markAsReachable(placementTiles);
   }
 
-  markAsSelected(tileId: number, unit: Unit) {
+  markAsSelected(tileId: number) {
+    const unit = this.unitQuery.getUnitbyTileId(tileId);
+
+    this.removeSelected();
     this.store.update(tileId, ({ isSelected: true }));
-    this.markAdjacentTilesReachable(unit);
     this.unitStore.setActive(unit.id.toString());
   }
 
-  markAdjacentTilesReachable(unit: Unit) {
+  markAdjacentTilesReachable(tileId: number) {
+    const unit = this.unitQuery.getUnitbyTileId(tileId);
     let reachableTileIds = this.query.getAdjacentTiles(unit.tileId, unit.move);
+
     // remove the tile id of the unit
-    reachableTileIds = reachableTileIds.filter(tileId => tileId !== unit.tileId);
+    reachableTileIds = reachableTileIds.filter(reachableTileId => reachableTileId !== unit.tileId);
     this.markAsReachable(reachableTileIds);
   }
 

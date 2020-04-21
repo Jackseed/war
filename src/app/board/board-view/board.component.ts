@@ -97,6 +97,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     const game = this.gameQuery.getActive();
     const player = this.playerQuery.getActive();
 
+    if (game.status === 'placement') {
+      if (unitTileIds.includes(i)) {
+        this.tileService.markAsSelected(i);
+      }
+    }
+
     // Check if the game is ongoing
     if (game.status !== 'finished') {
 
@@ -105,9 +111,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
-          const unit = this.getUnitbyTileId(i);
-          this.tileService.removeSelected();
-          this.tileService.markAsSelected(i, unit);
+          this.tileService.markAsSelected(i);
+          this.tileService.markAdjacentTilesReachable(i);
         } else {
           // If a unit is selected..
           if (this.unitQuery.hasActive()) {
@@ -127,14 +132,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     } else {
       console.log('game is over');
     }
-  }
-
-  getUnitbyTileId(tileId: number): Unit {
-    return this.unitQuery.getUnitbyTileId(tileId);
-  }
-
-  getOpponentUnitbyTileId(tileId: number): Unit {
-    return this.opponentUnitQuery.getUnitbyTileId(tileId);
   }
 
   ngOnDestroy() {
