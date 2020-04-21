@@ -32,9 +32,16 @@ export class UnitQuery extends QueryEntity<UnitState> {
     return this.getAll().map(({tileId}) => tileId);
   }
 
-  public getUnitbyTileId(tileId: number): Unit {
+  public getUnitByTileId(tileId: number): Unit {
     const units = this.getAll();
     return units.find(unit => unit.tileId === tileId);
+  }
+
+  public isSelectedUnit(tileId: number): boolean {
+    const unit = this.getUnitByTileId(tileId);
+    const activeUnitId = this.getActiveId();
+
+    return unit.id === activeUnitId;
   }
 
 }

@@ -95,10 +95,19 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   public updatePosition(unit: Unit, tileId: number) {
-    this.db.collection(this.currentPath).doc(unit.id.toString()).set({
-      ...unit,
-      tileId
-    });
+    this.db.collection(this.currentPath)
+      .doc(unit.id.toString()).update({tileId});
   }
 
+  public swapUnitPositions(tileId: number) {
+    const clickedUnit = this.query.getUnitByTileId(tileId);
+    const activeUnit = this.query.getActive();
+    const collection = this.db.firestore.collection(this.currentPath);
+    const batch = this.db.firestore.batch();
+
+    batch.update(collection.doc(clickedUnit.id), {tileId: activeUnit.tileId});
+    batch.update(collection.doc(activeUnit.id), {tileId: clickedUnit.tileId});
+
+    batch.commit();
+  }
 }

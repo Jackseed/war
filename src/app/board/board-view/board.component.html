@@ -33,7 +33,7 @@
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>
             <div class="unit">
-              <img class="img-unit" src="assets/img/{{getUnitbyTileId(i).color}}_{{getUnitbyTileId(i).type}}.png">
+              <img class="img-unit" src="assets/img/{{getUnitByTileId(i).color}}_{{getUnitByTileId(i).type}}.png">
             </div>
           </div>
         </ng-template>
@@ -44,7 +44,7 @@
               <img fxFlexFill src="assets/img/grass.jpg">
             </div>
             <div class="unit">
-              <img class="img-unit" src="assets/img/{{getOpponentUnitbyTileId(i).color}}_{{getOpponentUnitbyTileId(i).type}}.png">
+              <img class="img-unit" src="assets/img/{{getOpponentUnitByTileId(i).color}}_{{getOpponentUnitByTileId(i).type}}.png">
             </div>
           </div>
         </ng-template>

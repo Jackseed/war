@@ -72,17 +72,16 @@ export class TileService {
   }
 
   markAsSelected(tileId: number) {
-    const unit = this.unitQuery.getUnitbyTileId(tileId);
-
+    const unit = this.unitQuery.getUnitByTileId(tileId);
     this.removeSelected();
     this.store.update(tileId, ({ isSelected: true }));
     this.unitStore.setActive(unit.id.toString());
   }
 
   markAdjacentTilesReachable(tileId: number) {
-    const unit = this.unitQuery.getUnitbyTileId(tileId);
-    let reachableTileIds = this.query.getAdjacentTiles(unit.tileId, unit.move);
+    const unit = this.unitQuery.getUnitByTileId(tileId);
 
+    let reachableTileIds = this.query.getAdjacentTiles(unit.tileId, unit.move);
     // remove the tile id of the unit
     reachableTileIds = reachableTileIds.filter(reachableTileId => reachableTileId !== unit.tileId);
     this.markAsReachable(reachableTileIds);
@@ -93,7 +92,6 @@ export class TileService {
   }
 
   public moveSelectedUnit(unit: Unit, tileId: number) {
-    this.removeSelected();
     this.unitService.updatePosition(unit, tileId);
   }
 
@@ -102,6 +100,8 @@ export class TileService {
       isSelected: false,
       isReachable: false,
     });
+    this.unitStore.removeActive(this.unitQuery.getActiveId());
+    console.log(this.unitQuery.hasActive());
   }
 
 }
