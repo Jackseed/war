@@ -4,7 +4,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UnitService } from '../../unit/+state';
 import { GameService, GameQuery } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../../player/+state';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({

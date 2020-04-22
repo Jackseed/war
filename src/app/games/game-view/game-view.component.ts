@@ -22,11 +22,19 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.gameStatus$ = this.gameQuery.gameStatus$;
+
     this.playersCountSub$ = combineLatest([this.playerQuery.selectCount(), this.gameStatus$]).pipe(
       tap(([count, gameStatus]) => (count === 2 && gameStatus === 'waiting' ? this.gameService.switchStatus('unit creation') : false))
     ).subscribe();
-    this.playersReadyCountSub$ = this.gameQuery.playersReadyCount.pipe(
-      tap(count => (count === 2 ? this.gameService.switchStatus('placement') : false))
+
+    this.playersReadyCountSub$ = combineLatest([this.gameQuery.playersReadyCount, this.gameStatus$]).pipe(
+      tap(([count, gameStatus]) => {
+        if ((count === 2) && gameStatus === 'unit creation') {
+          this.gameService.switchStatus('placement');
+        } else if ((count === 2) && gameStatus === 'placement') {
+          this.gameService.switchStatus('battle');
+        }
+      })
     ).subscribe();
   }
 

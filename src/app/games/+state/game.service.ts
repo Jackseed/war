@@ -93,8 +93,6 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection('games').doc(game.id);
 
     doc.update({playersReady});
-
-    return playersReady.length;
   }
 
 }
