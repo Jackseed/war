@@ -110,6 +110,9 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.unitService.swapUnitPositions(i);
           this.tileService.removeSelected();
         }
+      } else if (this.unitQuery.hasActive() && tile.isReachable) {
+        this.tileService.moveSelectedUnit(selectedUnit, i);
+        this.tileService.removeSelected();
       }
     }
 
@@ -120,17 +123,15 @@ export class BoardComponent implements OnInit, OnDestroy {
         if (unitTileIds.includes(i)) {
           this.tileService.markAsSelected(i);
           this.tileService.markAdjacentTilesReachable(i);
-        } else {
-          // If a unit is selected..
-          if (this.unitQuery.hasActive()) {
-            // and clicked on a tile reachable, the unit moves to the tile
-            if (tile.isReachable) {
-              this.tileService.moveSelectedUnit(selectedUnit, i);
-              this.tileService.removeReachable();
-              this.tileService.removeSelected();
-              // increment action count and switch active player if needed
-              this.playerService.actionPlayed();
-            }
+        // Else, if a unit is selected..
+        } else if (this.unitQuery.hasActive()) {
+          // and clicked on a tile reachable, the unit moves to the tile
+          if (tile.isReachable) {
+            this.tileService.moveSelectedUnit(selectedUnit, i);
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+            // increment action count and switch active player if needed
+            this.playerService.actionPlayed();
           }
         }
       } else {
