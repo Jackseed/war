@@ -38,10 +38,16 @@ export class BottomBarComponent implements OnInit {
 
   setReady() {
     const playerId = this.playerQuery.getActiveId();
+    const gameStatus = this.gameQuery.getActive().status;
+
     // Mark the player as ready
     this.gameService.markReady(playerId);
+
     // Save the units created
-    this.unitService.setUnits();
+    if (gameStatus === 'unit creation') {
+      this.unitService.setUnits();
+    }
+
   }
 
 }

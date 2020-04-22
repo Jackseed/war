@@ -42,9 +42,7 @@ export class PlayerService extends CollectionService<PlayerState> {
 
     if (player.actionCount < actionsPerTurn - 1) {
       playerDoc.update({ actionCount: increment });
-      console.log('updating increment to', player.actionCount + 1);
     } else {
-      console.log('switching active players');
       this.switchActivePlayer();
     }
   }

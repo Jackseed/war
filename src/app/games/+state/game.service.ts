@@ -68,7 +68,7 @@ export class GameService extends CollectionService<GameState> {
       this.router.navigate([`/games/${game.id}`]);
 
     } else {
-      console.log('Game is full');
+      console.log('game is full');
     }
   }
 

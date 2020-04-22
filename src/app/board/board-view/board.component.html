@@ -28,7 +28,7 @@
         </div>
 
         <ng-template #unit>
-          <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit" (click)="play(i)" class="container" [ngClass]="{'unit-ground': (gameStatus$ | async) === 'placement'}">
+          <div *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit" (click)="play(i)" class="container unit-ground">
             <div class="ground">
               <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable,'selected': tile.isSelected}">
             </div>

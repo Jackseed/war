@@ -3,6 +3,7 @@ import { GameQuery, GameService } from '../+state';
 import { map, tap } from 'rxjs/operators';
 import { PlayerQuery } from 'src/app/board/player/+state';
 import { Observable, Subscription, combineLatest } from 'rxjs';
+import { TileService } from 'src/app/board/tile/+state';
 
 @Component({
   selector: 'app-game-view',
@@ -18,6 +19,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private gameQuery: GameQuery,
     private gameService: GameService,
     private playerQuery: PlayerQuery,
+    private tileService: TileService,
   ) {}
 
   ngOnInit() {
@@ -32,6 +34,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
         if ((count === 2) && gameStatus === 'unit creation') {
           this.gameService.switchStatus('placement');
         } else if ((count === 2) && gameStatus === 'placement') {
+          this.tileService.removeReachable();
+          this.tileService.removeSelected();
           this.gameService.switchStatus('battle');
         }
       })
