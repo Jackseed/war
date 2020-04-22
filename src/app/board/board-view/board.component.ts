@@ -103,12 +103,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (unitTileIds.includes(i)) {
         // check if a unit wasn't already selected, then selects this one
         if (!this.unitQuery.hasActive()) {
-          console.log('selecting tile ', i);
           this.tileService.markAsSelected(i);
         // else, check if the clicked unit is not the same as the already selected
         // if not, swap the positions
         } else if (!this.unitQuery.isSelectedUnit(i)) {
-          console.log('ici');
           this.unitService.swapUnitPositions(i);
           this.tileService.removeSelected();
         }
@@ -128,6 +126,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             // and clicked on a tile reachable, the unit moves to the tile
             if (tile.isReachable) {
               this.tileService.moveSelectedUnit(selectedUnit, i);
+              this.tileService.removeReachable();
               this.tileService.removeSelected();
               // increment action count and switch active player if needed
               this.playerService.actionPlayed();

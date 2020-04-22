@@ -98,10 +98,14 @@ export class TileService {
   public removeSelected() {
     this.store.update(null, {
       isSelected: false,
-      isReachable: false,
     });
     this.unitStore.removeActive(this.unitQuery.getActiveId());
-    console.log(this.unitQuery.hasActive());
+  }
+
+  public removeReachable() {
+    this.store.update(null, {
+      isReachable: false,
+    });
   }
 
 }
