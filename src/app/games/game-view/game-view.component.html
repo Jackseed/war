@@ -1,4 +1,4 @@
-<div class="container" fxLayout="column wrap" fxLayoutAlign="center center">
+<div *ngIf="((gameStatus$ | async) === 'waiting' || (gameStatus$ | async) === 'unit creation'); else board" class="container" fxLayout="column wrap" fxLayoutAlign="center center">
 
   <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
     <app-top-bar></app-top-bar>
@@ -28,7 +28,7 @@
 
     <!-- Board -->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement' || (gameStatus$ | async) === 'battle' || (gameStatus$ | async) === 'finished'">
-      <app-board></app-board>
+
     </ng-container>
 
   </div>
@@ -38,3 +38,21 @@
   </div>
 
 </div>
+
+<ng-template #board>
+  <div class="container" fxLayout="column wrap" fxLayoutAlign="center center">
+
+    <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
+      <app-top-bar></app-top-bar>
+    </div>
+    
+    <div fxFlex="70" fxFill>
+      <app-board></app-board>
+    </div>
+
+    <div fxFlex="10"  fxLayoutAlign="start start">
+      <app-bottom-bar></app-bottom-bar>
+    </div>
+
+  </div>
+</ng-template>
