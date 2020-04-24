@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
-import { Unit, UnitQuery } from '../unit/+state';
+import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { boardCols, Castle, actionsPerTurn, GameService, GameQuery } from 'src/app/games/+state';
 import { map } from 'rxjs/operators';
 import { OpponentUnitService, OpponentUnitQuery, OpponentUnitStore } from '../unit/opponent/+state';
@@ -36,6 +36,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private tileQuery: TileQuery,
     private tileService: TileService,
     private unitQuery: UnitQuery,
+    private unitService: UnitService,
     private playerQuery: PlayerQuery,
     private playerService: PlayerService,
     private opponentUnitStore: OpponentUnitStore,
@@ -54,8 +55,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
     this.gameStatus$ = this.gameQuery.gameStatus$;
 
-    // get the visible tile ids
-    this.visibleTileIds$ = this.tileQuery.visibleTileIds$;
+    // get the visible tile ids, except during placement
+    this.visibleTileIds$ = combineLatest([this.gameStatus$, this.tileQuery.visibleTileIds$]).pipe(
+      map(([status, visibleTiles]) => {
+        if (status === 'placement') {
+          return [];
+        } else {
+          return visibleTiles;
+        }
+      })
+    );
 
     // get unit tile ids
     this.unitTileIds$ = this.unitQuery.unitTileIds$;
@@ -97,44 +106,59 @@ export class BoardComponent implements OnInit, OnDestroy {
     const game = this.gameQuery.getActive();
     const player = this.playerQuery.getActive();
 
-    // Check if the game is ongoing
-    if (game.status !== 'finished') {
+    if (game.status === 'placement') {
+      // check if the player clicked on its own unit
+      if (unitTileIds.includes(i)) {
+        // check if a unit wasn't already selected, then selects this one
+        if (!this.unitQuery.hasActive()) {
+          this.tileService.markAsSelected(i);
+        // else, check if the clicked unit is not the same as the already selected
+        // if not, swap the positions
+        } else if (!this.unitQuery.isSelectedUnit(i)) {
+          this.unitService.swapUnitPositions(i);
+          this.tileService.removeSelected();
+        }
+      } else if (this.unitQuery.hasActive() && tile.isReachable) {
+        this.tileService.moveSelectedUnit(selectedUnit, i);
+        this.tileService.removeSelected();
+      }
+    }
 
+    if (game.status === 'battle') {
       // Check if the player is active & has not made too many actions
       if (player.isActive && (player.actionCount < actionsPerTurn)) {
-
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
-          const unit = this.getUnitbyTileId(i);
-          this.tileService.removeSelected();
-          this.tileService.markAsSelected(i, unit);
-        } else {
-          // If a unit is selected..
-          if (this.unitQuery.hasActive()) {
-            // and clicked on a tile reachable, the unit moves to the tile
-            if (tile.isReachable) {
-              this.tileService.moveSelectedUnit(selectedUnit, i);
-
-              // increment action count and switch active player if needed
-              this.playerService.actionPlayed();
-            }
+          this.tileService.markAsSelected(i);
+          this.tileService.markAdjacentTilesReachable(i);
+        // Else, if a unit is selected..
+        } else if (this.unitQuery.hasActive()) {
+          // and clicked on a tile reachable, the unit moves to the tile
+          if (tile.isReachable) {
+            this.tileService.moveSelectedUnit(selectedUnit, i);
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+            // increment action count and switch active player if needed
+            this.playerService.actionPlayed();
           }
         }
       } else {
         console.log('not your turn');
       }
+    }
 
-    } else {
+    // Check if the game is ongoing
+    if (game.status === 'finished') {
       console.log('game is over');
     }
   }
 
-  getUnitbyTileId(tileId: number): Unit {
-    return this.unitQuery.getUnitbyTileId(tileId);
+  public getUnitByTileId(tileId: number): Unit {
+    return this.unitQuery.getUnitByTileId(tileId);
   }
 
-  getOpponentUnitbyTileId(tileId: number): Unit {
-    return this.opponentUnitQuery.getUnitbyTileId(tileId);
+  public getOpponentUnitByTileId(tileId: number): Unit {
+    return this.opponentUnitQuery.getUnitByTileId(tileId);
   }
 
   ngOnDestroy() {

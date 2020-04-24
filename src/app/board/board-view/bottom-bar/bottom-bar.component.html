@@ -1,16 +1,20 @@
-<ng-container *ngIf="(players$ | async).length === 1; else unitCreation">
+<div [ngSwitch]="true" class="center">
 
-</ng-container>
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
+  </ng-container>
 
-<ng-template #unitCreation>
-  <ng-container *ngIf="(gameStatus$ | async) === 'unit creation'; else board" >
+
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation' || (gameStatus$ | async) === 'placement'">
     <button mat-raised-button [disabled]="(isPlayerReady$ | async)" color="warn" (click)="setReady()">
       <span>Ready</span>
       <mat-icon svgIcon="fight" style="margin-left: 5px;"></mat-icon>
     </button>
   </ng-container>
-</ng-template>
 
-<ng-template #board>
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
+  </ng-container>
 
-</ng-template>
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
+  </ng-container>
+
+</div>

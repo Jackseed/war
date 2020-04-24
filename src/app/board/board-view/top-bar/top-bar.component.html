@@ -5,13 +5,17 @@
       <p>Prepare yourself with the dino :)</p>
   </ng-container>
 
-
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
     <h1>CREATE YOUR ARMY</h1>
     <p>Be wise, your opponent is doing the same.</p>
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
+    <h1>POSITION YOUR ARMY</h1>
+    <p>Battle will start soon.</p>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
 
     <ng-container *ngIf="(player$ | async).isActive; else unactive">
       <ng-container *ngIf="(player$ | async) as player">

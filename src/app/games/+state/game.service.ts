@@ -68,7 +68,7 @@ export class GameService extends CollectionService<GameState> {
       this.router.navigate([`/games/${game.id}`]);
 
     } else {
-      console.log('Game is full');
+      console.log('game is full');
     }
   }
 
@@ -93,8 +93,6 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection('games').doc(game.id);
 
     doc.update({playersReady});
-
-    return playersReady.length;
   }
 
 }

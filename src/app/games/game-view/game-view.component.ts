@@ -3,6 +3,7 @@ import { GameQuery, GameService } from '../+state';
 import { map, tap } from 'rxjs/operators';
 import { PlayerQuery } from 'src/app/board/player/+state';
 import { Observable, Subscription, combineLatest } from 'rxjs';
+import { TileService } from 'src/app/board/tile/+state';
 
 @Component({
   selector: 'app-game-view',
@@ -18,15 +19,26 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private gameQuery: GameQuery,
     private gameService: GameService,
     private playerQuery: PlayerQuery,
+    private tileService: TileService,
   ) {}
 
   ngOnInit() {
     this.gameStatus$ = this.gameQuery.gameStatus$;
+
     this.playersCountSub$ = combineLatest([this.playerQuery.selectCount(), this.gameStatus$]).pipe(
       tap(([count, gameStatus]) => (count === 2 && gameStatus === 'waiting' ? this.gameService.switchStatus('unit creation') : false))
     ).subscribe();
-    this.playersReadyCountSub$ = this.gameQuery.playersReadyCount.pipe(
-      tap(count => (count === 2 ? this.gameService.switchStatus('placement') : false))
+
+    this.playersReadyCountSub$ = combineLatest([this.gameQuery.playersReadyCount, this.gameStatus$]).pipe(
+      tap(([count, gameStatus]) => {
+        if ((count === 2) && gameStatus === 'unit creation') {
+          this.gameService.switchStatus('placement');
+        } else if ((count === 2) && gameStatus === 'placement') {
+          this.tileService.removeReachable();
+          this.tileService.removeSelected();
+          this.gameService.switchStatus('battle');
+        }
+      })
     ).subscribe();
   }
 

@@ -14,23 +14,27 @@ export interface Castle {
   vision: number;
 }
 
+/// TODO push to firebase
 export const boardCols = 11;
 export const boardMaxTiles = 1000;
 export const actionsPerTurn = 3;
+export const unitPlacementMargin = 2;
+export const xCastle = 1;
+export const yCastle = Math.floor(boardCols / 2);
 
 export function Castle(color: 'white' | 'black'): Castle {
   return {
     color,
     get x(): number {
       if (this.color === 'white') {
-        return 1;
+        return xCastle;
       } else {
-        return boardCols - Math.round(boardCols / 5);
+        return boardCols - (xCastle + 1);
       }
     },
-    y: Math.round(boardCols / 2 - 1) * boardCols,
+    y: yCastle,
     get tileId(): number {
-      return this.x + this.y;
+      return this.x + this.y * boardCols;
     },
     vision: 2,
   };

@@ -35,7 +35,7 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
     );
   }
 
-  public getUnitbyTileId(tileId: number): Unit {
+  public getUnitByTileId(tileId: number): Unit {
     const units = this.getAll();
     return units.find(unit => unit.tileId === tileId);
   }

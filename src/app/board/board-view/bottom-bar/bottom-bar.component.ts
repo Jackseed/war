@@ -4,7 +4,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UnitService } from '../../unit/+state';
 import { GameService, GameQuery } from 'src/app/games/+state';
 import { PlayerQuery, Player } from '../../player/+state';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -39,10 +38,16 @@ export class BottomBarComponent implements OnInit {
 
   setReady() {
     const playerId = this.playerQuery.getActiveId();
+    const gameStatus = this.gameQuery.getActive().status;
+
     // Mark the player as ready
     this.gameService.markReady(playerId);
+
     // Save the units created
-    this.unitService.setUnits();
+    if (gameStatus === 'unit creation') {
+      this.unitService.setUnits();
+    }
+
   }
 
 }
