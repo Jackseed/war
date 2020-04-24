@@ -46,6 +46,28 @@ export class TileQuery extends QueryEntity<TileState> {
     return tileIds;
   }
 
+  public getWithinRangeTiles(tileId: number, range: number): number[] {
+    const tile: Tile = this.getEntity(tileId.toString());
+    const tileIds: number[] = [];
+    
+    for (let x = -range; x <= range; x++) {
+      for (let y = -range; y <= range; y++) {
+        if (x !== -range && x !== range && y !== -range && y !== range) {
+        } else {
+          const X = tile.x + x;
+          const Y = tile.y + y;
+
+          // verifies that the tile is inside the board
+          if ((X < boardCols) && (X >= 0) && (Y < boardCols) && (Y >= 0)) {
+            const id = X + boardCols * Y;
+            tileIds.push(id);
+          }
+        }
+      }
+    }
+    return tileIds;
+  }
+
   public get tileIds$(): Observable<number[]> {
     return this.selectAll().pipe(
       map(tiles =>

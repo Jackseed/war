@@ -4,7 +4,7 @@
     <mat-grid-list fxFlex="80" class="container" cols="{{boardSize}}" gutterSize="0" rowHeight="fit">
 
       <mat-grid-tile *ngFor="let tile of (tiles$ | async); let i = index;" [ngClass]="{'finished': (gameStatus$ | async) === 'finished'}">
-
+        {{i}}
         <div *ngIf="castleIds.includes(i); else unit" class="container">
 
           <div *ngIf="i === castle.tileId">

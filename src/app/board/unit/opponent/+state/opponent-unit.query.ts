@@ -3,7 +3,7 @@ import { QueryEntity } from '@datorama/akita';
 import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { Observable, combineLatest } from 'rxjs';
 import { Unit, UnitQuery } from '../../+state';
-import { TileQuery } from 'src/app/board/tile/+state';
+import { TileQuery } from 'src/app/board/tile/+state/tile.query';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })

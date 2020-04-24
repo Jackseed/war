@@ -5,6 +5,7 @@ import { TileStore } from './tile.store';
 import { Tile, createTile } from './tile.model';
 import { boardCols, boardMaxTiles, unitPlacementMargin, GameQuery } from 'src/app/games/+state';
 import { PlayerQuery } from '../../player/+state';
+import { OpponentUnitQuery } from '../../unit/opponent/+state/opponent-unit.query';
 
 @Injectable({ providedIn: 'root' })
 export class TileService {
@@ -17,9 +18,10 @@ export class TileService {
     private unitQuery: UnitQuery,
     private unitStore: UnitStore,
     private unitService: UnitService,
+    private opponentUnitQuery: OpponentUnitQuery,
   ) {}
 
-  setTiles() {
+  public setTiles() {
     const tiles: Tile[] = [];
     const gameStatus = this.gameQuery.getActive().status;
 
@@ -41,7 +43,7 @@ export class TileService {
   }
 
   // TODO : factorize with unit service defaultPositionUnits()
-  setPlacementTiles() {
+  private setPlacementTiles() {
     const player = this.playerQuery.getActive();
     const placementTilesArea = (unitPlacementMargin + 1) * ( boardCols - (unitPlacementMargin * 2));
     const placementTiles: number[] = [];
@@ -71,14 +73,14 @@ export class TileService {
     this.markAsReachable(placementTiles);
   }
 
-  markAsSelected(tileId: number) {
+  public markAsSelected(tileId: number) {
     const unit = this.unitQuery.getUnitByTileId(tileId);
     this.removeSelected();
-    this.store.update(tileId, ({ isSelected: true }));
+    this.store.update(tileId, { isSelected: true });
     this.unitStore.setActive(unit.id.toString());
   }
 
-  markAdjacentTilesReachable(tileId: number) {
+  public markAdjacentTilesReachable(tileId: number) {
     const unit = this.unitQuery.getUnitByTileId(tileId);
 
     let reachableTileIds = this.query.getAdjacentTiles(unit.tileId, unit.move);
@@ -87,30 +89,41 @@ export class TileService {
     this.markAsReachable(reachableTileIds);
   }
 
-  markAsReachable(tileIds: number[]) {
-    this.store.update(tileIds, ({ isReachable: true }));
+  public markAsReachable(tileIds: number[]) {
+    this.store.update(tileIds, { isReachable: true });
   }
 
-  markAsAttackable() {
-    const reachableTileIds = this.query.reachableTileIds;
-    const opponentUnitTileIds =
+  public markWithinRangeTiles(tileId: number) {
+    const unit = this.unitQuery.getUnitByTileId(tileId);
+    const withinRangeTileIds = this.query.getWithinRangeTiles(unit.tileId, unit.range);
+
+    // if unit range is 1, only units within range are marked
+    if (unit.range === 1) {
+      const visibleOpponentUnitTileIds = this.opponentUnitQuery.visibleUnitTileIds;
+      const withinRangeOpponentUnitTileIds = withinRangeTileIds.filter(id => visibleOpponentUnitTileIds.includes(id));
+
+      this.store.update(withinRangeOpponentUnitTileIds, { isInRange: true });
+    } else {
+      this.store.update(withinRangeTileIds, { isInRange: true });
+    }
   }
+
+  public removeInRangeTiles() {
+    this.store.update(null, { isInRange: false });
+  }
+
 
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.unitService.updatePosition(unit, tileId);
   }
 
   public removeSelected() {
-    this.store.update(null, {
-      isSelected: false,
-    });
+    this.store.update(null, { isSelected: false });
     this.unitStore.removeActive(this.unitQuery.getActiveId());
   }
 
   public removeReachable() {
-    this.store.update(null, {
-      isReachable: false,
-    });
+    this.store.update(null, { isReachable: false });
   }
 
 }
