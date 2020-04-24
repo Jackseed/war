@@ -7,7 +7,7 @@ export interface Tile {
   isVisible?: boolean;
   isReachable?: boolean;
   isSelected?: boolean;
-  isInRange?: boolean;
+  withinRange?: boolean;
 }
 
 /** A factory function that creates Tiles */

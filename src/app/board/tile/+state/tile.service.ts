@@ -102,14 +102,14 @@ export class TileService {
       const visibleOpponentUnitTileIds = this.opponentUnitQuery.visibleUnitTileIds;
       const withinRangeOpponentUnitTileIds = withinRangeTileIds.filter(id => visibleOpponentUnitTileIds.includes(id));
 
-      this.store.update(withinRangeOpponentUnitTileIds, { isInRange: true });
+      this.store.update(withinRangeOpponentUnitTileIds, { withinRange: true });
     } else {
-      this.store.update(withinRangeTileIds, { isInRange: true });
+      this.store.update(withinRangeTileIds, { withinRange: true });
     }
   }
 
   public removeInRangeTiles() {
-    this.store.update(null, { isInRange: false });
+    this.store.update(null, { withinRange: false });
   }
 
 

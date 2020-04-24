@@ -143,6 +143,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.tileService.moveSelectedUnit(selectedUnit, i);
             this.tileService.removeReachable();
             this.tileService.removeSelected();
+            this.tileService.removeInRangeTiles();
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
           }

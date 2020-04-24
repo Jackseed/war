@@ -49,7 +49,7 @@ export class TileQuery extends QueryEntity<TileState> {
   public getWithinRangeTiles(tileId: number, range: number): number[] {
     const tile: Tile = this.getEntity(tileId.toString());
     const tileIds: number[] = [];
-    
+
     for (let x = -range; x <= range; x++) {
       for (let y = -range; y <= range; y++) {
         if (x !== -range && x !== range && y !== -range && y !== range) {
