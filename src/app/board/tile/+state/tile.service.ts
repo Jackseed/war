@@ -91,6 +91,11 @@ export class TileService {
     this.store.update(tileIds, ({ isReachable: true }));
   }
 
+  markAsAttackable() {
+    const reachableTileIds = this.query.reachableTileIds;
+    const opponentUnitTileIds =
+  }
+
   public moveSelectedUnit(unit: Unit, tileId: number) {
     this.unitService.updatePosition(unit, tileId);
   }

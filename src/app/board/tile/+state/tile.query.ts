@@ -3,7 +3,7 @@ import { TileStore, TileState } from './tile.store';
 import { Observable } from 'rxjs';
 import { Tile } from '.';
 import { map } from 'rxjs/operators';
-import { UnitQuery } from '../../unit/+state';
+import { UnitQuery, Unit } from '../../unit/+state';
 import { Injectable } from '@angular/core';
 import { boardCols, Castle } from 'src/app/games/+state';
 import { Player, PlayerQuery } from '../../player/+state';
@@ -25,32 +25,7 @@ export class TileQuery extends QueryEntity<TileState> {
 
   public get visibleTileIds$(): Observable<number[]> {
     return this.unitQuery.selectAll().pipe(
-      map(units => {
-        const visibleIds: number[] = [];
-        const player: Player = this.playerQuery.getActive();
-        const castle: Castle = Castle(player.color);
-
-        // add the castle visibility
-        const castleVisibleIds: number[] = this.getAdjacentTiles(castle.tileId, castle.vision);
-        for (const id of castleVisibleIds) {
-          visibleIds.push(id);
-        }
-
-        // gets the adjacent tiles visible by the unit
-        const unitTileIdsArray: number[][] = units.map(
-          unit => this.getAdjacentTiles(unit.tileId, unit.vision)
-        );
-
-        // flatten the array of each unit into one, without duplicate
-        for (const ids of unitTileIdsArray) {
-          for (const id of ids) {
-            if (!visibleIds.includes(id)) {
-              visibleIds.push(id);
-            }
-          }
-        }
-        return visibleIds;
-      })
+      map(units => this.visibleTileIds(units))
     );
   }
 
@@ -77,6 +52,38 @@ export class TileQuery extends QueryEntity<TileState> {
         tiles.map(({id}) => id)
       )
     );
+  }
+
+  public get reachableTileIds(): number[] {
+    return this.getAll().filter(tile => tile.isReachable)
+      .map(tile => tile.id);
+  }
+
+  public visibleTileIds(units: Unit[]): number[] {
+    const visibleIds: number[] = [];
+    const player: Player = this.playerQuery.getActive();
+    const castle: Castle = Castle(player.color);
+
+    // add the castle visibility
+    const castleVisibleIds: number[] = this.getAdjacentTiles(castle.tileId, castle.vision);
+    for (const id of castleVisibleIds) {
+      visibleIds.push(id);
+    }
+
+    // gets the adjacent tiles visible by the unit
+    const unitTileIdsArray: number[][] = units.map(
+      unit => this.getAdjacentTiles(unit.tileId, unit.vision)
+    );
+
+    // flatten the array of each unit into one, without duplicate
+    for (const ids of unitTileIdsArray) {
+      for (const id of ids) {
+        if (!visibleIds.includes(id)) {
+          visibleIds.push(id);
+        }
+      }
+    }
+    return visibleIds;
   }
 
 }

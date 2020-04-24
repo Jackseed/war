@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
 import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { Observable, combineLatest } from 'rxjs';
-import { Unit } from '../../+state';
+import { Unit, UnitQuery } from '../../+state';
 import { TileQuery } from 'src/app/board/tile/+state';
 import { map } from 'rxjs/operators';
 
@@ -11,6 +11,7 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
   constructor(
     protected store: OpponentUnitStore,
+    private unitQuery: UnitQuery,
     private tileQuery: TileQuery,
   ) {
     super(store);
@@ -46,5 +47,17 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
         units.map(({tileId}) => tileId)
       )
     );
+  }
+
+  public get unitTileIds(): number[] {
+    return this.getAll().map(unit => unit.tileId);
+  }
+
+  public get visibleUnitTileIds(): number[] {
+    const activeUnits = this.unitQuery.getAll();
+    const visibleTileIds = this.tileQuery.visibleTileIds(activeUnits);
+    const unitTileIds = this.unitTileIds;
+
+    return unitTileIds.filter(id => visibleTileIds.includes(id));
   }
 }

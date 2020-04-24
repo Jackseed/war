@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, of, combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { boardCols, Castle, actionsPerTurn, GameService, GameQuery } from 'src/app/games/+state';
@@ -129,6 +129,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (player.isActive && (player.actionCount < actionsPerTurn)) {
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
+          this.tileService.removeReachable();
+          this.tileService.removeSelected();
           this.tileService.markAsSelected(i);
           this.tileService.markAdjacentTilesReachable(i);
         // Else, if a unit is selected..
