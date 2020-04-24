@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GameQuery, GameService } from '../+state';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { PlayerQuery } from 'src/app/board/player/+state';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { TileService } from 'src/app/board/tile/+state';
