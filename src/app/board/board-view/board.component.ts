@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { boardCols, Castle, actionsPerTurn, GameService, GameQuery } from 'src/app/games/+state';
@@ -55,8 +55,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
     this.gameStatus$ = this.gameQuery.gameStatus$;
 
-    // get the visible tile ids
-    this.visibleTileIds$ = this.tileQuery.visibleTileIds$;
+    // get the visible tile ids, except during placement
+    this.visibleTileIds$ = combineLatest([this.gameStatus$, this.tileQuery.visibleTileIds$]).pipe(
+      map(([status, visibleTiles]) => {
+        if (status === 'placement') {
+          return [];
+        } else {
+          return visibleTiles;
+        }
+      })
+    );
 
     // get unit tile ids
     this.unitTileIds$ = this.unitQuery.unitTileIds$;
