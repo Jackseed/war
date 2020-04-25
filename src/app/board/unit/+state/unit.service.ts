@@ -155,7 +155,8 @@ export class UnitService extends CollectionService<UnitState> {
         hp: 0,
       };
     } else {
-      const resultingDefensiveHP = resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
+      const resultingDefensiveHP = resultingDefensiveTotaltHP % baseDefensiveUnit.hp === 0 ?
+        baseDefensiveUnit.hp : resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
 
       defensiveUnit = {
         ...defensiveUnit,
