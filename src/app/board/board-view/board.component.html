@@ -38,9 +38,9 @@
         </ng-template>
 
         <ng-template #opponentUnit>
-          <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else ground" (click)="play(i)" class="container" [ngClass]="{}">
+          <div *ngIf="(visibleOpponentUnitTileIds$ | async).includes(i); else ground" (click)="play(i)" class="container" [ngClass]="{'reachable': tile.isReachable, 'withinRange': tile.withinRange}">
             <div class="ground">
-              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{'reachable': tile.isReachable, 'withinRange': tile.withinRange}">
+              <img fxFlexFill src="assets/img/grass.jpg" [ngClass]="{}">
             </div>
             <div class="unit">
               <img class="img-unit" src="assets/img/{{getOpponentUnitByTileId(i).color}}_{{getOpponentUnitByTileId(i).type}}.png">

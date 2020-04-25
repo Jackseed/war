@@ -29,7 +29,7 @@ export class BottomBarComponent implements OnInit {
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(
       'fight',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/fight.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/img/fight.svg')
     );
   }
 
