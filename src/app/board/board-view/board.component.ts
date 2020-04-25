@@ -138,8 +138,11 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.tileService.markWithinRangeTiles(i);
         // Else, if a unit is selected..
         } else if (this.unitQuery.hasActive()) {
-          // and clicked on a tile reachable, the unit moves to the tile
-          if (tile.isReachable) {
+          // and clicked on within range tile
+          if (tile.withinRange) {
+            this.unitService.attack(selectedUnit, i);
+          } else if (tile.isReachable) {
+            // and clicked on a tile reachable, the unit moves to the tile
             this.tileService.moveSelectedUnit(selectedUnit, i);
             this.tileService.removeReachable();
             this.tileService.removeSelected();
