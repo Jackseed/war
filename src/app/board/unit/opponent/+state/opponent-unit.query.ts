@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
 import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { Observable, combineLatest } from 'rxjs';
-import { Unit } from '../../+state';
-import { TileQuery } from 'src/app/board/tile/+state';
+import { UnitQuery } from '../../+state/unit.query';
+import { Unit } from '../../+state/unit.model';
+import { TileQuery } from 'src/app/board/tile/+state/tile.query';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +12,7 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
   constructor(
     protected store: OpponentUnitStore,
+    private unitQuery: UnitQuery,
     private tileQuery: TileQuery,
   ) {
     super(store);
@@ -18,7 +20,9 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
   public get visibleUnits$(): Observable<Unit[]> {
     const visibleTileIds$ = this.tileQuery.visibleTileIds$;
-    const units$ = this.selectAll();
+    const units$ = this.selectAll({
+      filterBy: unit => unit.tileId !== null
+    });
 
     return combineLatest([visibleTileIds$, units$]).pipe(
       map(([visibleTileIds, units]) => {
@@ -36,15 +40,35 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
   }
 
   public getUnitByTileId(tileId: number): Unit {
-    const units = this.getAll();
+    const units = this.getAll({
+      filterBy: unit => unit.tileId !== null
+    });
     return units.find(unit => unit.tileId === tileId);
   }
 
   public get unitTileIds$(): Observable<number[]> {
-    return this.selectAll().pipe(
+    return this.selectAll({
+      filterBy: unit => unit.tileId !== null
+    }).pipe(
       map(units =>
         units.map(({tileId}) => tileId)
       )
     );
+  }
+
+  public get unitTileIds(): number[] {
+    return this.getAll({
+      filterBy: unit => unit.tileId !== null
+    }).map(unit => unit.tileId);
+  }
+
+  public get visibleUnitTileIds(): number[] {
+    const activeUnits = this.unitQuery.getAll({
+      filterBy: unit => unit.tileId !== null
+    });
+    const visibleTileIds = this.tileQuery.visibleTileIds(activeUnits);
+    const unitTileIds = this.unitTileIds;
+
+    return unitTileIds.filter(id => visibleTileIds.includes(id));
   }
 }

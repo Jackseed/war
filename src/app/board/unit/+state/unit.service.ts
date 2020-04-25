@@ -5,6 +5,8 @@ import { GameQuery, boardCols, unitPlacementMargin, xCastle, yCastle } from 'src
 import { PlayerQuery } from '../../player/+state';
 import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
 import { UnitQuery } from './unit.query';
+import { OpponentUnitQuery } from '../opponent/+state/opponent-unit.query';
+import { OpponentUnitService } from '../opponent/+state/opponent-unit.service';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
@@ -16,6 +18,8 @@ export class UnitService extends CollectionService<UnitState> {
     private query: UnitQuery,
     private gameQuery: GameQuery,
     private playerQuery: PlayerQuery,
+    private opponentUnitQuery: OpponentUnitQuery,
+    private opponentUnitService: OpponentUnitService,
   ) {
     super(store);
   }
@@ -99,6 +103,11 @@ export class UnitService extends CollectionService<UnitState> {
       .doc(unit.id.toString()).update({tileId});
   }
 
+  public updateUnit(unit: Unit) {
+    this.db.collection(this.currentPath)
+      .doc(unit.id.toString()).update(unit);
+  }
+
   public swapUnitPositions(tileId: number) {
     const clickedUnit = this.query.getUnitByTileId(tileId);
     const activeUnit = this.query.getActive();
@@ -109,5 +118,51 @@ export class UnitService extends CollectionService<UnitState> {
     batch.update(collection.doc(activeUnit.id), {tileId: clickedUnit.tileId});
 
     batch.commit();
+  }
+
+  public attack(attackingUnit: Unit, tileId: number) {
+    let opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
+
+    // verify that there is a unit on the attacked tile
+    if (opponentUnit) {
+      console.log('beginning of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
+      opponentUnit = this.fight(attackingUnit, opponentUnit);
+      if (opponentUnit.quantity > 0) {
+        attackingUnit = this.fight(opponentUnit, attackingUnit);
+      }
+      this.updateUnit(attackingUnit);
+      this.opponentUnitService.updateUnit(opponentUnit);
+      console.log('result of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
+    } else {
+      console.log('you missed your shot');
+    }
+
+  }
+
+  private fight(attackingUnit: Unit, defensiveUnit: Unit): Unit {
+    const baseDefensiveUnit = createUnit(defensiveUnit.id, defensiveUnit.playerId.toString(),
+          defensiveUnit.color, defensiveUnit.type, defensiveUnit.tileId);
+    const attackValue = attackingUnit.power * attackingUnit.quantity;
+    const defenseValue = defensiveUnit.hp * defensiveUnit.quantity;
+    const resultingDefensiveTotaltHP = defenseValue - attackValue;
+    const resultingDefensiveQuantity = Math.floor(resultingDefensiveTotaltHP / baseDefensiveUnit.hp);
+
+    if (resultingDefensiveQuantity <= 0) {
+      defensiveUnit = {
+        ...defensiveUnit,
+        tileId: null,
+        quantity: 0,
+        hp: 0,
+      };
+    } else {
+      const resultingDefensiveHP = resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
+
+      defensiveUnit = {
+        ...defensiveUnit,
+        quantity: resultingDefensiveQuantity,
+        hp: resultingDefensiveHP
+      };
+    }
+    return defensiveUnit;
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, of, combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Tile, TileQuery, TileService } from '../tile/+state';
 import { Unit, UnitQuery, UnitService } from '../unit/+state';
 import { boardCols, Castle, actionsPerTurn, GameService, GameQuery } from 'src/app/games/+state';
@@ -129,15 +129,29 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (player.isActive && (player.actionCount < actionsPerTurn)) {
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
+          this.tileService.removeReachable();
+          this.tileService.removeSelected();
+          this.tileService.removeInRangeTiles();
+
           this.tileService.markAsSelected(i);
           this.tileService.markAdjacentTilesReachable(i);
+          this.tileService.markWithinRangeTiles(i);
         // Else, if a unit is selected..
         } else if (this.unitQuery.hasActive()) {
-          // and clicked on a tile reachable, the unit moves to the tile
-          if (tile.isReachable) {
+          // and clicked on within range tile
+          if (tile.withinRange) {
+            this.unitService.attack(selectedUnit, i);
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+            this.tileService.removeInRangeTiles();
+            // increment action count and switch active player if needed
+            this.playerService.actionPlayed();
+          } else if (tile.isReachable) {
+            // and clicked on a tile reachable, the unit moves to the tile
             this.tileService.moveSelectedUnit(selectedUnit, i);
             this.tileService.removeReachable();
             this.tileService.removeSelected();
+            this.tileService.removeInRangeTiles();
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
           }
