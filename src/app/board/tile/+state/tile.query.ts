@@ -25,7 +25,9 @@ export class TileQuery extends QueryEntity<TileState> {
   }
 
   public get visibleTileIds$(): Observable<number[]> {
-    return this.unitQuery.selectAll().pipe(
+    return this.unitQuery.selectAll({
+      filterBy: unit => unit.tileId !== null
+    }).pipe(
       map(units => this.visibleTileIds(units))
     );
   }

@@ -141,6 +141,11 @@ export class BoardComponent implements OnInit, OnDestroy {
           // and clicked on within range tile
           if (tile.withinRange) {
             this.unitService.attack(selectedUnit, i);
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+            this.tileService.removeInRangeTiles();
+            // increment action count and switch active player if needed
+            this.playerService.actionPlayed();
           } else if (tile.isReachable) {
             // and clicked on a tile reachable, the unit moves to the tile
             this.tileService.moveSelectedUnit(selectedUnit, i);
