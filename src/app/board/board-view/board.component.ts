@@ -90,10 +90,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     // check if a player has no unit anymore
-    this.noUnitVictorySub = combineLatest([this.unitQuery.selectCount(unit => unit.tileId !== null),
-      this.opponentUnitQuery.selectCount(unit => unit.tileId !== null), this.gameStatus$]).pipe(
-        map(([unitCount, oppUnitCount, gameStatus]) => {
-          if (gameStatus === 'battle') {
+    this.noUnitVictorySub = combineLatest([this.unitQuery.selectCount(unit => unit.tileId !== null), this.unitQuery.selectLoading(),
+      this.opponentUnitQuery.selectCount(unit => unit.tileId !== null), this.opponentUnitQuery.selectLoading(), this.gameStatus$]).pipe(
+        map(([unitCount, unitLoading, oppUnitCount, oppUnitLoading, gameStatus]) => {
+          if (gameStatus === 'battle' && !unitLoading && !oppUnitLoading) {
             if (unitCount === 0) {
               this.gameService.switchStatus('finished');
               console.log('your army is destroyed, game over');

@@ -7,6 +7,7 @@ import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fi
 import { UnitQuery } from './unit.query';
 import { OpponentUnitQuery } from '../opponent/+state/opponent-unit.query';
 import { OpponentUnitService } from '../opponent/+state/opponent-unit.service';
+import { TileQuery } from '../../tile/+state/tile.query';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
@@ -18,6 +19,7 @@ export class UnitService extends CollectionService<UnitState> {
     private query: UnitQuery,
     private gameQuery: GameQuery,
     private playerQuery: PlayerQuery,
+    private tileQuery: TileQuery,
     private opponentUnitQuery: OpponentUnitQuery,
     private opponentUnitService: OpponentUnitService,
   ) {
@@ -122,12 +124,14 @@ export class UnitService extends CollectionService<UnitState> {
 
   public attack(attackingUnit: Unit, tileId: number) {
     let opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
-
-    // verify that there is a unit on the attacked tile
+    const oppWithinCounterAttackRange =
+      this.tileQuery.getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range).includes(attackingUnit.tileId);
+    // verify that there is a unit on the attacked tile and attack
     if (opponentUnit) {
       console.log('beginning of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
       opponentUnit = this.fight(attackingUnit, opponentUnit);
-      if (opponentUnit.quantity > 0) {
+      // if the attacked unit survived and is within range, counter attack
+      if (opponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
         attackingUnit = this.fight(opponentUnit, attackingUnit);
       }
       this.updateUnit(attackingUnit);
