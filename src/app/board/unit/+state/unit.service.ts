@@ -12,7 +12,7 @@ import { TileQuery } from '../../tile/+state/tile.query';
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
 export class UnitService extends CollectionService<UnitState> {
-  unitTypes = ['soldier', 'musketeer', 'knight', 'cannon'];
+  unitTypes: ('soldier' | 'musketeer' | 'knight' | 'cannon')[] = ['soldier', 'musketeer', 'knight', 'cannon'];
 
   constructor(
     store: UnitStore,
@@ -47,7 +47,7 @@ export class UnitService extends CollectionService<UnitState> {
 
   }
 
-  get defaultPositionUnits(): Unit[] {
+  private get defaultPositionUnits(): Unit[] {
     const player = this.playerQuery.getActive();
     const units: Unit[] = [];
     let y = unitPlacementMargin;
@@ -93,7 +93,7 @@ export class UnitService extends CollectionService<UnitState> {
   public addUnit(unitType, tileId: number) {
     const id = this.db.createId();
     const player = this.playerQuery.getActive();
-    this.store.add(createUnit(id, player.id, player.color, unitType, tileId));
+    this.store.add(createUnit(unitType, id, player.id, player.color, tileId));
   }
 
   public removeUnit(unit: Unit) {
@@ -101,8 +101,13 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   public updatePosition(unit: Unit, tileId: number) {
-    this.db.collection(this.currentPath)
-      .doc(unit.id.toString()).update({tileId});
+    const game = this.gameQuery.getActive();
+    if (game.status === 'placement') {
+      this.db.collection(this.currentPath).doc(unit.id.toString()).update({tileId});
+    } else {
+      const stamina = unit.stamina - 1;
+      this.db.collection(this.currentPath).doc(unit.id.toString()).update({tileId, stamina});
+    }
   }
 
   public updateUnit(unit: Unit) {
@@ -124,10 +129,10 @@ export class UnitService extends CollectionService<UnitState> {
 
   public attack(attackingUnit: Unit, tileId: number) {
     let opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
-    const oppWithinCounterAttackRange =
-      this.tileQuery.getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range).includes(attackingUnit.tileId);
     // verify that there is a unit on the attacked tile and attack
     if (opponentUnit) {
+      const oppWithinCounterAttackRange =
+        this.tileQuery.getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range).includes(attackingUnit.tileId);
       console.log('beginning of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
       opponentUnit = this.fight(attackingUnit, opponentUnit);
       // if the attacked unit survived and is within range, counter attack
@@ -144,8 +149,7 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   private fight(attackingUnit: Unit, defensiveUnit: Unit): Unit {
-    const baseDefensiveUnit = createUnit(defensiveUnit.id, defensiveUnit.playerId.toString(),
-          defensiveUnit.color, defensiveUnit.type, defensiveUnit.tileId);
+    const baseDefensiveUnit = createUnit(defensiveUnit.type);
     const attackValue = attackingUnit.power * attackingUnit.quantity;
     const defenseValue = defensiveUnit.hp * defensiveUnit.quantity;
     const resultingDefensiveTotaltHP = defenseValue - attackValue;

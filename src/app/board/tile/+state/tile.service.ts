@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Unit, UnitStore, UnitService, UnitQuery } from '../../unit/+state';
+import { UnitStore, UnitQuery } from '../../unit/+state';
 import { TileQuery } from './tile.query';
 import { TileStore } from './tile.store';
 import { Tile, createTile } from './tile.model';
@@ -17,7 +17,6 @@ export class TileService {
     private playerQuery: PlayerQuery,
     private unitQuery: UnitQuery,
     private unitStore: UnitStore,
-    private unitService: UnitService,
     private opponentUnitQuery: OpponentUnitQuery,
   ) {}
 
@@ -110,11 +109,6 @@ export class TileService {
 
   public removeInRangeTiles() {
     this.store.update(null, { withinRange: false });
-  }
-
-
-  public moveSelectedUnit(unit: Unit, tileId: number) {
-    this.unitService.updatePosition(unit, tileId);
   }
 
   public removeSelected() {

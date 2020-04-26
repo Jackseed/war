@@ -18,7 +18,7 @@ export const unitCols = 10;
 export const unitMaxTiles = 10;
 
 export function createUnit(
-  id: string, playerId: string, color: 'white' | 'black', unitType: 'soldier' | 'musketeer' | 'knight' | 'cannon',
+  unitType: 'soldier' | 'musketeer' | 'knight' | 'cannon', id?: string, playerId?: string, color?: 'white' | 'black',
   tileId?: number, params?: Partial<Unit>): Unit {
   if (unitType === 'soldier') {
       return {

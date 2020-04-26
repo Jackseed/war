@@ -138,7 +138,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.tileService.removeSelected();
         }
       } else if (this.unitQuery.hasActive() && tile.isReachable) {
-        this.tileService.moveSelectedUnit(selectedUnit, i);
+        this.unitService.updatePosition(selectedUnit, i);
         this.tileService.removeSelected();
       }
     }
@@ -171,15 +171,21 @@ export class BoardComponent implements OnInit, OnDestroy {
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
 
-          } else if (tile.isReachable) {
+          } else if (tile.isReachable && (selectedUnit.stamina > 0)) {
             // and clicked on a tile reachable, the unit moves to the tile
-            this.tileService.moveSelectedUnit(selectedUnit, i);
+            this.unitService.updatePosition(selectedUnit, i);
 
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.tileService.removeInRangeTiles();
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
+          } else {
+            if (selectedUnit.stamina === 0) {
+              console.log('rest first');
+            } else {
+              console.log('you cannot reach this place');
+            }
           }
         }
       } else {

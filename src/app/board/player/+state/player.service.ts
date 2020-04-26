@@ -5,6 +5,7 @@ import { PlayerStore, PlayerState } from './player.store';
 import { PlayerQuery } from './player.query';
 import { GameQuery, actionsPerTurn } from 'src/app/games/+state';
 import { Player } from './player.model';
+import { OpponentUnitQuery } from '../../unit/opponent/+state/opponent-unit.query';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players' })
@@ -14,6 +15,7 @@ export class PlayerService extends CollectionService<PlayerState> {
     store: PlayerStore,
     private query: PlayerQuery,
     private gameQuery: GameQuery,
+    private opponentUnitQuery: OpponentUnitQuery,
   ) {
     super(store);
   }
@@ -50,6 +52,7 @@ export class PlayerService extends CollectionService<PlayerState> {
     const player = this.query.getActive();
     const opponent = this.query.opponent;
     const gameId = this.gameQuery.getActiveId();
+    const oppTiredUnits = this.opponentUnitQuery.tiredUnits;
     const playerDoc = this.db.firestore.collection(this.currentPath).doc(player.id);
     const opponentDoc = this.db.firestore.collection(this.currentPath).doc(opponent.id);
     const gameDoc = this.db.firestore.collection('games').doc(gameId);
@@ -68,6 +71,11 @@ export class PlayerService extends CollectionService<PlayerState> {
     });
 
     batch.update(gameDoc, {turnCount: increment});
+
+    for (const unit of oppTiredUnits) {
+      const unitDoc = opponentDoc.collection('units').doc(unit.id);
+      batch.update(unitDoc, {stamina: increment});
+    }
 
     batch.commit();
   }

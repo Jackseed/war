@@ -7,7 +7,8 @@ import { UnitQuery } from '../../unit/+state/unit.query';
 import { Unit } from '../../unit/+state/unit.model';
 import { Injectable } from '@angular/core';
 import { boardCols, Castle } from 'src/app/games/+state';
-import { Player, PlayerQuery } from '../../player/+state';
+import { Player } from '../../player/+state/player.model';
+import { PlayerQuery } from '../../player/+state/player.query';
 
 @QueryConfig({
   sortBy: 'id',

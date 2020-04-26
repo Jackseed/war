@@ -3,12 +3,13 @@ import { QueryEntity } from '@datorama/akita';
 import { OpponentUnitStore, OpponentUnitState } from './opponent-unit.store';
 import { Observable, combineLatest } from 'rxjs';
 import { UnitQuery } from '../../+state/unit.query';
-import { Unit } from '../../+state/unit.model';
+import { Unit, createUnit } from '../../+state/unit.model';
 import { TileQuery } from 'src/app/board/tile/+state/tile.query';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
+  unitTypes: ('soldier' | 'musketeer' | 'knight' | 'cannon')[] = ['soldier', 'musketeer', 'knight', 'cannon'];
 
   constructor(
     protected store: OpponentUnitStore,
@@ -71,5 +72,20 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
     return unitTileIds.filter(id => visibleTileIds.includes(id));
   }
+
+  public get tiredUnits(): Unit[] {
+    let tiredUnits: Unit[] = [];
+
+    for (const unitType of this.unitTypes) {
+      const baseUnit = createUnit(unitType);
+      const tiredTypedUnits = this.getAll({
+        filterBy: unit => (unit.type === unitType) && (unit.tileId !== null) && (unit.stamina < baseUnit.stamina)
+      });
+      tiredUnits = tiredUnits.concat(tiredTypedUnits);
+    }
+
+    return tiredUnits;
+  }
+
 
 }
