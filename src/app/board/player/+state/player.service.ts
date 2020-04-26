@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { PlayerStore, PlayerState } from './player.store';
 import { PlayerQuery } from './player.query';
 import { GameQuery, actionsPerTurn } from 'src/app/games/+state';
+import { Player } from './player.model';
 
 @Injectable({ providedIn: 'root' })
 @CollectionConfig({ path: 'games/:gameId/players' })
@@ -23,14 +24,12 @@ export class PlayerService extends CollectionService<PlayerState> {
     return pathWithParams(this.constructor[path], {gameId});
   }
 
-  public setVictorious() {
-    const playerId = this.query.getActiveId();
-    const opponentId = this.query.opponent.id;
+  public setVictorious(winner: Player, loser: Player) {
     const collection = this.db.firestore.collection(this.currentPath);
     const batch = this.db.firestore.batch();
 
-    batch.update(collection.doc(playerId), {isVictorious: true});
-    batch.update(collection.doc(opponentId), {isVictorious: false});
+    batch.update(collection.doc(winner.id), {isVictorious: true});
+    batch.update(collection.doc(loser.id), {isVictorious: false});
 
     batch.commit();
   }

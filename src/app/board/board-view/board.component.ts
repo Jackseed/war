@@ -15,7 +15,8 @@ import { Player, PlayerQuery, PlayerService } from '../player/+state';
 
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
-  private victorySub: Subscription;
+  private castleVictorySub: Subscription;
+  private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
   public boardSize = boardCols;
   public player: Player;
@@ -77,15 +78,33 @@ export class BoardComponent implements OnInit, OnDestroy {
     );
 
     // check if a player unit is on the opponent castle, if so stop the game
-    this.victorySub = this.unitTileIds$.pipe(
+    this.castleVictorySub = this.unitTileIds$.pipe(
       map(unitTileIds =>
         unitTileIds.map(unitTileId => {
           if (unitTileId === this.opponentCastle.tileId) {
             this.gameService.switchStatus('finished');
-            this.playerService.setVictorious();
+            this.playerService.setVictorious(this.player, this.opponentPlayer);
           }
         })
       )
+    ).subscribe();
+
+    // check if a player has no unit anymore
+    this.noUnitVictorySub = combineLatest([this.unitQuery.selectCount(unit => unit.tileId !== null),
+      this.opponentUnitQuery.selectCount(unit => unit.tileId !== null), this.gameStatus$]).pipe(
+        map(([unitCount, oppUnitCount, gameStatus]) => {
+          if (gameStatus === 'battle') {
+            if (unitCount === 0) {
+              this.gameService.switchStatus('finished');
+              console.log('your army is destroyed, game over');
+              this.playerService.setVictorious(this.opponentPlayer, this.player);
+            } else if (oppUnitCount === 0) {
+              this.gameService.switchStatus('finished');
+              console.log('you crushed him, congratz');
+              this.playerService.setVictorious(this.player, this.opponentPlayer);
+            }
+          }
+        })
     ).subscribe();
 
     // when the game is finished, turn all the tiles & units visible
@@ -129,6 +148,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (player.isActive && (player.actionCount < actionsPerTurn)) {
         // If a unit was clicked and belongs to player, turns it selected
         if (unitTileIds.includes(i)) {
+
           this.tileService.removeReachable();
           this.tileService.removeSelected();
           this.tileService.removeInRangeTiles();
@@ -138,17 +158,23 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.tileService.markWithinRangeTiles(i);
         // Else, if a unit is selected..
         } else if (this.unitQuery.hasActive()) {
-          // and clicked on within range tile
+
+          // and clicked in a tile within range, then attack
           if (tile.withinRange) {
+
             this.unitService.attack(selectedUnit, i);
+
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.tileService.removeInRangeTiles();
+
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
+
           } else if (tile.isReachable) {
             // and clicked on a tile reachable, the unit moves to the tile
             this.tileService.moveSelectedUnit(selectedUnit, i);
+
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.tileService.removeInRangeTiles();
@@ -178,7 +204,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.opponentUnitStore.reset();
     this.oppUnitsync.unsubscribe();
-    this.victorySub.unsubscribe();
+    this.castleVictorySub.unsubscribe();
+    this.noUnitVictorySub.unsubscribe();
     this.finishedSub.unsubscribe();
   }
 

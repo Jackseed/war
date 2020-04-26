@@ -28,4 +28,5 @@ export class OpponentUnitService extends CollectionService<OpponentUnitState> {
     this.db.collection(this.currentPath)
       .doc(unit.id.toString()).update(unit);
   }
+
 }

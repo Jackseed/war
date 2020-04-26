@@ -71,4 +71,5 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
     return unitTileIds.filter(id => visibleTileIds.includes(id));
   }
+
 }
