@@ -134,6 +134,7 @@ export class UnitService extends CollectionService<UnitState> {
       const oppWithinCounterAttackRange =
         this.tileQuery.getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range).includes(attackingUnit.tileId);
       console.log('beginning of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
+      this.messageService.messageFactory('attack', )
       opponentUnit = this.fight(attackingUnit, opponentUnit);
       // if the attacked unit survived and is within range, counter attack
       if (opponentUnit.quantity > 0 && oppWithinCounterAttackRange) {

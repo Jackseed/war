@@ -1,8 +1,8 @@
-import * as firebase from 'firebase/app';
+import * as firebase from "firebase/app";
 
 export interface Message {
   id: number | string;
-  type: 'attack';
+  type: "attack";
   activePlayerId: string;
   passivePlayerId?: string;
   timestamp: firebase.firestore.Timestamp;
