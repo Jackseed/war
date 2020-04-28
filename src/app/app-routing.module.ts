@@ -9,6 +9,7 @@ import { UnitGuard } from './board/unit/guard/unit.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { ActiveAuthGuard } from './auth/guard/active-auth.guard';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { MessageGuard } from './board/message/guard/message.guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['welcome']);
 
@@ -39,8 +40,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        canActivate: [PlayerGuard],
-        canDeactivate: [PlayerGuard],
+        canActivate: [PlayerGuard, MessageGuard],
+        canDeactivate: [PlayerGuard, MessageGuard],
         children: [
           {
             path: '',

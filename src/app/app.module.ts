@@ -23,6 +23,8 @@ import { UnitGuard } from './board/unit/guard/unit.guard';
 import { PlayerGuard } from './board/player/guard/player.guard';
 import { GameGuard } from './games/guard/game.guard';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { MessageModule } from './board/message/message.module';
+import { MessageGuard } from './board/message/guard/message.guard';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk',
@@ -50,13 +52,24 @@ const firebaseConfig = {
     UnitsModule,
     TilesModule,
     PlayerModule,
+    MessageModule,
     FlexLayoutModule,
     AuthModule,
     FormsModule,
     RouterModule,
     environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
-  providers: [ActiveAuthGuard, AngularFireAuthGuard, UnitGuard, PlayerGuard, GameGuard, ActiveGameGuard],
-  bootstrap: [AppComponent]
+  providers: [
+    ActiveAuthGuard,
+    AngularFireAuthGuard,
+    UnitGuard,
+    PlayerGuard,
+    GameGuard,
+    ActiveGameGuard,
+    MessageGuard,
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
