@@ -11,7 +11,6 @@ export interface Message {
   isAttackerVisible?: boolean;
   isDefenserVisible?: boolean;
   casualties: number;
-  injured: boolean;
 }
 
 export function createMessage(params: Partial<Message>): Message {
@@ -23,7 +22,6 @@ export function createMessage(params: Partial<Message>): Message {
     defensiveUnit: params.defensiveUnit,
     isAttackerVisible: params.isAttackerVisible,
     isDefenserVisible: params.isDefenserVisible,
-    casualties: params.casualties,
-    injured: params.injured,
+    casualties: params.casualties
   };
 }

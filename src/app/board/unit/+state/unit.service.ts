@@ -159,7 +159,14 @@ export class UnitService extends CollectionService<UnitState> {
         .includes(attackingUnit.tileId);
 
       const resultingOpponentUnit = this.fight(attackingUnit, opponentUnit);
-      console.log(resultingOpponentUnit);
+      this.messageService.addMessage(
+        "attack",
+        attackingUnit,
+        opponentUnit,
+        true,
+        true,
+        opponentUnit.quantity - resultingOpponentUnit.quantity,
+      );
       // if attacked unit survived and within range, counter attack
       if (resultingOpponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
         resultingAttackingUnit = this.fight(resultingOpponentUnit, attackingUnit);
@@ -182,16 +189,13 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   private fight(attackingUnit: Unit, defensiveUnit: Unit): Unit {
-    const baseDefensiveUnit = createUnit(defensiveUnit.type);
     const attackValue = attackingUnit.power * attackingUnit.quantity;
     const defenseValue = defensiveUnit.hp * defensiveUnit.quantity;
     const resultingDefensiveTotaltHP = defenseValue - attackValue;
     const resultingDefensiveQuantity = Math.floor(
-      resultingDefensiveTotaltHP / baseDefensiveUnit.hp
+      resultingDefensiveTotaltHP / defensiveUnit.hp
     );
     let resultingDefensiveUnit: Unit;
-    const casualties = defensiveUnit.quantity - resultingDefensiveQuantity;
-    let injured: boolean;
 
     if (resultingDefensiveQuantity <= 0) {
       resultingDefensiveUnit = {
@@ -200,30 +204,13 @@ export class UnitService extends CollectionService<UnitState> {
         quantity: 0,
         hp: 0,
       };
-      injured = false;
     } else {
-      const resultingDefensiveHP =
-        resultingDefensiveTotaltHP % baseDefensiveUnit.hp === 0
-          ? baseDefensiveUnit.hp
-          : resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
-
       resultingDefensiveUnit = {
         ...defensiveUnit,
         quantity: resultingDefensiveQuantity,
-        hp: resultingDefensiveHP,
       };
-      injured =
-        resultingDefensiveHP % baseDefensiveUnit.hp === 0 ? false : true;
     }
-    this.messageService.addMessage(
-      "attack",
-      attackingUnit,
-      defensiveUnit,
-      true,
-      true,
-      casualties,
-      injured
-    );
+
     return resultingDefensiveUnit;
   }
 }

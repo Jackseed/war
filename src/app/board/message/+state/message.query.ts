@@ -22,46 +22,28 @@ export class MessageQuery extends QueryEntity<MessageState> {
           if (message.type === "attack") {
             if (
               message.attackingUnit.playerId === player.id &&
-              !message.defensiveUnit.tileId
+              message.defensiveUnit.quantity === message.casualties
             ) {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
             } else if (
               message.attackingUnit.playerId === player.id &&
-              message.defensiveUnit.tileId &&
-              message.injured
-            ) {
-              title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They made ${message.casualties} casualties and 1 injured.`;
-            } else if (
-              message.attackingUnit.playerId === player.id &&
-              message.defensiveUnit.tileId &&
-              !message.injured
+              message.defensiveUnit.quantity !== message.casualties
             ) {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
             } else if (
               message.attackingUnit.playerId !== player.id &&
-              !message.defensiveUnit.tileId
+              message.defensiveUnit.quantity === message.casualties
             ) {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
             } else if (
               message.attackingUnit.playerId === player.id &&
-              message.defensiveUnit.tileId &&
-              message.injured
-            ) {
-              title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They made ${message.casualties} casualties and 1 injured.`;
-            } else if (
-              message.attackingUnit.playerId === player.id &&
-              message.defensiveUnit.tileId &&
-              !message.injured
+              message.defensiveUnit.quantity !== message.casualties
             ) {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;

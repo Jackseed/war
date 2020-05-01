@@ -30,7 +30,6 @@ export class MessageService extends CollectionService<MessageState> {
     isAttackerVisible: boolean,
     isDefenserVisible: boolean,
     casualties?: number,
-    injured?: boolean
   ) {
     const collection = this.db.collection(this.currentPath);
     const createdAt = firebase.firestore.FieldValue.serverTimestamp();
@@ -42,7 +41,6 @@ export class MessageService extends CollectionService<MessageState> {
       isAttackerVisible,
       isDefenserVisible,
       casualties,
-      injured,
     });
     collection.add(message);
   }
