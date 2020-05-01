@@ -1,1 +1,14 @@
-<p>message-board works!</p>
+<mat-card>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let message of messages$ | async">
+        <div [ngSwitch]="message.type">
+          <div *ngSwitchCase="'attack'">
+            <h3></h3>
+            <p></p>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
