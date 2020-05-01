@@ -8,7 +8,7 @@ import {
 import { GameQuery } from "src/app/games/+state";
 import { Unit } from "../../unit/+state";
 import * as firebase from "firebase";
-import { createMessage } from './message.model';
+import { createMessage } from "./message.model";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games/:gameId/messages" })
@@ -23,7 +23,7 @@ export class MessageService extends CollectionService<MessageState> {
     return pathWithParams(this.constructor[path], { gameId });
   }
 
-  public messageFactory(
+  public addMessage(
     type: "attack",
     attackingUnit: Unit,
     defensiveUnit: Unit,
@@ -42,7 +42,7 @@ export class MessageService extends CollectionService<MessageState> {
       isAttackerVisible,
       isDefenserVisible,
       casualties,
-      injured
+      injured,
     });
     collection.add(message);
   }

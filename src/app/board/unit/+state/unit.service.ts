@@ -212,7 +212,7 @@ export class UnitService extends CollectionService<UnitState> {
       injured =
         resultingDefensiveHP % baseDefensiveUnit.hp === 0 ? false : true;
     }
-    this.messageService.messageFactory(
+    this.messageService.addMessage(
       "attack",
       attackingUnit,
       defensiveUnit,
