@@ -2,7 +2,7 @@
   <mat-card-content class="message-board">
     <mat-list>
       <mat-list-item *ngFor="let message of messages$ | async">
-        <h3 matLine>{{message.title}}</h3>
+        <p matLine style="font-weight: bold;">{{message.title}}</p>
         <p matLine>{{message.subtitle}}</p>
       </mat-list-item>
     </mat-list>

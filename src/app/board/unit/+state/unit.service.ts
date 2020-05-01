@@ -187,11 +187,12 @@ export class UnitService extends CollectionService<UnitState> {
     const resultingDefensiveQuantity = Math.floor(
       resultingDefensiveTotaltHP / baseDefensiveUnit.hp
     );
+    let resultingDefensiveUnit: Unit;
     const casualties = defensiveUnit.quantity - resultingDefensiveQuantity;
     let injured: boolean;
 
     if (resultingDefensiveQuantity <= 0) {
-      defensiveUnit = {
+      resultingDefensiveUnit = {
         ...defensiveUnit,
         tileId: null,
         quantity: 0,
@@ -204,7 +205,7 @@ export class UnitService extends CollectionService<UnitState> {
           ? baseDefensiveUnit.hp
           : resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
 
-      defensiveUnit = {
+      resultingDefensiveUnit = {
         ...defensiveUnit,
         quantity: resultingDefensiveQuantity,
         hp: resultingDefensiveHP,
@@ -221,6 +222,6 @@ export class UnitService extends CollectionService<UnitState> {
       casualties,
       injured
     );
-    return defensiveUnit;
+    return resultingDefensiveUnit;
   }
 }

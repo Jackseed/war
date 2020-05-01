@@ -1,23 +1,23 @@
-<div [ngSwitch]="true" class="center">
+<div [ngSwitch]="true">
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'" class="center">
       <h1>WAITING FOR AN OPPONENT</h1>
       <p>Prepare yourself with the dino :)</p>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'" class="center">
     <h1>CREATE YOUR ARMY</h1>
     <p>Be wise, your opponent is doing the same.</p>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'" class="center">
     <h1>POSITION YOUR ARMY</h1>
     <p>Battle will start soon.</p>
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxFlexLayout="row" fxLayoutAlign="space-evenly center">
-      <div fxFlex>
+    <div fxFlexLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px">
+      <div fxFlex class="center">
         <ng-container *ngIf="(player$ | async).isActive; else unactive">
           <ng-container *ngIf="(player$ | async) as player">
             <h1>YOUR TURN</h1>
@@ -38,7 +38,7 @@
           </ng-container>
         </ng-template>
       </div>
-      <div fxFlex>
+      <div fxFlex style="margin: 30px;">
         <app-message-board></app-message-board>
       </div>
     </div>
