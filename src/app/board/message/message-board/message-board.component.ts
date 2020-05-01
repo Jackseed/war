@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Message, MessageQuery } from "../+state";
+import { MessageQuery } from "../+state";
 import { Observable } from "rxjs";
+import { Player, PlayerQuery } from "../../player/+state";
 
 @Component({
   selector: "app-message-board",
@@ -8,10 +9,12 @@ import { Observable } from "rxjs";
   styleUrls: ["./message-board.component.scss"],
 })
 export class MessageBoardComponent implements OnInit {
-  public messages$: Observable<Message[]>;
-  constructor(private query: MessageQuery) {}
+  public messages$: Observable<{title: string, subtitle: string}[]>;
+  public player: Player;
+  constructor(private query: MessageQuery, private playerQuery: PlayerQuery) {}
 
   ngOnInit(): void {
-    this.messages$ = this.query.selectAll();
+    this.messages$ = this.query.messages$;
+    this.player = this.playerQuery.getActive();
   }
 }
