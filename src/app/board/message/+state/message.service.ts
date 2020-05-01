@@ -6,6 +6,9 @@ import {
   pathWithParams,
 } from "akita-ng-fire";
 import { GameQuery } from "src/app/games/+state";
+import { Unit } from "../../unit/+state";
+import * as firebase from "firebase";
+import { createMessage } from './message.model';
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games/:gameId/messages" })
@@ -22,11 +25,25 @@ export class MessageService extends CollectionService<MessageState> {
 
   public messageFactory(
     type: "attack",
-    activePlayerId: string,
-    passivePlayerId: string,
-    attackingUnitId: string,
-    defensiveUnitId: string,
+    attackingUnit: Unit,
+    defensiveUnit: Unit,
     isAttackerVisible: boolean,
-    isDefenserVisible: boolean
-  ) {}
+    isDefenserVisible: boolean,
+    casualties?: number,
+    injured?: boolean
+  ) {
+    const collection = this.db.collection(this.currentPath);
+    const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    const message = createMessage({
+      type,
+      createdAt,
+      attackingUnit,
+      defensiveUnit,
+      isAttackerVisible,
+      isDefenserVisible,
+      casualties,
+      injured
+    });
+    collection.add(message);
+  }
 }

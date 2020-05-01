@@ -1,27 +1,29 @@
 import * as firebase from "firebase/app";
+import { Unit } from "../../unit/+state/unit.model";
+import { guid } from "@datorama/akita";
 
 export interface Message {
   id: number | string;
   type: "attack";
-  activePlayerId: string;
-  passivePlayerId?: string;
-  timestamp: firebase.firestore.Timestamp;
-  attackingUnitId?: string;
-  defensiveUnitId?: string;
+  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  attackingUnit?: Unit;
+  defensiveUnit?: Unit;
   isAttackerVisible?: boolean;
   isDefenserVisible?: boolean;
+  casualties: number;
+  injured: boolean;
 }
 
 export function createMessage(params: Partial<Message>): Message {
   return {
-    id: params.id,
+    id: guid(),
     type: params.type,
-    activePlayerId: params.activePlayerId,
-    passivePlayerId: params.passivePlayerId,
-    timestamp: params.timestamp,
-    attackingUnitId: params.attackingUnitId,
-    defensiveUnitId: params.defensiveUnitId,
+    createdAt: params.createdAt,
+    attackingUnit: params.attackingUnit,
+    defensiveUnit: params.defensiveUnit,
     isAttackerVisible: params.isAttackerVisible,
     isDefenserVisible: params.isDefenserVisible,
+    casualties: params.casualties,
+    injured: params.injured,
   };
 }

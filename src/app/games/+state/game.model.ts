@@ -1,13 +1,25 @@
 export interface Game {
   id?: string;
   name?: string;
-  status?: 'waiting' | 'unit creation' | 'placement' | 'battle' | 'finished';
+  status?: "waiting" | "unit creation" | "placement" | "battle" | "finished";
   playerIds?: string[];
   playersReady?: string[];
   turnCount: number;
 }
+
+/* export const expenseSubType = {
+  technical: "Technical expenses",
+  delivery: "Delivery expenses",
+  marketing: "Marketing expenses",
+  translation: "Translation expenses",
+} as const;
+
+export type ExpenseSubType = keyof typeof expenseSubType;
+export type ExpenseSubTypeValue = typeof expenseSubType[ExpenseSubType];
+ */
+
 export interface Castle {
-  color: 'white' | 'black';
+  color: "white" | "black";
   x: number;
   y: number;
   tileId: number;
@@ -22,11 +34,11 @@ export const unitPlacementMargin = 2;
 export const xCastle = 1;
 export const yCastle = Math.floor(boardCols / 2);
 
-export function Castle(color: 'white' | 'black'): Castle {
+export function Castle(color: "white" | "black"): Castle {
   return {
     color,
     get x(): number {
-      if (this.color === 'white') {
+      if (this.color === "white") {
         return xCastle;
       } else {
         return boardCols - (xCastle + 1);
@@ -45,11 +57,10 @@ export function createGame(params: Partial<Game> = {}): Game {
   return {
     id: params.id,
     name: params.name,
-    status: 'waiting',
+    status: "waiting",
     playersReady: [],
     playerIds: params.playerIds,
     turnCount: 0,
-    ...params
+    ...params,
   };
 }
-

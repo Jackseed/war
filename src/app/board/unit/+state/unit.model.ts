@@ -1,8 +1,8 @@
 export interface Unit {
   id?: string;
   tileId?: number;
-  color?: 'white' | 'black';
-  type?: 'soldier' | 'musketeer' | 'knight' | 'cannon';
+  color?: "white" | "black";
+  type?: "soldier" | "musketeer" | "knight" | "cannon";
   quantity?: number;
   range?: number;
   move?: number;
@@ -18,15 +18,20 @@ export const unitCols = 10;
 export const unitMaxTiles = 10;
 
 export function createUnit(
-  unitType: 'soldier' | 'musketeer' | 'knight' | 'cannon', id?: string, playerId?: string, color?: 'white' | 'black',
-  tileId?: number, params?: Partial<Unit>): Unit {
-  if (unitType === 'soldier') {
-      return {
+  unitType: "soldier" | "musketeer" | "knight" | "cannon",
+  id?: string,
+  playerId?: string,
+  color?: "white" | "black",
+  tileId?: number,
+  params?: Partial<Unit>
+): Unit {
+  if (unitType === "soldier") {
+    return {
       id,
       playerId,
       color,
       tileId,
-      type: 'soldier',
+      type: "soldier",
       quantity: 10,
       hp: 2,
       power: 1,
@@ -35,15 +40,15 @@ export function createUnit(
       stamina: 1,
       vision: 1,
       noise: 1,
-      ...params
+      ...params,
     };
-  } else if (unitType === 'musketeer') {
+  } else if (unitType === "musketeer") {
     return {
       id,
       playerId,
       color,
       tileId,
-      type: 'musketeer',
+      type: "musketeer",
       quantity: 10,
       hp: 1,
       power: 1,
@@ -52,15 +57,15 @@ export function createUnit(
       stamina: 1,
       vision: 1,
       noise: 1,
-      ...params
+      ...params,
     };
-  } else if (unitType === 'knight') {
+  } else if (unitType === "knight") {
     return {
       id,
       playerId,
       color,
       tileId,
-      type: 'knight',
+      type: "knight",
       quantity: 10,
       hp: 1,
       power: 1,
@@ -69,15 +74,15 @@ export function createUnit(
       stamina: 1,
       vision: 1,
       noise: 1,
-      ...params
+      ...params,
     };
-  } else if (unitType === 'cannon') {
+  } else if (unitType === "cannon") {
     return {
       id,
       playerId,
       color,
       tileId,
-      type: 'cannon',
+      type: "cannon",
       quantity: 5,
       hp: 1,
       range: 3,
@@ -86,9 +91,7 @@ export function createUnit(
       stamina: 1,
       vision: 1,
       noise: 1,
-      ...params
+      ...params,
     };
   }
 }
-
-

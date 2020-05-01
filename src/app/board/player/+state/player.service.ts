@@ -1,37 +1,40 @@
-import { Injectable } from '@angular/core';
-import { CollectionService, CollectionConfig, pathWithParams } from 'akita-ng-fire';
-import * as firebase from 'firebase/app';
-import { PlayerStore, PlayerState } from './player.store';
-import { PlayerQuery } from './player.query';
-import { GameQuery, actionsPerTurn } from 'src/app/games/+state';
-import { Player } from './player.model';
-import { OpponentUnitQuery } from '../../unit/opponent/+state/opponent-unit.query';
+import { Injectable } from "@angular/core";
+import {
+  CollectionService,
+  CollectionConfig,
+  pathWithParams,
+} from "akita-ng-fire";
+import * as firebase from "firebase/app";
+import { PlayerStore, PlayerState } from "./player.store";
+import { PlayerQuery } from "./player.query";
+import { GameQuery, actionsPerTurn } from "src/app/games/+state";
+import { Player } from "./player.model";
+import { OpponentUnitQuery } from "../../unit/opponent/+state/opponent-unit.query";
 
-@Injectable({ providedIn: 'root' })
-@CollectionConfig({ path: 'games/:gameId/players' })
+@Injectable({ providedIn: "root" })
+@CollectionConfig({ path: "games/:gameId/players" })
 export class PlayerService extends CollectionService<PlayerState> {
-
   constructor(
     store: PlayerStore,
     private query: PlayerQuery,
     private gameQuery: GameQuery,
-    private opponentUnitQuery: OpponentUnitQuery,
+    private opponentUnitQuery: OpponentUnitQuery
   ) {
     super(store);
   }
 
   get path(): string {
-    const path = 'path';
+    const path = "path";
     const gameId = this.gameQuery.getActiveId();
-    return pathWithParams(this.constructor[path], {gameId});
+    return pathWithParams(this.constructor[path], { gameId });
   }
 
   public setVictorious(winner: Player, loser: Player) {
     const collection = this.db.firestore.collection(this.currentPath);
     const batch = this.db.firestore.batch();
 
-    batch.update(collection.doc(winner.id), {isVictorious: true});
-    batch.update(collection.doc(loser.id), {isVictorious: false});
+    batch.update(collection.doc(winner.id), { isVictorious: true });
+    batch.update(collection.doc(loser.id), { isVictorious: false });
 
     batch.commit();
   }
@@ -53,31 +56,34 @@ export class PlayerService extends CollectionService<PlayerState> {
     const opponent = this.query.opponent;
     const gameId = this.gameQuery.getActiveId();
     const oppTiredUnits = this.opponentUnitQuery.tiredUnits;
-    const playerDoc = this.db.firestore.collection(this.currentPath).doc(player.id);
-    const opponentDoc = this.db.firestore.collection(this.currentPath).doc(opponent.id);
-    const gameDoc = this.db.firestore.collection('games').doc(gameId);
+    const playerDoc = this.db.firestore
+      .collection(this.currentPath)
+      .doc(player.id);
+    const opponentDoc = this.db.firestore
+      .collection(this.currentPath)
+      .doc(opponent.id);
+    const gameDoc = this.db.firestore.collection("games").doc(gameId);
     const increment = firebase.firestore.FieldValue.increment(1);
 
     const batch = this.db.firestore.batch();
 
     batch.update(playerDoc, {
       isActive: false,
-      actionCount: 0
+      actionCount: 0,
     });
 
     batch.update(opponentDoc, {
       isActive: true,
-      actionCount: 0
+      actionCount: 0,
     });
 
-    batch.update(gameDoc, {turnCount: increment});
+    batch.update(gameDoc, { turnCount: increment });
 
     for (const unit of oppTiredUnits) {
-      const unitDoc = opponentDoc.collection('units').doc(unit.id);
-      batch.update(unitDoc, {stamina: increment});
+      const unitDoc = opponentDoc.collection("units").doc(unit.id);
+      batch.update(unitDoc, { stamina: increment });
     }
 
     batch.commit();
   }
-
 }

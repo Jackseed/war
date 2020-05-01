@@ -1,18 +1,34 @@
-import { Injectable } from '@angular/core';
-import { UnitStore, UnitState } from './unit.store';
-import { createUnit, Unit } from './unit.model';
-import { GameQuery, boardCols, unitPlacementMargin, xCastle, yCastle } from 'src/app/games/+state';
-import { PlayerQuery } from '../../player/+state';
-import { CollectionConfig, pathWithParams, CollectionService } from 'akita-ng-fire';
-import { UnitQuery } from './unit.query';
-import { OpponentUnitQuery } from '../opponent/+state/opponent-unit.query';
-import { OpponentUnitService } from '../opponent/+state/opponent-unit.service';
-import { TileQuery } from '../../tile/+state/tile.query';
+import { Injectable } from "@angular/core";
+import { UnitStore, UnitState } from "./unit.store";
+import { createUnit, Unit } from "./unit.model";
+import {
+  GameQuery,
+  boardCols,
+  unitPlacementMargin,
+  xCastle,
+  yCastle,
+} from "src/app/games/+state";
+import { PlayerQuery } from "../../player/+state";
+import {
+  CollectionConfig,
+  pathWithParams,
+  CollectionService,
+} from "akita-ng-fire";
+import { UnitQuery } from "./unit.query";
+import { OpponentUnitQuery } from "../opponent/+state/opponent-unit.query";
+import { OpponentUnitService } from "../opponent/+state/opponent-unit.service";
+import { TileQuery } from "../../tile/+state/tile.query";
+import { MessageService } from "../../message/+state";
 
-@Injectable({ providedIn: 'root' })
-@CollectionConfig({ path: 'games/:gameId/players/:playerId/units' })
+@Injectable({ providedIn: "root" })
+@CollectionConfig({ path: "games/:gameId/players/:playerId/units" })
 export class UnitService extends CollectionService<UnitState> {
-  unitTypes: ('soldier' | 'musketeer' | 'knight' | 'cannon')[] = ['soldier', 'musketeer', 'knight', 'cannon'];
+  unitTypes: ("soldier" | "musketeer" | "knight" | "cannon")[] = [
+    "soldier",
+    "musketeer",
+    "knight",
+    "cannon",
+  ];
 
   constructor(
     store: UnitStore,
@@ -22,15 +38,16 @@ export class UnitService extends CollectionService<UnitState> {
     private tileQuery: TileQuery,
     private opponentUnitQuery: OpponentUnitQuery,
     private opponentUnitService: OpponentUnitService,
+    private messageService: MessageService
   ) {
     super(store);
   }
 
   get path(): string {
-    const path = 'path';
+    const path = "path";
     const gameId = this.gameQuery.getActiveId();
     const playerId = this.playerQuery.getActiveId();
-    return pathWithParams(this.constructor[path], {gameId, playerId});
+    return pathWithParams(this.constructor[path], { gameId, playerId });
   }
 
   public setUnits() {
@@ -44,7 +61,6 @@ export class UnitService extends CollectionService<UnitState> {
     }
 
     batch.commit();
-
   }
 
   private get defaultPositionUnits(): Unit[] {
@@ -53,12 +69,12 @@ export class UnitService extends CollectionService<UnitState> {
     let y = unitPlacementMargin;
     let x = unitPlacementMargin;
     let i = 1;
-    if (player.color === 'black') {
+    if (player.color === "black") {
       x = boardCols - (unitPlacementMargin + 1);
     }
     for (const unitType of this.unitTypes) {
       const typedUnits = this.query.getAll({
-        filterBy: unit => unit.type === unitType
+        filterBy: (unit) => unit.type === unitType,
       });
       for (let unit of typedUnits) {
         // avoid the castle
@@ -73,11 +89,11 @@ export class UnitService extends CollectionService<UnitState> {
         units.push(unit);
 
         // increment y
-        if (y < (boardCols - (unitPlacementMargin + 1))) {
+        if (y < boardCols - (unitPlacementMargin + 1)) {
           y++;
-        // respect the margin and start a new line
+          // respect the margin and start a new line
         } else {
-          if (player.color === 'black') {
+          if (player.color === "black") {
             x = boardCols - (unitPlacementMargin + 1) + i;
           } else {
             x = unitPlacementMargin - i;
@@ -102,17 +118,22 @@ export class UnitService extends CollectionService<UnitState> {
 
   public updatePosition(unit: Unit, tileId: number) {
     const game = this.gameQuery.getActive();
-    if (game.status === 'placement') {
-      this.db.collection(this.currentPath).doc(unit.id.toString()).update({tileId});
+    if (game.status === "placement") {
+      this.db
+        .collection(this.currentPath)
+        .doc(unit.id.toString())
+        .update({ tileId });
     } else {
       const stamina = unit.stamina - 1;
-      this.db.collection(this.currentPath).doc(unit.id.toString()).update({tileId, stamina});
+      this.db
+        .collection(this.currentPath)
+        .doc(unit.id.toString())
+        .update({ tileId, stamina });
     }
   }
 
   public updateUnit(unit: Unit) {
-    this.db.collection(this.currentPath)
-      .doc(unit.id.toString()).update(unit);
+    this.db.collection(this.currentPath).doc(unit.id.toString()).update(unit);
   }
 
   public swapUnitPositions(tileId: number) {
@@ -121,32 +142,41 @@ export class UnitService extends CollectionService<UnitState> {
     const collection = this.db.firestore.collection(this.currentPath);
     const batch = this.db.firestore.batch();
 
-    batch.update(collection.doc(clickedUnit.id), {tileId: activeUnit.tileId});
-    batch.update(collection.doc(activeUnit.id), {tileId: clickedUnit.tileId});
+    batch.update(collection.doc(clickedUnit.id), { tileId: activeUnit.tileId });
+    batch.update(collection.doc(activeUnit.id), { tileId: clickedUnit.tileId });
 
     batch.commit();
   }
 
   public attack(attackingUnit: Unit, tileId: number) {
     let opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
-    // verify that there is a unit on the attacked tile and attack
+    // if unit on attacked tile, attack
     if (opponentUnit) {
-      const oppWithinCounterAttackRange =
-        this.tileQuery.getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range).includes(attackingUnit.tileId);
-      console.log('beginning of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
-      this.messageService.messageFactory('attack', )
+      const oppWithinCounterAttackRange = this.tileQuery
+        .getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range)
+        .includes(attackingUnit.tileId);
+      console.log(
+        "beginning of the fight: attack ",
+        attackingUnit,
+        "defense: ",
+        opponentUnit
+      );
       opponentUnit = this.fight(attackingUnit, opponentUnit);
-      // if the attacked unit survived and is within range, counter attack
+      // if attacked unit survived and within range, counter attack
       if (opponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
         attackingUnit = this.fight(opponentUnit, attackingUnit);
       }
       this.updateUnit(attackingUnit);
       this.opponentUnitService.updateUnit(opponentUnit);
-      console.log('result of the fight: attack ', attackingUnit, 'defense: ', opponentUnit);
+      console.log(
+        "result of the fight: attack ",
+        attackingUnit,
+        "defense: ",
+        opponentUnit
+      );
     } else {
-      console.log('you missed your shot');
+      console.log("you missed your shot");
     }
-
   }
 
   private fight(attackingUnit: Unit, defensiveUnit: Unit): Unit {
@@ -154,7 +184,11 @@ export class UnitService extends CollectionService<UnitState> {
     const attackValue = attackingUnit.power * attackingUnit.quantity;
     const defenseValue = defensiveUnit.hp * defensiveUnit.quantity;
     const resultingDefensiveTotaltHP = defenseValue - attackValue;
-    const resultingDefensiveQuantity = Math.floor(resultingDefensiveTotaltHP / baseDefensiveUnit.hp);
+    const resultingDefensiveQuantity = Math.floor(
+      resultingDefensiveTotaltHP / baseDefensiveUnit.hp
+    );
+    const casualties = defensiveUnit.quantity - resultingDefensiveQuantity;
+    let injured: boolean;
 
     if (resultingDefensiveQuantity <= 0) {
       defensiveUnit = {
@@ -163,16 +197,30 @@ export class UnitService extends CollectionService<UnitState> {
         quantity: 0,
         hp: 0,
       };
+      injured = false;
     } else {
-      const resultingDefensiveHP = resultingDefensiveTotaltHP % baseDefensiveUnit.hp === 0 ?
-        baseDefensiveUnit.hp : resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
+      const resultingDefensiveHP =
+        resultingDefensiveTotaltHP % baseDefensiveUnit.hp === 0
+          ? baseDefensiveUnit.hp
+          : resultingDefensiveTotaltHP % baseDefensiveUnit.hp;
 
       defensiveUnit = {
         ...defensiveUnit,
         quantity: resultingDefensiveQuantity,
-        hp: resultingDefensiveHP
+        hp: resultingDefensiveHP,
       };
+      injured =
+        resultingDefensiveHP % baseDefensiveUnit.hp === 0 ? false : true;
     }
+    this.messageService.messageFactory(
+      "attack",
+      attackingUnit,
+      defensiveUnit,
+      true,
+      true,
+      casualties,
+      injured
+    );
     return defensiveUnit;
   }
 }
