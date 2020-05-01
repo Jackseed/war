@@ -9,8 +9,9 @@ import { Player, PlayerQuery } from "../../player/+state";
   styleUrls: ["./message-board.component.scss"],
 })
 export class MessageBoardComponent implements OnInit {
-  public messages$: Observable<{title: string, subtitle: string}[]>;
+  public messages$: Observable<{ title: string; subtitle: string }[]>;
   public player: Player;
+
   constructor(private query: MessageQuery, private playerQuery: PlayerQuery) {}
 
   ngOnInit(): void {

@@ -1,10 +1,9 @@
 <mat-card>
-  <mat-card-content class="message-board">
-    <mat-list>
-      <mat-list-item *ngFor="let message of messages$ | async">
-        <p matLine style="font-weight: bold;">{{message.title}}</p>
-        <p matLine>{{message.subtitle}}</p>
-      </mat-list-item>
-    </mat-list>
+  <mat-card-content>
+    <div #list class="message-board" [scrollTop]="list.scrollHeight">
+      <p *ngFor="let message of messages$ | async">
+        <span>{{message.title}} {{message.subtitle}}</span>
+      </p>
+    </div>
   </mat-card-content>
 </mat-card>

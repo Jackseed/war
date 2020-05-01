@@ -7,7 +7,7 @@ import {
 } from "akita-ng-fire";
 import { GameQuery } from "src/app/games/+state";
 import { Unit } from "../../unit/+state";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 import { createMessage } from "./message.model";
 
 @Injectable({ providedIn: "root" })

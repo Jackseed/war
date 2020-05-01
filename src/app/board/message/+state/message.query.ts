@@ -20,6 +20,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
       map((messages) =>
         messages.map((message) => {
           if (message.type === "attack") {
+            // active player killed them all
             if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity === message.casualties
@@ -27,6 +28,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
+            // active player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity !== message.casualties
@@ -34,6 +36,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
+            // passive player killed them all
             } else if (
               message.attackingUnit.playerId !== player.id &&
               message.defensiveUnit.quantity === message.casualties
@@ -41,6 +44,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
+            // passive player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity !== message.casualties
