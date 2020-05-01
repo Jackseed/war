@@ -149,31 +149,33 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   public attack(attackingUnit: Unit, tileId: number) {
-    let opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
+    const opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
+    let resultingAttackingUnit: Unit = attackingUnit;
+    console.log(attackingUnit);
     // if unit on attacked tile, attack
     if (opponentUnit) {
       const oppWithinCounterAttackRange = this.tileQuery
         .getWithinRangeTiles(opponentUnit.tileId, opponentUnit.range)
         .includes(attackingUnit.tileId);
-      console.log(
-        "beginning of the fight: attack ",
-        attackingUnit,
-        "defense: ",
-        opponentUnit
-      );
-      opponentUnit = this.fight(attackingUnit, opponentUnit);
+
+      const resultingOpponentUnit = this.fight(attackingUnit, opponentUnit);
+      console.log(resultingOpponentUnit);
       // if attacked unit survived and within range, counter attack
-      if (opponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
-        attackingUnit = this.fight(opponentUnit, attackingUnit);
+      if (resultingOpponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
+        resultingAttackingUnit = this.fight(resultingOpponentUnit, attackingUnit);
+      } else if (
+        resultingOpponentUnit.quantity === 0 &&
+        attackingUnit.type === "soldier" ||
+        attackingUnit.type === "knight"
+      ) {
+        resultingAttackingUnit = {
+          ...resultingAttackingUnit,
+          tileId
+        };
+        console.log(resultingAttackingUnit);
       }
-      this.updateUnit(attackingUnit);
-      this.opponentUnitService.updateUnit(opponentUnit);
-      console.log(
-        "result of the fight: attack ",
-        attackingUnit,
-        "defense: ",
-        opponentUnit
-      );
+      this.updateUnit(resultingAttackingUnit);
+      this.opponentUnitService.updateUnit(resultingOpponentUnit);
     } else {
       console.log("you missed your shot");
     }
