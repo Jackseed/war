@@ -1,21 +1,37 @@
-<div *ngIf="((gameStatus$ | async) === 'waiting' || (gameStatus$ | async) === 'unit creation'); else board" class="container" fxLayout="column wrap" fxLayoutAlign="center center">
-
-  <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
+<div
+  *ngIf="
+    (gameStatus$ | async) === 'waiting' ||
+      (gameStatus$ | async) === 'unit creation';
+    else board
+  "
+  class="container"
+  fxLayout="column wrap"
+  fxLayoutAlign="center center"
+>
+  <div fxFlex="20">
     <app-top-bar></app-top-bar>
   </div>
 
   <div [ngSwitch]="true" fxFlex="70" fxFill>
-
     <!-- Waiting Room -->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
       <div fxLayout="row" fxLayoutAlign="center center">
-        <iframe fxFlex=50 src="https://www.dinogame.net/game/index.html" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+        <iframe
+          fxFlex="50"
+          src="https://www.dinogame.net/game/index.html"
+          frameborder="0"
+          marginwidth="0"
+          marginheight="0"
+          scrolling="no"
+        ></iframe>
       </div>
     </ng-container>
 
     <!-- Unit Creation -->
-    <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'" class="container">
-
+    <ng-container
+      *ngSwitchCase="(gameStatus$ | async) === 'unit creation'"
+      class="container"
+    >
       <div fxFlex="20">
         <app-unit-board></app-unit-board>
       </div>
@@ -23,36 +39,36 @@
       <div fxFlex="80">
         <app-unit-creation></app-unit-creation>
       </div>
-
     </ng-container>
 
     <!-- Board -->
-    <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement' || (gameStatus$ | async) === 'battle' || (gameStatus$ | async) === 'finished'">
-
+    <ng-container
+      *ngSwitchCase="
+        (gameStatus$ | async) === 'placement' ||
+        (gameStatus$ | async) === 'battle' ||
+        (gameStatus$ | async) === 'finished'
+      "
+    >
     </ng-container>
-
   </div>
 
-  <div fxFlex="10"  fxLayoutAlign="start start">
+  <div fxFlex="10" fxLayoutAlign="start start">
     <app-bottom-bar></app-bottom-bar>
   </div>
-
 </div>
 
 <ng-template #board>
   <div class="container" fxLayout="column wrap" fxLayoutAlign="center center">
-
     <div fxFlex="20" fxLayout="column wrap" fxLayoutAlign="center center">
       <app-top-bar></app-top-bar>
     </div>
-    
+
     <div fxFlex="70" fxFill>
       <app-board></app-board>
     </div>
 
-    <div fxFlex="10"  fxLayoutAlign="start start">
+    <div fxFlex="10" fxLayoutAlign="start start">
       <app-bottom-bar></app-bottom-bar>
     </div>
-
   </div>
 </ng-template>
