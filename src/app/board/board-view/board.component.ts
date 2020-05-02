@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
 import { Unit, UnitQuery, UnitService } from "../unit/+state";
@@ -208,9 +208,12 @@ export class BoardComponent implements OnInit, OnDestroy {
             // increment action count and switch active player if needed
             this.playerService.actionPlayed();
 
-          // and clicked on reachable tile without opponent, the unit moves to the tile
-          } else if (tile.isReachable && !opponentUnitTileIds.includes(i) && selectedUnit.stamina > 0) {
-
+            // and clicked on reachable tile without opponent, the unit moves to the tile
+          } else if (
+            tile.isReachable &&
+            !opponentUnitTileIds.includes(i) &&
+            selectedUnit.stamina > 0
+          ) {
             this.unitService.updatePosition(selectedUnit, i);
 
             this.tileService.removeReachable();
@@ -220,8 +223,14 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.playerService.actionPlayed();
           } else {
             if (selectedUnit.stamina === 0) {
+              this.tileService.removeReachable();
+              this.tileService.removeSelected();
+              this.tileService.removeInRangeTiles();
               console.log("rest first");
             } else {
+              this.tileService.removeReachable();
+              this.tileService.removeSelected();
+              this.tileService.removeInRangeTiles();
               console.log("you cannot reach this place");
             }
           }
@@ -243,6 +252,16 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   public getOpponentUnitByTileId(tileId: number): Unit {
     return this.opponentUnitQuery.getUnitByTileId(tileId);
+  }
+
+  @HostListener("document:keydown", ["$event"]) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    if (event.key === "Escape") {
+      this.tileService.removeReachable();
+      this.tileService.removeSelected();
+      this.tileService.removeInRangeTiles();
+    }
   }
 
   ngOnDestroy() {
