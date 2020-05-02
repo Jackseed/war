@@ -3,7 +3,7 @@
   <div fxFlex="75" fxFill>
     <div fxLayout="column" fxFill fxLayoutAlign="start center">
 
-      <div fxFlex="25" fxFill *ngFor="let unitType of unitTypes">
+      <div fxFlex="20" fxFill *ngFor="let unitType of unitTypes">
 
         <mat-grid-list fxFlexFill cols="{{cols}}" gutterSize="0" rowHeight="fit">
           <mat-grid-tile *ngFor="let unit of (selectUnitByType(unitType) | async); let i = index;">

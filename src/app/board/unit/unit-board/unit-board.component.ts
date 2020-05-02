@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { UnitQuery, Unit, UnitService, totalUnitValue } from "../+state";
+import { UnitQuery, Unit, UnitService, maxTotalUnitValue } from "../+state";
 import { Observable } from "rxjs";
 
 @Component({
@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 export class UnitBoardComponent implements OnInit {
   public unitTypes = ["soldier", "musketeer", "knight", "cannon"];
   public unitsValue$: Observable<number>;
-  public totalUnitValue = totalUnitValue;
+  public maxTotalUnitValue = maxTotalUnitValue;
   constructor(
     private query: UnitQuery,
     private service: UnitService,
@@ -27,8 +27,11 @@ export class UnitBoardComponent implements OnInit {
   }
 
   addUnit(unitType) {
-    const tileId = this.query.getCount((unit) => unit.type === unitType);
-    this.service.addUnit(unitType, tileId);
+    const totalUnitQuantity: number = this.query.getCount();
+    if (totalUnitQuantity < maxTotalUnitValue) {
+      const tileId = this.query.getCount((unit) => unit.type === unitType);
+      this.service.addUnit(unitType, tileId);
+    }
   }
 
   // Remove the last unit created from the selected type
