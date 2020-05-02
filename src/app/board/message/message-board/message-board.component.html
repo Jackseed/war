@@ -1,8 +1,8 @@
 <mat-card class="message-container">
   <mat-card-content>
-    <div #list class="message-board" [scrollTop]="list.scrollHeight">
+    <div  #list class="message-board" [scrollTop]="list.scrollHeight">
       <p *ngFor="let message of messages$ | async" [ngClass]="{active: message.isActive, passive: !message.isActive}">
-        <span>{{message.title}} {{message.subtitle}}</span>
+        <span id="date">[{{message.date.toDate() | date: 'HH:mm'}}] </span> <span>  {{message.title}} {{message.subtitle}}</span>
       </p>
     </div>
   </mat-card-content>

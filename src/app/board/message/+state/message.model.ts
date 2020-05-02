@@ -1,11 +1,11 @@
-import * as firebase from "firebase/app";
+import { firestore } from "firebase/app";
 import { Unit } from "../../unit/+state/unit.model";
 import { guid } from "@datorama/akita";
 
 export interface Message {
   id: number | string;
   type: "attack";
-  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  createdAt: firestore.Timestamp;
   attackingUnit?: Unit;
   defensiveUnit?: Unit;
   isAttackerVisible?: boolean;

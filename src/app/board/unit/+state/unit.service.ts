@@ -151,7 +151,6 @@ export class UnitService extends CollectionService<UnitState> {
   public attack(attackingUnit: Unit, tileId: number) {
     const opponentUnit = this.opponentUnitQuery.getUnitByTileId(tileId);
     let resultingAttackingUnit: Unit = attackingUnit;
-    console.log(attackingUnit);
     // if unit on attacked tile, attack
     if (opponentUnit) {
       const oppWithinCounterAttackRange = this.tileQuery
@@ -179,7 +178,6 @@ export class UnitService extends CollectionService<UnitState> {
           ...resultingAttackingUnit,
           tileId
         };
-        console.log(resultingAttackingUnit);
       }
       this.updateUnit(resultingAttackingUnit);
       this.opponentUnitService.updateUnit(resultingOpponentUnit);

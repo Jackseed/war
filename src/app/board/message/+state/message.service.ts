@@ -7,8 +7,8 @@ import {
 } from "akita-ng-fire";
 import { GameQuery } from "src/app/games/+state";
 import { Unit } from "../../unit/+state";
-import * as firebase from "firebase/app";
 import { createMessage } from "./message.model";
+import { firestore } from "firebase/app";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games/:gameId/messages" })
@@ -32,7 +32,8 @@ export class MessageService extends CollectionService<MessageState> {
     casualties?: number,
   ) {
     const collection = this.db.collection(this.currentPath);
-    const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    const createdAt = firestore.Timestamp.fromDate(new Date());
+    console.log(createdAt);
     const message = createMessage({
       type,
       createdAt,

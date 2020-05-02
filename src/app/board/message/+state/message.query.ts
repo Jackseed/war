@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { QueryEntity } from "@datorama/akita";
+import { QueryEntity, QueryConfig, Order } from "@datorama/akita";
 import { MessageStore, MessageState } from "./message.store";
 import { map } from "rxjs/operators";
 import { PlayerQuery } from "../../player/+state";
+import { firestore } from "firebase/app";
 
 @Injectable({ providedIn: "root" })
 export class MessageQuery extends QueryEntity<MessageState> {
@@ -16,6 +17,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
     let title: string;
     let subtitle: string;
     let isActive: boolean;
+    let date: firestore.Timestamp;
 
     return messages$.pipe(
       map((messages) =>
@@ -30,7 +32,8 @@ export class MessageQuery extends QueryEntity<MessageState> {
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
               isActive = true;
-            // active player killed some of them
+              date = message.createdAt;
+              // active player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity !== message.casualties
@@ -39,7 +42,8 @@ export class MessageQuery extends QueryEntity<MessageState> {
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
               isActive = true;
-            // passive player killed them all
+              date = message.createdAt;
+              // passive player killed them all
             } else if (
               message.attackingUnit.playerId !== player.id &&
               message.defensiveUnit.quantity === message.casualties
@@ -48,7 +52,8 @@ export class MessageQuery extends QueryEntity<MessageState> {
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
               isActive = false;
-            // passive player killed some of them
+              date = message.createdAt;
+              // passive player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity !== message.casualties
@@ -57,9 +62,10 @@ export class MessageQuery extends QueryEntity<MessageState> {
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
               isActive = false;
+              date = message.createdAt;
             }
           }
-          return { title, subtitle, isActive };
+          return { title, subtitle, isActive, date };
         })
       )
     );

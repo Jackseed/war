@@ -4,7 +4,7 @@ import {
   CollectionConfig,
   pathWithParams,
 } from "akita-ng-fire";
-import * as firebase from "firebase/app";
+import { firestore } from "firebase/app";
 import { PlayerStore, PlayerState } from "./player.store";
 import { PlayerQuery } from "./player.query";
 import { GameQuery, actionsPerTurn } from "src/app/games/+state";
@@ -42,7 +42,7 @@ export class PlayerService extends CollectionService<PlayerState> {
   public actionPlayed() {
     const player = this.query.getActive();
     const playerDoc = this.db.collection(this.currentPath).doc(player.id);
-    const increment = firebase.firestore.FieldValue.increment(1);
+    const increment = firestore.FieldValue.increment(1);
 
     if (player.actionCount < actionsPerTurn - 1) {
       playerDoc.update({ actionCount: increment });
@@ -63,7 +63,7 @@ export class PlayerService extends CollectionService<PlayerState> {
       .collection(this.currentPath)
       .doc(opponent.id);
     const gameDoc = this.db.firestore.collection("games").doc(gameId);
-    const increment = firebase.firestore.FieldValue.increment(1);
+    const increment = firestore.FieldValue.increment(1);
 
     const batch = this.db.firestore.batch();
 
