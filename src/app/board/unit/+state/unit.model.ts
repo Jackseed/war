@@ -11,6 +11,7 @@ export interface Unit {
   stamina?: number;
   vision?: number;
   noise?: number;
+  value?: number;
   playerId?: string | number;
 }
 

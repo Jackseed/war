@@ -1,39 +1,24 @@
 <div class="container" fxLayout="column">
-
   <div fxFlex="100" fxFlexFill>
     <div fxLayout="column" fxFill fxLayoutAlign="center center">
+      <div *ngFor="let unitType of unitTypes" fxFlex="20">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <div fxFlex="100" class="img-container">
+            <img src="assets/img/black_{{ unitType }}.png" />
+          </div>
 
-      <div *ngFor="let unitType of unitTypes" fxFlex="25">
-        <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
-
-              <div fxFlex="100">
-                <img src="assets/img/black_{{unitType}}.png">
-              </div>
-
-              <div fxFlex="100">
-                <div *ngIf="(gameStatus$ | async) === 'unit creation'; else battle">
-                  <button mat-icon-button (click)="removeUnit(unitType)">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                    <span>{{ (selectUnitType(unitType) | async).length }}</span>
-                  <button mat-icon-button (click)="addUnit(unitType)">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
-
-                <ng-template #battle>
-                  <div>
-                    <span>{{ (selectUnitType(unitType) | async).length }}</span>
-                  </div>
-                </ng-template>
-
-
+          <div fxFlex="100">
+            <button mat-icon-button class="small" (click)="removeUnit(unitType)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span>{{ (selectUnitType(unitType) | async).length }}</span>
+            <button mat-icon-button class="small" (click)="addUnit(unitType)">
+              <mat-icon>add</mat-icon>
+            </button>
           </div>
         </div>
-
-
       </div>
+
     </div>
   </div>
 </div>
-
