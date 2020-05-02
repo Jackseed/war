@@ -1,6 +1,5 @@
-<div class="container" fxLayout="column">
-  <div fxFlex="100" fxFlexFill>
-    <div fxLayout="column" fxFill fxLayoutAlign="center center">
+<div class="container" fxFill fxLayout="column">
+    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
       <div *ngFor="let unitType of unitTypes" fxFlex="20">
         <div fxLayout="column" fxLayoutAlign="center center">
           <div fxFlex="100" class="img-container">
@@ -18,7 +17,10 @@
           </div>
         </div>
       </div>
-
+      <div fxFlex="20" >
+        <mat-divider></mat-divider>
+        <h3>{{ unitsValue$ | async }}/{{totalUnitValue}}</h3>
+      </div>
     </div>
-  </div>
+
 </div>
