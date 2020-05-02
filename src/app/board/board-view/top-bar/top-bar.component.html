@@ -16,32 +16,41 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxFlexLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px">
-      <div fxFlex class="center">
-        <ng-container *ngIf="(player$ | async).isActive; else unactive">
-          <ng-container *ngIf="(player$ | async) as player">
-            <h1>YOUR TURN</h1>
-            <p [ngPlural]="actionsPerTurn - player.actionCount">
-              <ng-template ngPluralCase="=1">You have {{actionsPerTurn - player.actionCount}} action left</ng-template>
-              <ng-template ngPluralCase="other">You have {{actionsPerTurn - player.actionCount}} actions left</ng-template>
-            </p>
-          </ng-container>
-        </ng-container>
 
-        <ng-template #unactive>
-          <ng-container *ngIf="(opponent$ | async) as opponent">
-            <h1>OPPONENT'S TURN</h1>
-            <p [ngPlural]="actionsPerTurn - opponent.actionCount">
-              <ng-template ngPluralCase="=1">Opponent has {{actionsPerTurn - opponent.actionCount}} action left</ng-template>
-              <ng-template ngPluralCase="other">Opponent has {{actionsPerTurn - opponent.actionCount}} actions left</ng-template>
-            </p>
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <div fxFlex="40" fxFlexFill></div>
+
+        <div fxFlex="20" class="center">
+          <ng-container *ngIf="(player$ | async).isActive; else unactive">
+            <ng-container *ngIf="(player$ | async) as player">
+              <h2>YOUR TURN</h2>
+              <p [ngPlural]="actionsPerTurn - player.actionCount">
+                <ng-template ngPluralCase="=1">You have {{actionsPerTurn - player.actionCount}} action left</ng-template>
+                <ng-template ngPluralCase="other">You have {{actionsPerTurn - player.actionCount}} actions left</ng-template>
+              </p>
+            </ng-container>
           </ng-container>
-        </ng-template>
+
+          <ng-template #unactive>
+            <ng-container *ngIf="(opponent$ | async) as opponent">
+              <h2>OPPONENT'S TURN</h2>
+              <p [ngPlural]="actionsPerTurn - opponent.actionCount">
+                <ng-template ngPluralCase="=1">Opponent has {{actionsPerTurn - opponent.actionCount}} action left</ng-template>
+                <ng-template ngPluralCase="other">Opponent has {{actionsPerTurn - opponent.actionCount}} actions left</ng-template>
+              </p>
+            </ng-container>
+          </ng-template>
+        </div>
+
+        <div fxFlex="5" fxFlexFill></div>
+
+        <div fxFlex="30" class="messages">
+          <app-message-board></app-message-board>
+        </div>
+
       </div>
-      <div fxFlex style="margin: 30px;">
-        <app-message-board></app-message-board>
-      </div>
-    </div>
+
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">

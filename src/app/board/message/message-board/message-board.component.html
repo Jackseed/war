@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="message-container">
   <mat-card-content>
     <div #list class="message-board" [scrollTop]="list.scrollHeight">
       <p *ngFor="let message of messages$ | async">
