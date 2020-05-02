@@ -5,6 +5,10 @@ import { map } from "rxjs/operators";
 import { PlayerQuery } from "../../player/+state";
 import { firestore } from "firebase/app";
 
+@QueryConfig({
+  sortBy: "createdAt",
+  sortByOrder: Order.ASC,
+})
 @Injectable({ providedIn: "root" })
 export class MessageQuery extends QueryEntity<MessageState> {
   constructor(protected store: MessageStore, private playerQuery: PlayerQuery) {
@@ -55,7 +59,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               date = message.createdAt;
               // passive player killed some of them
             } else if (
-              message.attackingUnit.playerId === player.id &&
+              message.attackingUnit.playerId !== player.id &&
               message.defensiveUnit.quantity !== message.casualties
             ) {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
@@ -63,6 +67,9 @@ export class MessageQuery extends QueryEntity<MessageState> {
               subtitle = `They made ${message.casualties} casualties.`;
               isActive = false;
               date = message.createdAt;
+            } else {
+              console.log('attakcing player id : ', message.attackingUnit.playerId, 'playerId : ', player.id);
+              console.log(title, subtitle, isActive, date );
             }
           }
           return { title, subtitle, isActive, date };
