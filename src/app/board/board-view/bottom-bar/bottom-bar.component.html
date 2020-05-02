@@ -1,9 +1,5 @@
 <div [ngSwitch]="true" class="center">
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
-  </ng-container>
-
-
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation' || (gameStatus$ | async) === 'placement'">
     <button mat-raised-button [disabled]="(isPlayerReady$ | async)" color="warn" (click)="setReady()">
       <span>Ready</span>
@@ -11,10 +7,10 @@
     </button>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
-  </ng-container>
-
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
+    <button mat-button color='warn' (click)="skipTurn()">
+      <span>Skip turn</span>
+    </button>
   </ng-container>
 
 </div>
