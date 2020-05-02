@@ -15,6 +15,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
     const player = this.playerQuery.getActive();
     let title: string;
     let subtitle: string;
+    let isActive: boolean;
 
     return messages$.pipe(
       map((messages) =>
@@ -28,6 +29,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
+              isActive = true;
             // active player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
@@ -36,6 +38,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
+              isActive = true;
             // passive player killed them all
             } else if (
               message.attackingUnit.playerId !== player.id &&
@@ -44,6 +47,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They killed them all.`;
+              isActive = false;
             // passive player killed some of them
             } else if (
               message.attackingUnit.playerId === player.id &&
@@ -52,9 +56,10 @@ export class MessageQuery extends QueryEntity<MessageState> {
               title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
               your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
               subtitle = `They made ${message.casualties} casualties.`;
+              isActive = false;
             }
           }
-          return { title, subtitle };
+          return { title, subtitle, isActive };
         })
       )
     );

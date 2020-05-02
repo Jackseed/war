@@ -1,6 +1,13 @@
-.message-board{
-  width: 100%;
+.message-board {
   height: 100px;
   overflow-y: scroll;
 }
-
+.active {
+  font-weight: bold;
+}
+.passive {
+  font-style: italic;
+}
+p {
+  margin-top: 5px;
+}
