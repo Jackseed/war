@@ -67,9 +67,6 @@ export class MessageQuery extends QueryEntity<MessageState> {
               subtitle = `They made ${message.casualties} casualties.`;
               isActive = false;
               date = message.createdAt;
-            } else {
-              console.log('attakcing player id : ', message.attackingUnit.playerId, 'playerId : ', player.id);
-              console.log(title, subtitle, isActive, date );
             }
           }
           return { title, subtitle, isActive, date };

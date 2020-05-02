@@ -22,8 +22,19 @@
   -webkit-filter: drop-shadow(5px 5px 5px #222);
   filter: drop-shadow(5px 5px 5px #222);
 }
+.unit-quantity {
+  position: absolute;
+  z-index:2;
+  bottom: 0;
+}
+.white {
+  color: white;
+}
+.black {
+  right: 20%;
+}
 .unit-ground {
-  cursor:pointer;
+  cursor: pointer;
 }
 .unit-ground:hover {
   filter: brightness(92%);
@@ -46,7 +57,7 @@
 .reachable {
   filter: brightness(125%);
   filter: hue-rotate(90deg);
-  cursor:pointer;
+  cursor: pointer;
 }
 .reachable:hover {
   filter: hue-rotate(60deg);
@@ -55,7 +66,8 @@
   filter: brightness(70%);
 }
 .withinRange {
-  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg)
+    saturate(600%) contrast(0.8);
   cursor: url("/assets/img/sword.png") 25 15, pointer;
 }
 .withinRange:hover {
