@@ -8,7 +8,7 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxLayout="row">
+    <div fxLayout="row" class="margin">
       <div fxFlex="35" fxFlexOffset="10">
         <app-unit-graveyard></app-unit-graveyard>
       </div>

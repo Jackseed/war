@@ -1,7 +1,7 @@
 .container {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 90%;
 }
 .unit {
   align-items: center;
@@ -10,11 +10,18 @@
   filter: drop-shadow(5px 5px 5px #222);
 }
 .mat-card {
+  min-height: 115px;
+  max-height: 115px;
+  padding: 15px;
+  margin-bottom: 20px;
   background: rgba(219, 218, 218, 0.568);
 }
 img {
   display: block;
-  width: 80%;
+  width: 90%;
   height: auto;
   margin: auto;
+}
+.grid {
+  padding-bottom: 0;
 }
