@@ -61,8 +61,6 @@ export class BottomBarComponent implements OnInit {
         filterBy: (unit) => unit.tileId === null,
       });
     }
-
-    this.whiteDeadUnits$.subscribe(console.log);
   }
 
   setReady() {

@@ -5,8 +5,7 @@ import {
   GameQuery,
   boardCols,
   unitPlacementMargin,
-  xCastle,
-  yCastle,
+  Castle,
 } from "src/app/games/+state";
 import { PlayerQuery } from "../../player/+state";
 import {
@@ -64,6 +63,8 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   private get defaultPositionUnits(): Unit[] {
+    const whiteCastle = Castle("white");
+    const blackCastle = Castle("black");
     const player = this.playerQuery.getActive();
     const units: Unit[] = [];
     let y = unitPlacementMargin;
@@ -78,7 +79,10 @@ export class UnitService extends CollectionService<UnitState> {
       });
       for (let unit of typedUnits) {
         // avoid the castle
-        if (x === xCastle && y === yCastle) {
+        if (
+          (x === whiteCastle.x && y === whiteCastle.y) ||
+          (x === blackCastle.x && y === blackCastle.y)
+        ) {
           y++;
         }
         // give unit coordinates and push
@@ -164,19 +168,22 @@ export class UnitService extends CollectionService<UnitState> {
         opponentUnit,
         true,
         true,
-        opponentUnit.quantity - resultingOpponentUnit.quantity,
+        opponentUnit.quantity - resultingOpponentUnit.quantity
       );
       // if attacked unit survived and within range, counter attack
       if (resultingOpponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
-        resultingAttackingUnit = this.fight(resultingOpponentUnit, attackingUnit);
+        resultingAttackingUnit = this.fight(
+          resultingOpponentUnit,
+          attackingUnit
+        );
       } else if (
-        resultingOpponentUnit.quantity === 0 &&
-        attackingUnit.type === "soldier" ||
+        (resultingOpponentUnit.quantity === 0 &&
+          attackingUnit.type === "soldier") ||
         attackingUnit.type === "knight"
       ) {
         resultingAttackingUnit = {
           ...resultingAttackingUnit,
-          tileId
+          tileId,
         };
       }
       this.updateUnit(resultingAttackingUnit);
