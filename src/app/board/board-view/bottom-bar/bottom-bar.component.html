@@ -8,14 +8,19 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxLayout="row" class="margin">
-      <div fxFlex="35" fxFlexOffset="10">
+    <div fxLayout="row" class="margin" fxLayoutAlign="start center">
+      <div fxFlex="35" fxFlexOffset="5">
         <app-unit-graveyard></app-unit-graveyard>
       </div>
-      <div fxFlex="5">
-        <button mat-button color='warn' (click)="skipTurn()">
+      <div fxFlexOffset="5" fxFlex="10" fxLayout="row" class="margin" fxLayoutAlign="center center">
+        <div >
+        <button  mat-button color='warn' (click)="skipTurn()">
           <span>Skip turn</span>
         </button>
+      </div>
+      </div>
+      <div fxFlex="35" fxFlexOffset="5" >
+        <app-unit-graveyard></app-unit-graveyard>
       </div>
     </div>
   </ng-container>

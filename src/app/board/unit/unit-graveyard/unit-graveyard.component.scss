@@ -10,8 +10,7 @@
   filter: drop-shadow(5px 5px 5px #222);
 }
 .mat-card {
-  min-height: 115px;
-  max-height: 115px;
+  height: 100%;
   padding: 15px;
   margin-bottom: 20px;
   background: rgba(219, 218, 218, 0.568);
@@ -24,4 +23,8 @@ img {
 }
 .grid {
   padding-bottom: 0;
+}
+.button-wrapper {
+  display: flex;
+  justify-content: center;
 }
