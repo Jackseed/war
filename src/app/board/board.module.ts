@@ -10,6 +10,7 @@ import { TopBarComponent } from "./board-view/top-bar/top-bar.component";
 import { BottomBarComponent } from "./board-view/bottom-bar/bottom-bar.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MessageModule } from "./message/message.module";
+import { UnitsModule } from "./unit/units.module";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -22,6 +23,7 @@ import { MessageModule } from "./message/message.module";
     FormsModule,
     MatIconModule,
     MessageModule,
+    UnitsModule,
   ],
   exports: [BoardComponent, TopBarComponent, BottomBarComponent],
 })

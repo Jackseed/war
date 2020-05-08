@@ -1,16 +1,43 @@
 <div [ngSwitch]="true" class="center">
-
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation' || (gameStatus$ | async) === 'placement'">
-    <button mat-raised-button [disabled]="(isPlayerReady$ | async)" color="warn" (click)="setReady()">
+  <ng-container
+    *ngSwitchCase="
+      (gameStatus$ | async) === 'unit creation' ||
+      (gameStatus$ | async) === 'placement'
+    "
+  >
+    <button
+      mat-raised-button
+      [disabled]="isPlayerReady$ | async"
+      color="warn"
+      (click)="setReady()"
+    >
       <span>Ready</span>
       <mat-icon svgIcon="fight" style="margin-left: 5px;"></mat-icon>
     </button>
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <button mat-button color='warn' (click)="skipTurn()">
-      <span>Skip turn</span>
-    </button>
+    <div fxLayout="row" class="margin" fxLayoutAlign="start center">
+      <div fxFlex="35" fxFlexOffset="5">
+        <app-unit-graveyard [deadUnits$]="whiteDeadUnits$">
+        </app-unit-graveyard>
+      </div>
+      <div
+        fxFlexOffset="5"
+        fxFlex="10"
+        fxLayout="row"
+        class="margin"
+        fxLayoutAlign="center center"
+      >
+        <div>
+          <button mat-button color="warn" (click)="skipTurn()">
+            <span>Skip turn</span>
+          </button>
+        </div>
+      </div>
+      <div fxFlex="35" fxFlexOffset="5">
+        <app-unit-graveyard [deadUnits$]="blackDeadUnits$"></app-unit-graveyard>
+      </div>
+    </div>
   </ng-container>
-
 </div>

@@ -4,5 +4,31 @@
   height: 100%;
 }
 img {
-  width: 80%;
+  display: block;
+  width: 70%;
+  height: auto;
+  margin: auto;
+}
+.img-container {
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-icon-button.small {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+
+  .mat-icon {
+    font-size: 15px;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+  }
+}
+
+.mat-divider {
+  margin-top: 20px;
+  border-top-color: black;
+  height:20px;
 }

@@ -30,7 +30,7 @@ export class MessageBoardComponent implements OnInit {
       map((messages) => messages.sort())
     );
     this.player = this.playerQuery.getActive();
-    this.messageSub = this.messages$.subscribe(console.log);
+    this.messageSub = this.messages$.subscribe();
   }
 
   ngOndestroy(): void {

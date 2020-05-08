@@ -11,11 +11,13 @@ export interface Unit {
   stamina?: number;
   vision?: number;
   noise?: number;
+  value?: number;
   playerId?: string | number;
 }
 
 export const unitCols = 10;
 export const unitMaxTiles = 10;
+export const maxTotalUnitValue = 20;
 
 export function createUnit(
   unitType: "soldier" | "musketeer" | "knight" | "cannon",

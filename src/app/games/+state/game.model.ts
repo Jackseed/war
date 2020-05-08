@@ -7,17 +7,6 @@ export interface Game {
   turnCount: number;
 }
 
-/* export const expenseSubType = {
-  technical: "Technical expenses",
-  delivery: "Delivery expenses",
-  marketing: "Marketing expenses",
-  translation: "Translation expenses",
-} as const;
-
-export type ExpenseSubType = keyof typeof expenseSubType;
-export type ExpenseSubTypeValue = typeof expenseSubType[ExpenseSubType];
- */
-
 export interface Castle {
   color: "white" | "black";
   x: number;
@@ -31,10 +20,11 @@ export const boardCols = 11;
 export const boardMaxTiles = 1000;
 export const actionsPerTurn = 3;
 export const unitPlacementMargin = 2;
-export const xCastle = 1;
-export const yCastle = Math.floor(boardCols / 2);
+
 
 export function Castle(color: "white" | "black"): Castle {
+  const xCastle = 1;
+  const yCastle = Math.floor(boardCols / 2);
   return {
     color,
     get x(): number {

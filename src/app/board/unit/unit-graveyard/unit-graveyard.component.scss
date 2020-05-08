@@ -1,0 +1,32 @@
+.unit {
+  align-items: center;
+  justify-content: center;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+  filter: drop-shadow(2px 2px 2px #222);
+}
+.mat-card {
+  height: 130px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background: rgba(219, 218, 218, 0.568);
+}
+img {
+  display: block;
+  width: 80%;
+  height: auto;
+  margin: auto;
+}
+.grid {
+  padding-bottom: 0;
+}
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  max-height: 30%;
+}
+.wrapper {
+  height: 70%;
+}

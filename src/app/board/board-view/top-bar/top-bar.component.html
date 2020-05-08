@@ -25,9 +25,7 @@
 
       <div fxLayout="row" fxLayoutAlign="start center">
 
-        <div fxFlex="40" fxFlexFill></div>
-
-        <div fxFlex="20" class="center">
+        <div fxFlexOffset="40" fxFlex="20" class="center">
           <ng-container *ngIf="(player$ | async).isActive; else unactive">
             <ng-container *ngIf="(player$ | async) as player">
               <h2>YOUR TURN</h2>
@@ -49,9 +47,7 @@
           </ng-template>
         </div>
 
-        <div fxFlex="5" fxFlexFill></div>
-
-        <div fxFlex="30" class="messages">
+        <div fxFlexOffset="5" fxFlex="30" class="messages">
           <app-message-board></app-message-board>
         </div>
 
