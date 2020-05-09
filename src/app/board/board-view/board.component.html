@@ -1,8 +1,11 @@
 <div fxLayout="column" fxLayoutAlign="center" class="container">
   <div fxFlex fxLayout="row" fxLayoutAlign="center" class="container">
     <!--------------------------WHITE PLAYER BOARD------------------------------------->
-    <div fxFlexOffset="2.5" fxFlex="15">
-      <app-player-board [player$]="whitePlayer$"></app-player-board>
+    <div fxFlexOffset="2.5" fxFlex="15" class="player-container">
+      <app-player-board
+        [player$]="whitePlayer$"
+        [isOpponent]="isWhiteOpponent"
+      ></app-player-board>
     </div>
     <!--------------------------BOARD------------------------------------->
     <mat-grid-list
@@ -154,8 +157,11 @@
       </mat-grid-tile>
     </mat-grid-list>
     <!--------------------------BLACK PLAYER BOARD------------------------------------->
-    <div fxFlexOffset="2.5" fxFlex="15">
-      <app-player-board [player$]="blackPlayer$"></app-player-board>
+    <div fxFlexOffset="2.5" fxFlex="15" class="player-container">
+      <app-player-board
+        [player$]="blackPlayer$"
+        [isOpponent]="isBlackOpponent"
+      ></app-player-board>
     </div>
   </div>
 </div>

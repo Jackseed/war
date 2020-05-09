@@ -1,6 +1,6 @@
 export interface Player {
   id: string;
-  color?: 'white' | 'black';
+  color?: "white" | "black";
   isActive?: boolean;
   actionCount?: number;
   isVictorious?: boolean;
@@ -13,6 +13,6 @@ export function createPlayer(params: Partial<Player> = {}): Player {
     color: params.color,
     isActive: params.isActive,
     actionCount: 0,
-    ...params
+    ...params,
   };
 }

@@ -41,7 +41,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public whitePlayer$: Observable<Player>;
+  public isWhiteOpponent: boolean;
   public blackPlayer$: Observable<Player>;
+  public isBlackOpponent: boolean;
 
   constructor(
     private gameQuery: GameQuery,
@@ -94,9 +96,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (this.player.color === "white") {
       this.whitePlayer$ = this.playerQuery.selectActive();
       this.blackPlayer$ = this.playerQuery.opponent$;
+      this.isWhiteOpponent = false;
+      this.isBlackOpponent = true;
     } else {
       this.whitePlayer$ = this.playerQuery.opponent$;
       this.blackPlayer$ = this.playerQuery.selectActive();
+      this.isWhiteOpponent = true;
+      this.isBlackOpponent = false;
     }
 
     // check if a player unit is on the opponent castle, if so stop the game

@@ -1,1 +1,22 @@
-<p>{{(player$ | async).color}}</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title class="title">
+      <h3>{{ (player$ | async).color }}</h3>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <p>{{ playerName }}</p>
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="(player$ | async).isActive">
+      <p [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
+        <ng-template ngPluralCase="=1"
+          >{{ actionsPerTurn - (player$ | async).actionCount }} action
+          left</ng-template
+        >
+        <ng-template ngPluralCase="other"
+          >{{ actionsPerTurn - (player$ | async).actionCount }} actions
+          left</ng-template
+        >
+      </p>
+    </mat-card-subtitle>
+  </mat-card-header>
+</mat-card>
