@@ -17,7 +17,7 @@ export class PlayerBoardComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (this.isOpponent) {
+    if (!this.isOpponent) {
       this.playerName = "You";
     } else {
       this.playerName = "Opponent";

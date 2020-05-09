@@ -1,26 +1,25 @@
 <div class="container" fxFill fxLayout="column">
-    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
-      <div *ngFor="let unitType of unitTypes" fxFlex="20">
-        <div fxLayout="column" fxLayoutAlign="center center">
-          <div fxFlex="100" class="img-container">
-            <img src="assets/img/black_{{ unitType }}.png" />
-          </div>
+  <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngFor="let unitType of unitTypes" fxFlex="20">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="100" class="img-container">
+          <img src="assets/img/black_{{ unitType }}.png" />
+        </div>
 
-          <div fxFlex="100">
-            <button mat-icon-button class="small" (click)="removeUnit(unitType)">
-              <mat-icon>remove</mat-icon>
-            </button>
-            <span>{{ (selectUnitType(unitType) | async).length }}</span>
-            <button mat-icon-button class="small" (click)="addUnit(unitType)">
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
+        <div fxFlex="100">
+          <button mat-icon-button class="small" (click)="removeUnit(unitType)">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span>{{ (selectUnitType(unitType) | async).length }}</span>
+          <button mat-icon-button class="small" (click)="addUnit(unitType)">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
       </div>
-      <div fxFlex="20" >
-        <mat-divider></mat-divider>
-        <h3>{{ unitsValue$ | async }}/{{maxTotalUnitValue}}</h3>
-      </div>
     </div>
-
+    <div fxFlex="20">
+      <mat-divider></mat-divider>
+      <h3>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
+    </div>
+  </div>
 </div>
