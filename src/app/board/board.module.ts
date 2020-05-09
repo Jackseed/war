@@ -12,6 +12,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MessageModule } from "./message/message.module";
 import { UnitsModule } from "./unit/units.module";
 import { PlayerModule } from "./player/player.module";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -26,6 +27,7 @@ import { PlayerModule } from "./player/player.module";
     MessageModule,
     UnitsModule,
     PlayerModule,
+    MatCardModule,
   ],
   exports: [BoardComponent, TopBarComponent, BottomBarComponent],
 })
