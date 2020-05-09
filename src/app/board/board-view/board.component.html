@@ -1,7 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="center" class="container">
   <div fxFlex fxLayout="row" fxLayoutAlign="center" class="container">
+    <!--------------------------WHITE PLAYER BOARD------------------------------------->
+    <div fxFlexOffset="2.5" fxFlex="15">
+      <app-player-board></app-player-board>
+    </div>
+    <!--------------------------BOARD------------------------------------->
     <mat-grid-list
-      fxFlex="80"
+      fxFlexOffset="2.5"
+      fxFlex="60"
       class="container"
       cols="{{ boardSize }}"
       gutterSize="0"
@@ -147,5 +153,9 @@
         </ng-template>
       </mat-grid-tile>
     </mat-grid-list>
+    <!--------------------------BLACK PLAYER BOARD------------------------------------->
+    <div fxFlexOffset="2.5" fxFlex="15">
+      <app-player-board></app-player-board>
+    </div>
   </div>
 </div>

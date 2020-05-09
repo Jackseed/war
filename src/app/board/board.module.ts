@@ -11,6 +11,7 @@ import { BottomBarComponent } from "./board-view/bottom-bar/bottom-bar.component
 import { MatIconModule } from "@angular/material/icon";
 import { MessageModule } from "./message/message.module";
 import { UnitsModule } from "./unit/units.module";
+import { PlayerModule } from "./player/player.module";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -24,6 +25,7 @@ import { UnitsModule } from "./unit/units.module";
     MatIconModule,
     MessageModule,
     UnitsModule,
+    PlayerModule,
   ],
   exports: [BoardComponent, TopBarComponent, BottomBarComponent],
 })
