@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card [ngClass]="{isActive: (player$ | async).isActive}">
   <mat-card-header>
     <mat-card-title class="title">
       <h3>{{ (player$ | async).color }}</h3>

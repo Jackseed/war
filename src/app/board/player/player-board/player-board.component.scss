@@ -1,3 +1,4 @@
+@import '~@angular/material/theming';
 .title {
   text-transform: uppercase;
 }
@@ -5,4 +6,7 @@
   min-height: 100px;
   max-width: 150px;
   width: auto;
+}
+.isActive{
+  @include mat-elevation(15, #e91e1ebd);
 }
