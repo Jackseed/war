@@ -33,9 +33,9 @@ export class PlayerBoardComponent implements OnInit {
       )
     );
     this.matIconRegistry.addSvgIcon(
-      "camp 4",
+      "camp",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        "../../../assets/img/camp 4.svg"
+        "../../../assets/img/camp.svg"
       )
     );
   }
