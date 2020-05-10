@@ -1,6 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { UnitQuery, Unit, UnitService, maxTotalUnitValue } from "../+state";
+import {
+  UnitQuery,
+  Unit,
+  UnitService,
+  maxTotalUnitValue,
+  createUnit,
+} from "../+state";
 import { Observable } from "rxjs";
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-unit-board",
@@ -11,10 +19,20 @@ export class UnitBoardComponent implements OnInit {
   public unitTypes = ["soldier", "musketeer", "knight", "cannon"];
   public unitsValue$: Observable<number>;
   public maxTotalUnitValue = maxTotalUnitValue;
+
   constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
     private query: UnitQuery,
-    private service: UnitService,
-  ) {}
+    private service: UnitService
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      "camp",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/camp.svg"
+      )
+    );
+  }
 
   ngOnInit(): void {
     this.unitsValue$ = this.query.selectCount();
@@ -42,5 +60,9 @@ export class UnitBoardComponent implements OnInit {
     if (units.length > 0) {
       this.service.removeUnit(units[units.length - 1]);
     }
+  }
+
+  createUnit(unitType): Unit {
+    return createUnit(unitType);
   }
 }

@@ -1,5 +1,6 @@
-<div class="container" fxFill fxLayout="column">
-  <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+<div class="container" fxFill fxLayout="row wrap">
+  <!--------------------- Units --------------------->
+  <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
     <div *ngFor="let unitType of unitTypes" fxFlex="20">
       <div fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="100" class="img-container">
@@ -21,5 +22,53 @@
       <mat-divider></mat-divider>
       <h3>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
     </div>
+  </div>
+  <!--------------------- Stats --------------------->
+  <div fxFlex="50" fxLayout="column" fxLayoutAlign="start start" fxFill>
+    <div *ngFor="let unitType of unitTypes" fxFill fxFlex="20" fxLayout="column">
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).hp }}</span>
+        </div>
+      </div>
+
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).move }}</span>
+        </div>
+      </div>
+
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).vision }}</span>
+        </div>
+      </div>
+
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).stamina }}</span>
+        </div>
+      </div>
+
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).power }}</span>
+        </div>
+      </div>
+
+      <div fxFlex="16.5" fxLayout="row">
+        <div fxFlex="30"><mat-icon svgIcon="camp"></mat-icon></div>
+        <div fxFlex>
+          <span>{{ createUnit(unitType).range }}</span>
+        </div>
+      </div>
+
+    </div>
+    <div fxFlex="20"></div>
   </div>
 </div>
