@@ -25,49 +25,65 @@
   </div>
   <!--------------------- Stats --------------------->
   <div fxFlex="50" fxLayout="column" fxLayoutAlign="start start" fxFill>
-    <div *ngFor="let unitType of unitTypes" fxFill fxFlex="20" fxLayout="column">
+    <div
+      *ngFor="let unitType of unitTypes"
+      fxFill
+      fxFlex="20"
+      fxLayout="column"
+    >
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="hp" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).hp }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).hp }}</span>
+          <mat-icon svgIcon="hp" class="stats-icon"></mat-icon>
         </div>
       </div>
 
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="power" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).power }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).power }}</span>
+          <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
         </div>
       </div>
 
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="range" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).range }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).range }}</span>
+          <mat-icon svgIcon="range" class="stats-icon"></mat-icon>
         </div>
       </div>
 
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="move" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).move }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).move }}</span>
+          <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
         </div>
       </div>
 
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="stamina" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).stamina }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).stamina }}</span>
+          <mat-icon svgIcon="stamina" class="stats-icon"></mat-icon>
         </div>
       </div>
 
       <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="30"><mat-icon svgIcon="vision" class="stats-icon"></mat-icon></div>
+        <div fxFlex="10">
+          <span class="stats">{{ createUnit(unitType).vision }}</span>
+        </div>
         <div fxFlex>
-          <span>{{ createUnit(unitType).vision }}</span>
+          <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
         </div>
       </div>
-
     </div>
     <div fxFlex="20"></div>
   </div>
