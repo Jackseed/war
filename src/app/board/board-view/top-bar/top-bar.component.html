@@ -1,6 +1,8 @@
 <div [ngSwitch]="true">
-
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'" class="center">
+  <ng-container
+    *ngSwitchCase="(gameStatus$ | async) === 'waiting'"
+    class="center"
+  >
     <div class="title">
       <h1>WAITING FOR AN OPPONENT</h1>
       <p>Prepare yourself with the dino :)</p>
@@ -14,7 +16,10 @@
     </div>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'" class="center">
+  <ng-container
+    *ngSwitchCase="(gameStatus$ | async) === 'placement'"
+    class="center"
+  >
     <div class="title">
       <h1>POSITION YOUR ARMY</h1>
       <p>Battle will start soon.</p>
@@ -22,41 +27,14 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-
-      <div fxLayout="row" fxLayoutAlign="start center">
-
-        <div fxFlexOffset="40" fxFlex="20" class="center">
-          <ng-container *ngIf="(player$ | async).isActive; else unactive">
-            <ng-container *ngIf="(player$ | async) as player">
-              <h2>YOUR TURN</h2>
-              <p [ngPlural]="actionsPerTurn - player.actionCount">
-                <ng-template ngPluralCase="=1">You have {{actionsPerTurn - player.actionCount}} action left</ng-template>
-                <ng-template ngPluralCase="other">You have {{actionsPerTurn - player.actionCount}} actions left</ng-template>
-              </p>
-            </ng-container>
-          </ng-container>
-
-          <ng-template #unactive>
-            <ng-container *ngIf="(opponent$ | async) as opponent">
-              <h2>OPPONENT'S TURN</h2>
-              <p [ngPlural]="actionsPerTurn - opponent.actionCount">
-                <ng-template ngPluralCase="=1">Opponent has {{actionsPerTurn - opponent.actionCount}} action left</ng-template>
-                <ng-template ngPluralCase="other">Opponent has {{actionsPerTurn - opponent.actionCount}} actions left</ng-template>
-              </p>
-            </ng-container>
-          </ng-template>
-        </div>
-
-        <div fxFlexOffset="5" fxFlex="30" class="messages">
-          <app-message-board></app-message-board>
-        </div>
-
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlexOffset="67.5" fxFlex="30" class="messages">
+        <app-message-board></app-message-board>
       </div>
-
+    </div>
   </ng-container>
 
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
-
     <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
       <div class="title">
         <h1>VICTORY</h1>
@@ -70,7 +48,5 @@
         <p>Try again.</p>
       </div>
     </ng-template>
-
   </ng-container>
-
 </div>

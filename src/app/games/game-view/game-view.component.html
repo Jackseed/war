@@ -40,16 +40,6 @@
         <app-unit-creation></app-unit-creation>
       </div>
     </ng-container>
-
-    <!-- Board -->
-    <ng-container
-      *ngSwitchCase="
-        (gameStatus$ | async) === 'placement' ||
-        (gameStatus$ | async) === 'battle' ||
-        (gameStatus$ | async) === 'finished'
-      "
-    >
-    </ng-container>
   </div>
 
   <div fxFlex="10" fxLayoutAlign="start start">
@@ -57,6 +47,7 @@
   </div>
 </div>
 
+<!-- Board -->
 <ng-template #board>
   <div class="container" fxLayout="column">
     <div fxFlex="25" fxFill>

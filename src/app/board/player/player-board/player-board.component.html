@@ -1,0 +1,31 @@
+<mat-card [ngClass]="{ isActive: (player$ | async).isActive }">
+  <mat-card-header>
+    <mat-card-title class="title">
+      <h3>{{ (player$ | async).color }}</h3>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <p>{{ playerName }}</p>
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="(player$ | async).isActive">
+      <p [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
+        <ng-template ngPluralCase="=1"
+          >{{ actionsPerTurn - (player$ | async).actionCount }} action
+          left</ng-template
+        >
+        <ng-template ngPluralCase="other"
+          >{{ actionsPerTurn - (player$ | async).actionCount }} actions
+          left</ng-template
+        >
+      </p>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="skipTurn()">
+      <mat-icon svgIcon="camp"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="forfeit()">
+      <mat-icon svgIcon="flag"></mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
