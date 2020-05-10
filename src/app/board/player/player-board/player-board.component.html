@@ -1,4 +1,4 @@
-<mat-card [ngClass]="{isActive: (player$ | async).isActive}">
+<mat-card [ngClass]="{ isActive: (player$ | async).isActive }">
   <mat-card-header>
     <mat-card-title class="title">
       <h3>{{ (player$ | async).color }}</h3>
@@ -19,4 +19,13 @@
       </p>
     </mat-card-subtitle>
   </mat-card-header>
+
+  <mat-card-actions align="end">
+    <button mat-icon-button (click)="skipTurn()">
+      <mat-icon svgIcon="camp 4"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="forfeit()">
+      <mat-icon svgIcon="flag"></mat-icon>
+    </button>
+  </mat-card-actions>
 </mat-card>

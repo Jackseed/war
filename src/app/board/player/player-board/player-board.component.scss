@@ -7,6 +7,9 @@
   max-width: 150px;
   width: auto;
 }
+.buttons{
+  align-content: flex-end;
+}
 .isActive{
-  @include mat-elevation(15, #e91e1ebd);
+  @include mat-elevation(20, #e91e1ebd);
 }
