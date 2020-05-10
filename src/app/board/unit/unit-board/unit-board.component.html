@@ -31,60 +31,53 @@
       fxFlex="20"
       fxLayout="column"
     >
-      <div fxFlex="16.5" fxLayout="row">
+      <div fxFlex="33" fxLayout="row" fxLayoutAlign="center center">
         <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).hp }}</span>
+          <p class="stats">{{ createUnit(unitType).hp }}</p>
+        </div>
+        <div fxFlex="25">
+          <mat-icon svgIcon="hp" id="hp" class="stats-icon"></mat-icon>
+        </div>
+
+        <div fxFlex="10">
+          <p class="stats">{{ createUnit(unitType).vision }}</p>
         </div>
         <div fxFlex>
-          <mat-icon svgIcon="hp" class="stats-icon"></mat-icon>
+          <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
         </div>
       </div>
 
-      <div fxFlex="16.5" fxLayout="row">
+      <div fxFlex="33" fxLayout="row" fxLayoutAlign="center center">
         <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).power }}</span>
+          <p class="stats">{{ createUnit(unitType).power }}</p>
         </div>
-        <div fxFlex>
+        <div fxFlex="25">
           <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
         </div>
-      </div>
 
-      <div fxFlex="16.5" fxLayout="row">
         <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).range }}</span>
+          <p class="stats">{{ createUnit(unitType).range }}</p>
         </div>
         <div fxFlex>
           <mat-icon svgIcon="range" class="stats-icon"></mat-icon>
         </div>
       </div>
 
-      <div fxFlex="16.5" fxLayout="row">
+      <div fxFlex="33" fxLayout="row" fxLayoutAlign="center center">
         <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).move }}</span>
+          <p class="stats">{{ createUnit(unitType).move }}</p>
         </div>
-        <div fxFlex>
+        <div fxFlex="25">
           <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
         </div>
-      </div>
 
-      <div fxFlex="16.5" fxLayout="row">
         <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).stamina }}</span>
+          <p class="stats">{{ createUnit(unitType).stamina }}</p>
         </div>
         <div fxFlex>
           <mat-icon svgIcon="stamina" class="stats-icon"></mat-icon>
         </div>
       </div>
-
-      <div fxFlex="16.5" fxLayout="row">
-        <div fxFlex="10">
-          <span class="stats">{{ createUnit(unitType).vision }}</span>
-        </div>
-        <div fxFlex>
-          <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
-        </div>
-      </div>
     </div>
-    <div fxFlex="20"></div>
   </div>
 </div>
