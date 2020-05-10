@@ -27,9 +27,39 @@ export class UnitBoardComponent implements OnInit {
     private service: UnitService
   ) {
     this.matIconRegistry.addSvgIcon(
-      "camp",
+      "hp",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        "../../../assets/img/camp.svg"
+        "../../../assets/img/hp.svg"
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      "vision",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/vision.svg"
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      "move",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/move.svg"
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      "stamina",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/stamina.svg"
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      "power",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/power.svg"
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      "range",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/range.svg"
       )
     );
   }
