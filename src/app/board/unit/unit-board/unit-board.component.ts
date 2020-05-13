@@ -19,6 +19,7 @@ export class UnitBoardComponent implements OnInit {
   public unitTypes = ["soldier", "musketeer", "knight", "cannon"];
   public unitsValue$: Observable<number>;
   public maxTotalUnitValue = maxTotalUnitValue;
+  public mouseOvers: boolean[];
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -62,6 +63,7 @@ export class UnitBoardComponent implements OnInit {
         "../../../assets/img/range.svg"
       )
     );
+    this.mouseOvers = [false, false, false, false];
   }
 
   ngOnInit(): void {
@@ -95,4 +97,5 @@ export class UnitBoardComponent implements OnInit {
   createUnit(unitType): Unit {
     return createUnit(unitType);
   }
+
 }
