@@ -1,6 +1,6 @@
 <div class="container" fxFill fxLayout="row wrap">
   <!--------------------- Units --------------------->
-  <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center" fxFill>
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
@@ -10,8 +10,7 @@
     >
       <div
         fxLayout="column"
-        fxLayoutAlign="center center"
-        *ngIf="!mouseOvers[i]"
+        fxLayoutAlign="end center"
       >
         <div fxFlex="100" class="img-container">
           <img src="assets/img/black_{{ unitType }}.png" />
@@ -27,27 +26,35 @@
           </button>
         </div>
       </div>
-      <!--------------------- Stats --------------------->
+    </div>
+    <div fxFlex="20">
+      <mat-divider></mat-divider>
+      <h3>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
+    </div>
+  </div>
+    <!--------------------- Stats --------------------->
+  <div fxFlex="50" fxLayout="column" fxLayoutAlign="start start" fxFill>
+    <div
+      *ngFor="let unitType of unitTypes; let i = index"
+      fxFill
+      fxFlex="20"
+      fxLayout="column"
+    >
       <div
         fxLayout="column"
         *ngIf="mouseOvers[i]"
         fxLayoutAlign="center center"
         fxFill
       >
-        <div
-          fxFlex="33"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxFlexFill
-        >
-          <div class="stats" fxFlexOffset="25" fxFlex="nogrow">
+        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
+          <div class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).hp }}</p>
           </div>
           <div fxFlex="15">
             <mat-icon svgIcon="hp" id="hp" class="stats-icon"></mat-icon>
           </div>
 
-          <div fxFlexOffset="5" class="stats" fxFlex="nogrow">
+          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).vision }}</p>
           </div>
           <div fxFlex="15">
@@ -55,20 +62,15 @@
           </div>
         </div>
 
-        <div
-          fxFlex="33"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxFlexFill
-        >
-          <div class="stats" fxFlexOffset="25" fxFlex="nogrow">
+        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
+          <div class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).power }}</p>
           </div>
           <div fxFlex="15">
             <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
           </div>
 
-          <div fxFlexOffset="5" class="stats" fxFlex="nogrow">
+          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).range }}</p>
           </div>
           <div fxFlex="15">
@@ -76,20 +78,15 @@
           </div>
         </div>
 
-        <div
-          fxFlex="33"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxFlexFill
-        >
-          <div class="stats" fxFlexOffset="25" fxFlex="nogrow">
+        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
+          <div class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).move }}</p>
           </div>
           <div fxFlex="15">
             <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
           </div>
 
-          <div fxFlexOffset="5" class="stats" fxFlex="nogrow">
+          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
             <p>{{ createUnit(unitType).stamina }}</p>
           </div>
           <div fxFlex="15">
@@ -97,10 +94,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div fxFlex="20">
-      <mat-divider></mat-divider>
-      <h3>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
     </div>
   </div>
 </div>

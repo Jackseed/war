@@ -35,19 +35,20 @@ img {
 }
 
 .stats-icon {
-  font-size: 12px;
-  width: 12px;
-  height: 12px;
-  line-height: 12px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
   position: relative;
   /* Adjust these values accordingly */
-  top: 3px;
+  top: 4px;
 }
 
-#hp {
- top: 3px;
-}
+
 
 .stats{
   padding-right: 5px;
+}
+p{
+  font-size: 17px;
 }
