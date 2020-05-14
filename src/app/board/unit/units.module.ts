@@ -8,14 +8,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatDividerModule } from "@angular/material/divider";
-import { UnitGraveyardComponent } from "./unit-graveyard/unit-graveyard.component";
 
 @NgModule({
-  declarations: [
-    UnitCreationComponent,
-    UnitBoardComponent,
-    UnitGraveyardComponent,
-  ],
+  declarations: [UnitCreationComponent, UnitBoardComponent],
   imports: [
     CommonModule,
     MatGridListModule,
@@ -25,6 +20,6 @@ import { UnitGraveyardComponent } from "./unit-graveyard/unit-graveyard.componen
     FlexLayoutModule,
     MatDividerModule,
   ],
-  exports: [UnitCreationComponent, UnitBoardComponent, UnitGraveyardComponent],
+  exports: [UnitCreationComponent, UnitBoardComponent],
 })
 export class UnitsModule {}
