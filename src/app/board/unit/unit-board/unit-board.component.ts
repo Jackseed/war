@@ -9,6 +9,7 @@ import {
 import { Observable } from "rxjs";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
+import { GameQuery } from 'src/app/games/+state';
 
 @Component({
   selector: "app-unit-board",
@@ -20,12 +21,16 @@ export class UnitBoardComponent implements OnInit {
   public unitsValue$: Observable<number>;
   public maxTotalUnitValue = maxTotalUnitValue;
   public mouseOvers: boolean[];
+  public gameStatus$: Observable<
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+  >;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private query: UnitQuery,
-    private service: UnitService
+    private service: UnitService,
+    private gameQuery: GameQuery,
   ) {
     this.matIconRegistry.addSvgIcon(
       "hp",
@@ -68,6 +73,7 @@ export class UnitBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.unitsValue$ = this.query.selectCount();
+    this.gameStatus$ = this.gameQuery.gameStatus$;
   }
 
   selectUnitType(unitType): Observable<Unit[]> {

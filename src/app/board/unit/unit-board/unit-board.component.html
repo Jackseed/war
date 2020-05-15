@@ -1,6 +1,5 @@
-<div class="container" fxFill fxLayout="row wrap">
-  <!--------------------- Units --------------------->
-  <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center" fxFill>
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="end center" fxFlexFill fxFill>
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
@@ -8,91 +7,105 @@
       (mouseout)="mouseOvers[i] = false"
       fxFill
     >
-      <div
-        fxLayout="column"
-        fxLayoutAlign="end center"
-      >
-        <div fxFlex="100" class="img-container">
-          <img src="assets/img/black_{{ unitType }}.png" />
-        </div>
+      <div fxFlexLayout="row">
+        <!--------------------- Units --------------------->
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center">
+          <div fxFlex="100" class="img-container">
+            <img src="assets/img/black_{{ unitType }}.png" />
+          </div>
 
-        <div fxFlex="100">
-          <button mat-icon-button class="small" (click)="removeUnit(unitType)">
-            <mat-icon>remove</mat-icon>
-          </button>
-          <span>{{ (selectUnitType(unitType) | async).length }}</span>
-          <button mat-icon-button class="small" (click)="addUnit(unitType)">
-            <mat-icon>add</mat-icon>
-          </button>
+          <div fxFlex="100" *ngIf="(gameStatus$ | async) === 'unit creation'">
+            <button
+              mat-icon-button
+              class="small"
+              (click)="removeUnit(unitType)"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span>{{ (selectUnitType(unitType) | async).length }}</span>
+            <button mat-icon-button class="small" (click)="addUnit(unitType)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <!--------------------- Stats --------------------->
+        <div fxFlex="50">
+          <div
+            fxLayout="column"
+            *ngIf="mouseOvers[i]"
+            fxLayoutAlign="center center"
+            fxFill
+          >
+            <div
+              fxFlex="33"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxFlexFill
+            >
+              <div class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).hp }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="hp" id="hp" class="stats-icon"></mat-icon>
+              </div>
+
+              <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).vision }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
+              </div>
+            </div>
+
+            <div
+              fxFlex="33"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxFlexFill
+            >
+              <div class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).power }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
+              </div>
+
+              <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).range }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="range" class="stats-icon"></mat-icon>
+              </div>
+            </div>
+
+            <div
+              fxFlex="33"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxFlexFill
+            >
+              <div class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).move }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
+              </div>
+
+              <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
+                <p>{{ createUnit(unitType).stamina }}</p>
+              </div>
+              <div fxFlex="15">
+                <mat-icon svgIcon="stamina" class="stats-icon"></mat-icon>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div fxFlex="20">
-      <mat-divider></mat-divider>
-      <h3>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
-    </div>
-  </div>
-    <!--------------------- Stats --------------------->
-  <div fxFlex="50" fxLayout="column" fxLayoutAlign="start start" fxFill>
-    <div
-      *ngFor="let unitType of unitTypes; let i = index"
-      fxFill
-      fxFlex="20"
-      fxLayout="column"
-    >
-      <div
-        fxLayout="column"
-        *ngIf="mouseOvers[i]"
-        fxLayoutAlign="center center"
-        fxFill
-      >
-        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
-          <div class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).hp }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="hp" id="hp" class="stats-icon"></mat-icon>
-          </div>
-
-          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).vision }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
-          </div>
-        </div>
-
-        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
-          <div class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).power }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
-          </div>
-
-          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).range }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="range" class="stats-icon"></mat-icon>
-          </div>
-        </div>
-
-        <div fxFlex="33" fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
-          <div class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).move }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
-          </div>
-
-          <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-            <p>{{ createUnit(unitType).stamina }}</p>
-          </div>
-          <div fxFlex="15">
-            <mat-icon svgIcon="stamina" class="stats-icon"></mat-icon>
-          </div>
-        </div>
+    <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="start start" *ngIf="(gameStatus$ | async) === 'unit creation'">
+      <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+        <mat-divider fxFlex="50"></mat-divider>
+        <h3 fxFlexOffset="20" fxFlex="30">{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
       </div>
     </div>
   </div>
