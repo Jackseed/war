@@ -13,6 +13,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { AuthModule } from "../auth/auth.module";
 import { UnitsModule } from "../board/unit/units.module";
 import { RouterModule } from "@angular/router";
+import { MatTableModule } from "@angular/material/table";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
   declarations: [GameViewComponent, GameListComponent, GameFormComponent],
@@ -28,6 +30,8 @@ import { RouterModule } from "@angular/router";
     FlexLayoutModule,
     UnitsModule,
     RouterModule,
+    MatTableModule,
+    MatSortModule,
   ],
 })
 export class GamesModule {}
