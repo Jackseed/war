@@ -111,7 +111,7 @@
             fxLayoutAlign="center center"
             fxFill
           >
-          coucou
+          {{getDeathCount(unitType) | async}}
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@
         <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
           <mat-divider fxFlex="50"></mat-divider>
           <h3 fxFlexOffset="20" fxFlex="30">
-            {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
+            <span>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</span>
           </h3>
         </div>
       </div>

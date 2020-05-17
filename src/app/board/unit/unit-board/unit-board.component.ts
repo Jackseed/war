@@ -11,6 +11,7 @@ import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { GameQuery } from "src/app/games/+state";
 import { Player } from "../../player/+state";
+import { OpponentUnitQuery } from "../opponent/+state";
 
 @Component({
   selector: "app-unit-board",
@@ -33,7 +34,8 @@ export class UnitBoardComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private query: UnitQuery,
     private service: UnitService,
-    private gameQuery: GameQuery
+    private gameQuery: GameQuery,
+    private opponentUnitQuery: OpponentUnitQuery
   ) {
     this.matIconRegistry.addSvgIcon(
       "hp",
@@ -107,5 +109,19 @@ export class UnitBoardComponent implements OnInit {
 
   createUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon"): Unit {
     return createUnit(unitType);
+  }
+
+  getDeathCount(
+    unitType: "soldier" | "musketeer" | "knight" | "cannon"
+  ): Observable<number> {
+    let deathCount$: Observable<number>;
+
+    if (!this.isOpponent) {
+      deathCount$ = this.query.deathCountByType$(unitType);
+    } else {
+      deathCount$ = this.opponentUnitQuery.deathCountByType$(unitType);
+    }
+
+    return deathCount$;
   }
 }
