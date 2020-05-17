@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { Player, PlayerService, PlayerQuery } from "../+state";
-import { actionsPerTurn, GameService } from "src/app/games/+state";
+import { actionsPerTurn, GameService, GameQuery } from "src/app/games/+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { TileService } from "../../tile/+state";
@@ -20,6 +20,7 @@ export class PlayerBoardComponent implements OnInit {
   constructor(
     private query: PlayerQuery,
     private service: PlayerService,
+    private gameQuery: GameQuery,
     private gameService: GameService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
@@ -48,16 +49,24 @@ export class PlayerBoardComponent implements OnInit {
   }
 
   public skipTurn(): void {
-    this.tileService.removeReachable();
-    this.tileService.removeSelected();
-    this.tileService.removeInRangeTiles();
-    this.service.switchActivePlayer();
+    const game = this.gameQuery.getActive();
+
+    if (game.status === "battle") {
+      this.tileService.removeReachable();
+      this.tileService.removeSelected();
+      this.tileService.removeInRangeTiles();
+      this.service.switchActivePlayer();
+    }
   }
 
   public forfeit(): void {
-    const loser = this.query.getActive();
-    const winner = this.query.opponent;
-    this.gameService.switchStatus("finished");
-    this.service.setVictorious(winner, loser);
+    const game = this.gameQuery.getActive();
+
+    if (game.status === "battle") {
+      const loser = this.query.getActive();
+      const winner = this.query.opponent;
+      this.gameService.switchStatus("finished");
+      this.service.setVictorious(winner, loser);
+    }
   }
 }

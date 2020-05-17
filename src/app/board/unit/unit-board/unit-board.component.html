@@ -37,7 +37,7 @@
           <!--------------------- Stats --------------------->
           <div
             fxLayout="column"
-            *ngIf="mouseOvers[i]"
+            *ngIf="mouseOvers[i] && !isOpponent"
             fxLayoutAlign="center center"
             fxFill
           >
@@ -108,7 +108,7 @@
           <div
             fxLayout="column"
             *ngIf="
-              !mouseOvers[i] &&
+              (!mouseOvers[i] || isOpponent) &&
               ((gameStatus$ | async) === 'battle' ||
                 (gameStatus$ | async) === 'finished')
             "
