@@ -122,19 +122,19 @@
           </div>
         </div>
       </div>
-      <div
-        fxFlex="20"
-        fxFlexFill
-        fxLayout="row"
-        fxLayoutAlign="start start"
-        *ngIf="(gameStatus$ | async) === 'unit creation'"
-      >
-        <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
-          <mat-divider fxFlex="50"></mat-divider>
-          <h3 fxFlexOffset="20" fxFlex="30">
-            {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
-          </h3>
-        </div>
+    </div>
+    <div
+      fxFlex="20"
+      fxFlexFill
+      fxLayout="row"
+      fxLayoutAlign="start start"
+      *ngIf="(gameStatus$ | async) === 'unit creation'"
+    >
+      <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+        <mat-divider fxFlex="50"></mat-divider>
+        <h3 fxFlexOffset="20" fxFlex="30">
+          {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
+        </h3>
       </div>
     </div>
   </div>
