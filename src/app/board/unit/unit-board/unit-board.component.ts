@@ -76,13 +76,13 @@ export class UnitBoardComponent implements OnInit {
     this.gameStatus$ = this.gameQuery.gameStatus$;
   }
 
-  selectUnitType(unitType): Observable<Unit[]> {
+  selectUnitType(unitType: "soldier" | "musketeer" | "knight" | "cannon"): Observable<Unit[]> {
     return this.query.selectAll({
       filterBy: (unit) => unit.type === unitType,
     });
   }
 
-  addUnit(unitType) {
+  addUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon") {
     const totalUnitQuantity: number = this.query.getCount();
     if (totalUnitQuantity < maxTotalUnitValue) {
       const tileId = this.query.getCount((unit) => unit.type === unitType);
@@ -91,7 +91,7 @@ export class UnitBoardComponent implements OnInit {
   }
 
   // Remove the last unit created from the selected type
-  removeUnit(unitType) {
+  removeUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon") {
     const units: Unit[] = this.query.getAll({
       filterBy: (unit) => unit.type === unitType,
     });
@@ -100,7 +100,7 @@ export class UnitBoardComponent implements OnInit {
     }
   }
 
-  createUnit(unitType): Unit {
+  createUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon"): Unit {
     return createUnit(unitType);
   }
 }

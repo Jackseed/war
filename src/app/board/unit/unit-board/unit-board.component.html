@@ -9,7 +9,12 @@
     >
       <div fxFlexLayout="row" class="unit-container">
         <!--------------------- Units --------------------->
-        <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center" fxFlexAlign="center">
+        <div
+          fxFlex="50"
+          fxLayout="column"
+          fxLayoutAlign="end center"
+          fxFlexAlign="center"
+        >
           <div fxFlex="100" class="img-container">
             <img src="assets/img/black_{{ unitType }}.png" />
           </div>
@@ -28,8 +33,8 @@
             </button>
           </div>
         </div>
-        <!--------------------- Stats --------------------->
         <div fxFlex="50">
+          <!--------------------- Stats --------------------->
           <div
             fxLayout="column"
             *ngIf="mouseOvers[i]"
@@ -99,13 +104,30 @@
               </div>
             </div>
           </div>
+          <!--------------------- Death count --------------------->
+          <div
+            fxLayout="column"
+            *ngIf="!mouseOvers[i] && ((gameStatus$ | async) === 'battle' || (gameStatus$ | async) === 'finished')"
+            fxLayoutAlign="center center"
+            fxFill
+          >
+          coucou
+          </div>
         </div>
       </div>
-    </div>
-    <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="start start" *ngIf="(gameStatus$ | async) === 'unit creation'">
-      <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
-        <mat-divider fxFlex="50"></mat-divider>
-        <h3 fxFlexOffset="20" fxFlex="30">{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</h3>
+      <div
+        fxFlex="20"
+        fxFlexFill
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        *ngIf="(gameStatus$ | async) === 'unit creation'"
+      >
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+          <mat-divider fxFlex="50"></mat-divider>
+          <h3 fxFlexOffset="20" fxFlex="30">
+            {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
+          </h3>
+        </div>
       </div>
     </div>
   </div>
