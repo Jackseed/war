@@ -6,7 +6,6 @@ import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { TileService } from "../../tile/+state";
 
-
 @Component({
   selector: "app-player-board",
   templateUrl: "./player-board.component.html",
@@ -24,7 +23,7 @@ export class PlayerBoardComponent implements OnInit {
     private gameService: GameService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private tileService: TileService,
+    private tileService: TileService
   ) {
     this.matIconRegistry.addSvgIcon(
       "flag",
@@ -61,5 +60,4 @@ export class PlayerBoardComponent implements OnInit {
     this.gameService.switchStatus("finished");
     this.service.setVictorious(winner, loser);
   }
-
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import {
   UnitQuery,
   Unit,
@@ -10,6 +10,7 @@ import { Observable } from "rxjs";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { GameQuery } from "src/app/games/+state";
+import { Player } from "../../player/+state";
 
 @Component({
   selector: "app-unit-board",
@@ -17,6 +18,8 @@ import { GameQuery } from "src/app/games/+state";
   styleUrls: ["./unit-board.component.scss"],
 })
 export class UnitBoardComponent implements OnInit {
+  @Input() player$: Observable<Player>;
+  @Input() isOpponent: boolean;
   public unitTypes = ["soldier", "musketeer", "knight", "cannon"];
   public unitsValue$: Observable<number>;
   public maxTotalUnitValue = maxTotalUnitValue;
@@ -76,7 +79,9 @@ export class UnitBoardComponent implements OnInit {
     this.gameStatus$ = this.gameQuery.gameStatus$;
   }
 
-  selectUnitType(unitType: "soldier" | "musketeer" | "knight" | "cannon"): Observable<Unit[]> {
+  selectUnitType(
+    unitType: "soldier" | "musketeer" | "knight" | "cannon"
+  ): Observable<Unit[]> {
     return this.query.selectAll({
       filterBy: (unit) => unit.type === unitType,
     });
