@@ -9,7 +9,7 @@ import {
 import { Observable } from "rxjs";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { GameQuery } from 'src/app/games/+state';
+import { GameQuery } from "src/app/games/+state";
 
 @Component({
   selector: "app-unit-board",
@@ -30,7 +30,7 @@ export class UnitBoardComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private query: UnitQuery,
     private service: UnitService,
-    private gameQuery: GameQuery,
+    private gameQuery: GameQuery
   ) {
     this.matIconRegistry.addSvgIcon(
       "hp",
@@ -103,5 +103,4 @@ export class UnitBoardComponent implements OnInit {
   createUnit(unitType): Unit {
     return createUnit(unitType);
   }
-
 }

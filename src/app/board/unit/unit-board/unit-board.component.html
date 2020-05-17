@@ -7,9 +7,9 @@
       (mouseout)="mouseOvers[i] = false"
       fxFill
     >
-      <div fxFlexLayout="row">
+      <div fxFlexLayout="row" class="unit-container">
         <!--------------------- Units --------------------->
-        <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center">
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign="end center" fxFlexAlign="center">
           <div fxFlex="100" class="img-container">
             <img src="assets/img/black_{{ unitType }}.png" />
           </div>
@@ -46,7 +46,7 @@
                 <p>{{ createUnit(unitType).hp }}</p>
               </div>
               <div fxFlex="15">
-                <mat-icon svgIcon="hp" id="hp" class="stats-icon"></mat-icon>
+                <mat-icon svgIcon="hp" class="stats-icon"></mat-icon>
               </div>
 
               <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
