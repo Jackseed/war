@@ -13,6 +13,9 @@ img {
   align-items: center;
   justify-content: center;
 }
+.unit-container {
+  min-height: 70px;
+}
 
 .mat-icon-button.small {
   width: 30px;
@@ -30,6 +33,35 @@ img {
 .mat-divider {
   margin-top: 20px;
   border-top-color: black;
-  height:20px;
+  height: 20px;
   width: 45px;
+}
+
+.stats-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  position: relative;
+  top: 4px;
+}
+
+.stats {
+  padding-right: 5px;
+}
+p {
+  font-size: 17px;
+}
+
+.death-count{
+  margin-bottom: 8px;
+}
+
+#cross {
+  font-size: 23px;
+  width: 23px;
+  height: 23px;
+  line-height: 23px;
+  position: relative;
+  top: 5px;
 }

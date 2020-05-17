@@ -6,7 +6,9 @@
     <mat-card-subtitle>
       <p>{{ playerName }}</p>
     </mat-card-subtitle>
-    <mat-card-subtitle *ngIf="(player$ | async).isActive">
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="(player$ | async).isActive; else waiting" class="center">
       <p [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
         <ng-template ngPluralCase="=1"
           >{{ actionsPerTurn - (player$ | async).actionCount }} action
@@ -17,15 +19,22 @@
           left</ng-template
         >
       </p>
-    </mat-card-subtitle>
-  </mat-card-header>
-
-  <mat-card-actions align="end">
-    <button mat-icon-button (click)="skipTurn()">
-      <mat-icon svgIcon="camp"></mat-icon>
-    </button>
-    <button mat-icon-button (click)="forfeit()">
-      <mat-icon svgIcon="flag"></mat-icon>
-    </button>
-  </mat-card-actions>
+    </div>
+    <ng-template #waiting>
+      <p class="center">Waiting</p>
+    </ng-template>
+    <app-unit-board
+      [player$]="player$"
+      [isOpponent]="isOpponent"
+    ></app-unit-board>
+  </mat-card-content>
 </mat-card>
+
+<div *ngIf="!isOpponent">
+  <button mat-icon-button (click)="skipTurn()">
+    <mat-icon svgIcon="camp"></mat-icon>
+  </button>
+  <button mat-icon-button (click)="forfeit()">
+    <mat-icon svgIcon="flag"></mat-icon>
+  </button>
+</div>

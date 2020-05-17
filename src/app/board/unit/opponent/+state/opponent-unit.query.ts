@@ -88,4 +88,12 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
 
     return tiredUnits;
   }
+
+  public deathCountByType$(
+    unitType: "soldier" | "musketeer" | "knight" | "cannon"
+  ): Observable<number> {
+    return this.selectCount(
+      (unit) => unit.type === unitType && unit.tileId === null
+    );
+  }
 }

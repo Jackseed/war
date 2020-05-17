@@ -1,15 +1,19 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 .title {
   text-transform: uppercase;
 }
 .mat-card {
-  min-height: 100px;
+  min-height: 380px;
   max-width: 150px;
   width: auto;
 }
-.buttons{
+.buttons {
   align-content: flex-end;
 }
-.isActive{
+.isActive {
   @include mat-elevation(20, #e91e1ebd);
+}
+
+.center {
+  text-align: center;
 }

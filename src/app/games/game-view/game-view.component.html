@@ -13,7 +13,7 @@
   </div>
 
   <div [ngSwitch]="true" fxFlex="70" fxFill>
-    <!-- Waiting Room -->
+    <!--------------------- Waiting room --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
       <div fxLayout="row" fxLayoutAlign="center center">
         <iframe
@@ -27,16 +27,16 @@
       </div>
     </ng-container>
 
-    <!-- Unit Creation -->
+    <!--------------------- Unit Creation --------------------->
     <ng-container
       *ngSwitchCase="(gameStatus$ | async) === 'unit creation'"
       class="container"
     >
-      <div fxFlex="20">
+      <div fxFlexOffset="5" fxFlex="15">
         <app-unit-board></app-unit-board>
       </div>
 
-      <div fxFlex="80">
+      <div fxFlex="70">
         <app-unit-creation></app-unit-creation>
       </div>
     </ng-container>
@@ -47,7 +47,7 @@
   </div>
 </div>
 
-<!-- Board -->
+<!--------------------- Board --------------------->
 <ng-template #board>
   <div class="container" fxLayout="column">
     <div fxFlex="25" fxFill>
