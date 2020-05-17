@@ -4,7 +4,12 @@
   </button>
 </div>
 
-<div fxLayout="row" fxFill fxLayoutAlign="space-evenly stretch" style="padding-top: 10%;">
+<div
+  fxLayout="row"
+  fxFill
+  fxLayoutAlign="space-evenly stretch"
+  style="padding-top: 10%;"
+>
   <div fxFlex="20">
     <app-profile></app-profile>
   </div>
@@ -12,8 +17,13 @@
     <div fxFlex *ngIf="(playerGames$ | async).length">
       <h2 style="text-align: left;">Your current games</h2>
       <div *ngFor="let playerGame of playerGames$ | async">
-        <button mat-flat-button color="warn" (click)='joinGame(playerGame)' class='game-list'>
-          <span>{{playerGame.name}} {{playerGame.playerIds.length}}/2</span>
+        <button
+          mat-flat-button
+          color="warn"
+          (click)="joinGame(playerGame)"
+          class="game-list"
+        >
+          <span>{{ playerGame.name }} {{ playerGame.playerIds.length }}/2</span>
         </button>
       </div>
     </div>
@@ -24,10 +34,40 @@
   <div>
     <div fxFlex *ngIf="(otherGames$ | async).length">
       <h2 style="text-align: left;">Join a game</h2>
-      <div *ngFor="let otherGame of otherGames$ | async">
-        <button mat-flat-button color="warn" (click)='joinGame(otherGame)' class='game-list'>
-          <span>{{otherGame.name}} {{otherGame.playerIds.length}}/2</span>
-        </button>
+
+      <div class="table-container">
+        <table
+          mat-table
+          [dataSource]="otherGames$ | async"
+          class="mat-elevation-z8"
+        >
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef><h4>Name</h4></th>
+            <td mat-cell *matCellDef="let element">
+              <p>{{ element.name }}</p>
+            </td>
+          </ng-container>
+
+          <!-- Players Column -->
+          <ng-container matColumnDef="players">
+            <th mat-header-cell *matHeaderCellDef><h4>#Players</h4></th>
+            <td mat-cell *matCellDef="let element">
+              <p>{{ element.playerIds.length }}/2</p>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="['name', 'players']; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['name', 'players']"
+            (click)="joinGame(row)"
+            class="row-hover"
+          ></tr>
+        </table>
       </div>
     </div>
   </div>
