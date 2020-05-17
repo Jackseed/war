@@ -5,6 +5,9 @@
 </div>
 
 <div fxLayout="row" fxFill fxLayoutAlign="space-evenly stretch" style="padding-top: 10%;">
+  <div fxFlex="20">
+    <app-profile></app-profile>
+  </div>
   <div fxLayout="column">
     <div fxFlex *ngIf="(playerGames$ | async).length">
       <h2 style="text-align: left;">Your current games</h2>
@@ -19,7 +22,7 @@
     </div>
   </div>
   <div>
-    <div *ngIf="(otherGames$ | async).length">
+    <div fxFlex *ngIf="(otherGames$ | async).length">
       <h2 style="text-align: left;">Join a game</h2>
       <div *ngFor="let otherGame of otherGames$ | async">
         <button mat-flat-button color="warn" (click)='joinGame(otherGame)' class='game-list'>
