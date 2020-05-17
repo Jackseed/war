@@ -73,6 +73,12 @@ export class UnitBoardComponent implements OnInit {
         "../../../assets/img/range.svg"
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      "cross",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/cross.svg"
+      )
+    );
     this.mouseOvers = [false, false, false, false];
   }
 

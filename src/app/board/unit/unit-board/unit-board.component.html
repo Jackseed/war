@@ -107,11 +107,18 @@
           <!--------------------- Death count --------------------->
           <div
             fxLayout="column"
-            *ngIf="!mouseOvers[i] && ((gameStatus$ | async) === 'battle' || (gameStatus$ | async) === 'finished')"
-            fxLayoutAlign="center center"
+            *ngIf="
+              !mouseOvers[i] &&
+              ((gameStatus$ | async) === 'battle' ||
+                (gameStatus$ | async) === 'finished')
+            "
+            fxLayoutAlign="center start"
             fxFill
           >
-          {{getDeathCount(unitType) | async}}
+            <h4 class="death-count">
+              <mat-icon svgIcon="cross" id="cross"></mat-icon>
+              {{ getDeathCount(unitType) | async }}
+            </h4>
           </div>
         </div>
       </div>
@@ -125,7 +132,7 @@
         <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
           <mat-divider fxFlex="50"></mat-divider>
           <h3 fxFlexOffset="20" fxFlex="30">
-            <span>{{ unitsValue$ | async }}/{{ maxTotalUnitValue }}</span>
+            {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
           </h3>
         </div>
       </div>
