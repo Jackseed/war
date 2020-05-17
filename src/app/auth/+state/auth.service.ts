@@ -3,14 +3,16 @@ import { AuthStore, AuthState } from "./auth.store";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { CollectionConfig, CollectionService } from "akita-ng-fire";
-import { createUser } from "./auth.model";
-import { tap, first } from "rxjs/operators";
+import { createUser, User } from "./auth.model";
+import { first } from "rxjs/operators";
+import { AuthQuery } from './auth.query';
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "users" })
 export class AuthService extends CollectionService<AuthState> {
   constructor(
     store: AuthStore,
+    private query: AuthQuery,
     private afAuth: AngularFireAuth,
     private router: Router
   ) {
@@ -35,5 +37,10 @@ export class AuthService extends CollectionService<AuthState> {
   private setUser(id: string) {
     const user = createUser({ id });
     this.db.collection(this.currentPath).doc(id).set(user);
+  }
+
+  public updateName(name: string) {
+    const id = this.query.getActiveId();
+    this.db.collection(this.currentPath).doc(id).update({name});
   }
 }
