@@ -1,0 +1,29 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <div fxFlex="20" fxFlexFill>
+    <div fxLayout="row" fxLayoutAlign="end end">
+      <button mat-icon-button (click)="auth.signOut()">
+        <mat-icon>power_settings_new</mat-icon>
+      </button>
+    </div>
+    <h1 class="text-center">WAR</h1>
+  </div>
+  <div fxFlex="70" fxLayout="row" fxFlexFill>
+    <div fxFlexOffset="20" fxFlex="20">
+      <app-profile></app-profile>
+    </div>
+    <div fxFlexOffset="10" fxFlex="20">
+      <h2>Your games</h2>
+      <app-game-list [games$]="playerGames$"> </app-game-list>
+    </div>
+  </div>
+  <div fxFlex="10" fxFlexFill>
+    <button mat-raised-button color="warn" [routerLink]="'/create'">
+      <span>Create</span>
+      <mat-icon class="margin-left"></mat-icon>
+    </button>
+    <button mat-raised-button color="warn" [routerLink]="'/games'">
+      <span>Join</span>
+      <mat-icon class="margin-left"></mat-icon>
+    </button>
+  </div>
+</div>

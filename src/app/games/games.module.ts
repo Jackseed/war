@@ -15,9 +15,10 @@ import { UnitsModule } from "../board/unit/units.module";
 import { RouterModule } from "@angular/router";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
-  declarations: [GameViewComponent, GameListComponent, GameFormComponent],
+  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent],
   imports: [
     CommonModule,
     MatButtonModule,

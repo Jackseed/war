@@ -1,37 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { GameService, Game, GameQuery } from '../+state';
-import { AuthService } from 'src/app/auth/+state';
+import { Component, OnInit, Input } from "@angular/core";
+import { Observable } from "rxjs";
+import { GameService, Game } from "../+state";
 
 @Component({
-  selector: 'app-game-list',
-  templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.scss'],
+  selector: "app-game-list",
+  templateUrl: "./game-list.component.html",
+  styleUrls: ["./game-list.component.scss"],
 })
-export class GameListComponent implements OnInit, OnDestroy {
-  private sub: Subscription;
-  public games$: Observable<Game[]>;
-  public playerGames$: Observable<Game[]>;
-  public otherGames$: Observable<Game[]>;
+export class GameListComponent implements OnInit {
+  @Input() games$: Observable<Game[]>;
 
-  constructor(
-    public auth: AuthService,
-    private service: GameService,
-    private query: GameQuery,
-  ) { }
+  constructor(private service: GameService) {}
 
-  ngOnInit() {
-    this.sub = this.service.syncCollection().subscribe();
-    this.games$ = this.query.selectAll();
-    this.playerGames$ = this.query.playerGames;
-    this.otherGames$ = this.query.otherGames;
-  }
+  ngOnInit() {}
 
   joinGame(game: Game) {
     this.service.joinGame(game);
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 }

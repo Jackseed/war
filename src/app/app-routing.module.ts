@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { GameViewComponent } from "./games/game-view/game-view.component";
-import { GameListComponent } from "./games/game-list/game-list.component";
 import { GameGuard } from "./games/guard/game.guard";
 import { ActiveGameGuard } from "./games/guard/active-game.guard";
 import { PlayerGuard } from "./board/player/guard/player.guard";
@@ -13,6 +12,7 @@ import {
   redirectUnauthorizedTo,
 } from "@angular/fire/auth-guard";
 import { MessageGuard } from "./board/message/guard/message.guard";
+import { HomepageComponent } from "./games/homepage/homepage.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["welcome"]);
 
@@ -31,7 +31,7 @@ export const routes: Routes = [
         path: "",
         canActivate: [GameGuard, ActiveAuthGuard],
         canDeactivate: [GameGuard, ActiveAuthGuard],
-        component: GameListComponent,
+        component: HomepageComponent,
       },
     ],
   },
