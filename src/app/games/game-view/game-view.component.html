@@ -15,8 +15,9 @@
   <div [ngSwitch]="true" fxFlex="70" fxFill>
     <!--------------------- Waiting room --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
-      <div fxLayout="row" fxLayoutAlign="center center">
+      <div fxLayout="column" fxFlexFill fxLayoutAlign="start center">
         <iframe
+          fxFlexOffset="5"
           fxFlex="50"
           src="https://www.dinogame.net/game/index.html"
           frameborder="0"
