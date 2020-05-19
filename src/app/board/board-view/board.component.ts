@@ -38,7 +38,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public visibleOpponentUnitTileIds$: Observable<number[]>;
   public visibleTileIds$: Observable<number[]>;
   public gameStatus$: Observable<
-  "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished"
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public whitePlayer$: Observable<Player>;
   public isWhiteOpponent: boolean;

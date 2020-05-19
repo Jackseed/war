@@ -14,7 +14,7 @@ import { TileService } from "../../tile/+state";
 })
 export class BottomBarComponent implements OnInit {
   public gameStatus$: Observable<
-  "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished"
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
 

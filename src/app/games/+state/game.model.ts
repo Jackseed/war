@@ -1,7 +1,7 @@
 export interface Game {
   id?: string;
   name?: string;
-  status?: "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished";
+  status?: "waiting" | "unit creation" | "placement" | "battle" | "finished";
   playerIds?: string[];
   playersReady?: string[];
   turnCount: number;
@@ -20,7 +20,6 @@ export const boardCols = 11;
 export const boardMaxTiles = 1000;
 export const actionsPerTurn = 3;
 export const unitPlacementMargin = 2;
-
 
 export function Castle(color: "white" | "black"): Castle {
   const xCastle = 1;

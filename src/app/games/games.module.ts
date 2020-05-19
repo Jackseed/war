@@ -20,9 +20,10 @@ import { CreateComponent } from './pages/create/create.component';
 import { JoinComponent } from './pages/join/join.component';
 import { ChampionsComponent } from './pages/champions/champions.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { MenuTopBarComponent } from './pages/menu-top-bar/menu-top-bar.component';
 
 @NgModule({
-  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent, CreateComponent, JoinComponent, ChampionsComponent, LeaderboardComponent],
+  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent, CreateComponent, JoinComponent, ChampionsComponent, LeaderboardComponent, MenuTopBarComponent],
   imports: [
     CommonModule,
     MatButtonModule,

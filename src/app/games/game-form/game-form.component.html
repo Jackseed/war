@@ -3,16 +3,23 @@
   <div>
     <mat-form-field appearance="legacy" color="warn">
       <mat-label id="text">Game name</mat-label>
-      <input matInput id="text" type="text" name="name" required [(ngModel)]="game.name">
+      <input
+        matInput
+        id="text"
+        type="text"
+        name="name"
+        required
+        [(ngModel)]="game.name"
+      />
     </mat-form-field>
     <button
-    type="submit"
-    [disabled]="!gameForm.form.valid"
-    mat-button
-    color="warn"
-    (click)="this.createNewGame(); gameForm.reset()">
-      <mat-icon>create</mat-icon>
-      <span>Create</span>
+      type="submit"
+      [disabled]="!gameForm.form.valid"
+      mat-button
+      color="warn"
+      (click)="this.createNewGame(); gameForm.reset()"
+    >
+      <mat-icon>check_circle</mat-icon>
     </button>
   </div>
 </form>

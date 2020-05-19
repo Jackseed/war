@@ -12,7 +12,7 @@ import { TileService } from "src/app/board/tile/+state";
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<
-  "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished"
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   private playersReadyCountSub$: Subscription;
   private playersCountSub$: Subscription;
