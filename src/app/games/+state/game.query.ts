@@ -37,8 +37,15 @@ export class GameQuery extends QueryEntity<GameState> {
     );
   }
   get gameStatus$(): Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+    | "not started"
+    | "waiting"
+    | "unit creation"
+    | "placement"
+    | "battle"
+    | "finished"
   > {
-    return this.selectActive().pipe(map((game) => game.status));
+    return this.selectActive().pipe(
+      map((game) => (game ? game.status : "not started"))
+    );
   }
 }

@@ -26,7 +26,7 @@ export class UnitBoardComponent implements OnInit {
   public maxTotalUnitValue = maxTotalUnitValue;
   public mouseOvers: boolean[];
   public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+  "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
 
   constructor(

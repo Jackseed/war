@@ -14,7 +14,7 @@ export class PlayerBoardComponent implements OnInit {
   public actionsPerTurn = actionsPerTurn;
   public playerName: string;
   public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+  "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
 
   constructor(private gameQuery: GameQuery) {}

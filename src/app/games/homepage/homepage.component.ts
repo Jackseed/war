@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription, Observable } from "rxjs";
-import { AuthService } from "src/app/auth/+state";
 import { GameService, GameQuery, Game } from "../+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -17,7 +16,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    public auth: AuthService,
     private gameQuery: GameQuery,
     private gameService: GameService
   ) {

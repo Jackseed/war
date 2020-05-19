@@ -13,6 +13,9 @@ import {
 } from "@angular/fire/auth-guard";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { HomepageComponent } from "./games/homepage/homepage.component";
+import { CreateComponent } from "./games/pages/create/create.component";
+import { ChampionsComponent } from "./games/pages/champions/champions.component";
+import { JoinComponent } from "./games/pages/join/join.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["welcome"]);
 
@@ -33,14 +36,21 @@ export const routes: Routes = [
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: HomepageComponent,
+    component: CreateComponent,
+  },
+  {
+    path: "champions",
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    component: ChampionsComponent,
   },
   {
     path: "games",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: HomepageComponent,
+    component: JoinComponent,
   },
   {
     path: "games/:id",
@@ -65,6 +75,11 @@ export const routes: Routes = [
   },
   {
     path: "",
+    redirectTo: "/games",
+    pathMatch: "full",
+  },
+  {
+    path: "**",
     redirectTo: "/games",
     pathMatch: "full",
   },

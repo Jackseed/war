@@ -1,4 +1,16 @@
-<div [ngSwitch]="true">
+<div [ngSwitch]="true" class="container">
+  <ng-container *ngSwitchDefault>
+    <div fxLayout="column" fxLayoutAlign="center" fxFill class="container">
+      <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end">
+        <button  mat-icon-button (click)="auth.signOut()">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" class="container">
+        <h1 class="war">WAR</h1>
+      </div>
+    </div>
+  </ng-container>
   <ng-container
     *ngSwitchCase="(gameStatus$ | async) === 'waiting'"
     class="center"

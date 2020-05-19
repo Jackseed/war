@@ -1,7 +1,7 @@
 export interface Game {
   id?: string;
   name?: string;
-  status?: "waiting" | "unit creation" | "placement" | "battle" | "finished";
+  status?: "not started" | "waiting" | "unit creation" | "placement" | "battle" | "finished";
   playerIds?: string[];
   playersReady?: string[];
   turnCount: number;

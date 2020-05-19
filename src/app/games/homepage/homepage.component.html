@@ -1,13 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <div fxFlex="20" fxLayout="column" fxFlexFill>
-    <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end">
-      <button class="margin" mat-icon-button (click)="auth.signOut()">
-        <mat-icon>power_settings_new</mat-icon>
-      </button>
-    </div>
-    <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end">
-      <h1 class="title">WAR</h1>
-    </div>
+  <div fxFlex="25" fxFlexFill>
+    <app-top-bar></app-top-bar>
   </div>
 
   <div fxFlex="50" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
@@ -22,8 +15,9 @@
       <h2>Your games</h2>
       <app-game-list [games$]="playerGames$"> </app-game-list>
     </div>-->
+
   </div>
-  <div fxFlex="30" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex="25" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
     <div fxFlex="20">
       <button mat-icon-button [routerLink]="'/champions'">
         <mat-icon class="crown" svgIcon="crown"></mat-icon>
