@@ -15,7 +15,6 @@
       <h2>Your games</h2>
       <app-game-list [games$]="playerGames$"> </app-game-list>
     </div>-->
-
   </div>
   <div fxFlex="25" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
     <div fxFlex="20">
@@ -29,7 +28,7 @@
         fxFlex="15"
         mat-raised-button
         color="warn"
-        [routerLink]="'/create'"
+        [routerLink]="'/games'"
       >
         <span>Join</span>
         <mat-icon svgIcon="shield" class="margin-left"></mat-icon>
@@ -39,7 +38,7 @@
         fxFlex="15"
         mat-raised-button
         color="warn"
-        [routerLink]="'/games'"
+        [routerLink]="'/create'"
       >
         <span>Create</span>
         <mat-icon svgIcon="castle" class="margin-left"></mat-icon>
