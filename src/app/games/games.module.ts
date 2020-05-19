@@ -16,9 +16,13 @@ import { RouterModule } from "@angular/router";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
 import { HomepageComponent } from './homepage/homepage.component';
+import { CreateComponent } from './pages/create/create.component';
+import { JoinComponent } from './pages/join/join.component';
+import { ChampionsComponent } from './pages/champions/champions.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 @NgModule({
-  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent],
+  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent, CreateComponent, JoinComponent, ChampionsComponent, LeaderboardComponent],
   imports: [
     CommonModule,
     MatButtonModule,

@@ -25,7 +25,7 @@ export class AuthService extends CollectionService<AuthState> {
     if (user) {
       this.setUser(user.uid);
     }
-    this.router.navigate(["/games"]);
+    this.router.navigate(["/home"]);
   }
 
   async signOut() {

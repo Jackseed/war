@@ -22,18 +22,25 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: "home",
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    component: HomepageComponent,
+  },
+  {
+    path: "create",
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    component: HomepageComponent,
+  },
+  {
     path: "games",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    children: [
-      {
-        path: "",
-        canActivate: [GameGuard, ActiveAuthGuard],
-        canDeactivate: [GameGuard, ActiveAuthGuard],
-        component: HomepageComponent,
-      },
-    ],
+    component: HomepageComponent,
   },
   {
     path: "games/:id",
