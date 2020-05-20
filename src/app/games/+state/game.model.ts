@@ -21,7 +21,6 @@ export const boardMaxTiles = 1000;
 export const actionsPerTurn = 3;
 export const unitPlacementMargin = 2;
 
-
 export function Castle(color: "white" | "black"): Castle {
   const xCastle = 1;
   const yCastle = Math.floor(boardCols / 2);

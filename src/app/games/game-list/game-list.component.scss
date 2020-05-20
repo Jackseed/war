@@ -3,15 +3,17 @@
 }
 
 .table-container {
-  width: 400px;
-  height: 400px;
+  height: 20vw;
+  min-height: 200px;
+  width: 100%;
   overflow: auto;
+  margin-top: 5px;
 }
 
 table {
   width: 100%;
 }
 .row-hover:hover {
-  background-color: rgba(0, 0, 0, .05);
+  background-color: rgba(0, 0, 0, 0.05);
   cursor: pointer;
 }

@@ -1,15 +1,12 @@
-import { Injectable } from '@angular/core';
-import { GameService, GameState } from '../+state';
-import { CollectionGuard, CollectionGuardConfig } from 'akita-ng-fire';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { GameService, GameState } from "../+state";
+import { CollectionGuard, CollectionGuardConfig } from "akita-ng-fire";
+import { ActivatedRouteSnapshot } from "@angular/router";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: "root" })
 @CollectionGuardConfig({ awaitSync: true })
 export class ActiveGameGuard extends CollectionGuard<GameState> {
-
-  constructor(
-    service: GameService,
-  ) {
+  constructor(service: GameService) {
     super(service);
   }
 
