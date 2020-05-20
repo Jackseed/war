@@ -15,15 +15,26 @@ import { UnitsModule } from "../board/unit/units.module";
 import { RouterModule } from "@angular/router";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
-import { HomepageComponent } from './homepage/homepage.component';
-import { CreateComponent } from './pages/create/create.component';
-import { JoinComponent } from './pages/join/join.component';
-import { ChampionsComponent } from './pages/champions/champions.component';
-import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { MenuTopBarComponent } from './pages/menu-top-bar/menu-top-bar.component';
+import { HomepageComponent } from "./homepage/homepage.component";
+import { CreateComponent } from "./pages/create/create.component";
+import { JoinComponent } from "./pages/join/join.component";
+import { ChampionsComponent } from "./pages/champions/champions.component";
+import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
+import { MenuTopBarComponent } from "./pages/menu-top-bar/menu-top-bar.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
-  declarations: [GameViewComponent, GameListComponent, GameFormComponent, HomepageComponent, CreateComponent, JoinComponent, ChampionsComponent, LeaderboardComponent, MenuTopBarComponent],
+  declarations: [
+    GameViewComponent,
+    GameListComponent,
+    GameFormComponent,
+    HomepageComponent,
+    CreateComponent,
+    JoinComponent,
+    ChampionsComponent,
+    LeaderboardComponent,
+    MenuTopBarComponent,
+  ],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -38,6 +49,7 @@ import { MenuTopBarComponent } from './pages/menu-top-bar/menu-top-bar.component
     RouterModule,
     MatTableModule,
     MatSortModule,
+    MatTooltipModule,
   ],
 })
 export class GamesModule {}

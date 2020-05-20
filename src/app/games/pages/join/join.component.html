@@ -2,20 +2,27 @@
   <div fxFlex="25" fxFlexFill>
     <app-menu-top-bar></app-menu-top-bar>
   </div>
-  <div fxFlexOffset="5" fxFlex="55" fxFlexFill fxLayout="row" fxLayoutAlign="center start">
+  <div
+    fxFlexOffset="5"
+    fxFlex="55"
+    fxFlexFill
+    fxLayout="row"
+    fxLayoutAlign="center start"
+  >
     <div *ngIf="(otherGames$ | async).length === 0; else games">
       <h2>No games for now</h2>
     </div>
     <ng-template #games>
-      <div fxFlex="50">
+      <div fxFlex="40">
         <h2>Join a game</h2>
         <app-game-list [games$]="otherGames$"></app-game-list>
       </div>
     </ng-template>
   </div>
   <div fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
-    <button mat-icon-button [routerLink]="'/home'">
+    <button mat-icon-button [routerLink]="'/home'" matTooltip="Back">
       <mat-icon>arrow_back</mat-icon>
     </button>
+
   </div>
 </div>

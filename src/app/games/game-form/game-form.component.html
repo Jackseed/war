@@ -17,9 +17,10 @@
       [disabled]="!gameForm.form.valid"
       mat-button
       color="warn"
+      matTooltip="Create"
       (click)="this.createNewGame(); gameForm.reset()"
     >
-      <mat-icon>check_circle</mat-icon>
+      <mat-icon>arrow_forward</mat-icon>
     </button>
   </div>
 </form>
