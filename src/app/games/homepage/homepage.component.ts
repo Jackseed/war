@@ -17,7 +17,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private gameQuery: GameQuery,
-    private gameService: GameService
+    private gameService: GameService,
   ) {
     this.matIconRegistry.addSvgIcon(
       "castle",
