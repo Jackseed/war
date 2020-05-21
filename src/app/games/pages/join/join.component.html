@@ -13,7 +13,7 @@
       <h2>No games for now</h2>
     </div>
     <ng-template #games>
-      <div fxFlex="40">
+      <div fxFlex="40" fxFlex.lt-lg="60">
         <h2>Join a game</h2>
         <app-game-list [games$]="otherGames$"></app-game-list>
       </div>
