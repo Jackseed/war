@@ -75,12 +75,12 @@ export const routes: Routes = [
   },
   {
     path: "",
-    redirectTo: "/games",
+    redirectTo: "/home",
     pathMatch: "full",
   },
   {
     path: "**",
-    redirectTo: "/games",
+    redirectTo: "/home",
     pathMatch: "full",
   },
 ];
