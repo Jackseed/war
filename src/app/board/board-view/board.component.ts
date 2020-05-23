@@ -229,7 +229,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           } else if (
             tile.isReachable &&
             !opponentUnitTileIds.includes(i) &&
-            selectedUnit.stamina > 0
+            selectedUnit.stamina > 0 &&
+            i !== this.castle.tileId
           ) {
             this.unitService.updatePosition(selectedUnit, i);
 

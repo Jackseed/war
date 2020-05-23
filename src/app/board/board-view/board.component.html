@@ -21,26 +21,19 @@
             [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
           >
             <!--------------------------CASTLE------------------------------------->
-            <div *ngIf="castleIds.includes(i); else unit" class="container">
-              <div
-                *ngIf="i === castle.tileId"
-                class="castle container"
-                style="--img: url('assets/img/{{ castle.color }}_castle.png');"
-              ></div>
+            <div
+              *ngIf="castleIds.includes(i); else unit"
+              class="container"
+              style="--img: url('assets/img/{{ castle.color }}_castle.png');"
+              (click)="play(i)"
+              [ngClass]="{
+                castle: i === castle.tileId,
+                invisible: (i === opponentCastle.tileId && !(visibleTileIds$ | async).includes(i)),
+                reachable: (i === opponentCastle.tileId && tile.isReachable),
+                opponentCastle: i === opponentCastle.tileId
+              }"
+            >
 
-              <!--------------------------OPPONENT CASTLE------------------------------------->
-              <div
-                *ngIf="i === opponentCastle.tileId"
-                (click)="play(i)"
-                class="castle container"
-                style="--img: url('assets/img/{{ opponentCastle.color }}_castle.png');"
-                [ngClass]="{
-                  fog: !(visibleTileIds$ | async).includes(i),
-                  reachable: tile.isReachable
-                }"
-              >
-              
-              </div>
             </div>
 
             <!--------------------------UNIT------------------------------------->
