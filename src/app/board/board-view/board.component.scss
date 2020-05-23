@@ -16,7 +16,7 @@ mat-grid-tile {
 }
 
 .unit {
-  z-index: 2;
+  z-index: 1;
   background-image: var(--img);
   background-position: center;
   background-size: contain;
@@ -61,8 +61,8 @@ mat-grid-tile {
 }
 
 .reachable {
-  background-color: rgb(45, 45, 255, 0.5);
   z-index: 2;
+  background-color: rgb(45, 45, 255, 0.5);
   cursor: pointer;
 }
 .reachable:hover {
@@ -70,15 +70,12 @@ mat-grid-tile {
 }
 
 .withinRange {
-  background-image: url("/assets/img/grass.jpg");
-  background-size: cover;
   z-index: 2;
-  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg)
-    saturate(600%) contrast(0.8);
+  background-color:  rgb(129, 51, 48, 0.7);
   cursor: url("/assets/img/sword.png") 25 15, pointer;
 }
 .withinRange:hover {
-  filter: hue-rotate(30deg);
+  background-color:  rgb(129, 51, 48, 0.9);
 }
 
 .finished {
