@@ -3,9 +3,33 @@
   width: 100%;
   height: 100%;
 }
+
 .player-container {
   margin: auto;
   width: 100%;
+}
+
+mat-grid-tile {
+  background-image: url("/assets/img/grass.jpg");
+  background-size: cover;
+  z-index: 0;
+}
+
+.unit {
+  z-index: 2;
+  background-image: var(--img);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.playerUnit {
+  cursor: pointer;
+}
+.playerUnit:hover {
+  filter: brightness(92%);
 }
 
 .unit-quantity {
@@ -20,12 +44,7 @@
 .black {
   right: 20%;
 }
-.playerUnit {
-  cursor: pointer;
-}
-.playerUnit:hover {
-  filter: brightness(92%);
-}
+
 .invisible {
   background-color: rgba(31, 30, 30, 0.5);
   z-index: 1;
@@ -50,10 +69,6 @@
   opacity: 0.5;
 }
 
-.finished {
-  filter: brightness(70%);
-}
-
 .withinRange {
   background-image: url("/assets/img/grass.jpg");
   background-size: cover;
@@ -66,35 +81,6 @@
   filter: hue-rotate(30deg);
 }
 
-mat-grid-tile {
-  background-image: url("/assets/img/grass.jpg");
-  background-size: cover;
-  z-index: 0;
-}
-
-.castle {
-  z-index: 2;
-  background-image: var(--img);
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px #222);
-}
-
-.opponentCastle {
-  @extend .castle;
-  -webkit-filter: invert(1);
-  filter: invert(1);
-}
-
-
-.unit {
-  z-index: 2;
-  background-image: var(--img);
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px #222);
+.finished {
+  filter: brightness(70%);
 }

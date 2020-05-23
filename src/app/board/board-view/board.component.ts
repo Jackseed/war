@@ -297,6 +297,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       url = `/assets/img/${this.getOpponentUnitByTileId(i).color}_${
         this.getOpponentUnitByTileId(i).type
       }.png`;
+    } else if (this.castle.tileId === i) {
+      url = `/assets/img/${this.castle.color}_castle.png`;
+    } else if (this.opponentCastle.tileId === i) {
+      url = `/assets/img/${this.opponentCastle.color}_castle.png`;
     } else {
       url = "";
     }
