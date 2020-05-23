@@ -47,10 +47,12 @@
   filter: brightness(92%);
 }
 .invisible {
-  background-image: url("/assets/img/grass.jpg");
+/*   background-image: url("/assets/img/grass.jpg");
   background-size: cover;
+  filter: grayscale(70%); */
+  background-color: rgba(65, 65, 65, 0.5);
   z-index: 1;
-  filter: grayscale(70%);
+
 }
 .fog {
   filter: opacity(50%);
@@ -70,11 +72,13 @@
   cursor: pointer;
 }
 .reachable:hover {
-  filter: hue-rotate(60deg);
+  opacity: 0.5;
 }
+
 .finished {
   filter: brightness(70%);
 }
+
 .withinRange {
   background-image: url("/assets/img/grass.jpg");
   background-size: cover;
