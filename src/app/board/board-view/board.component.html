@@ -8,15 +8,12 @@
       ></app-player-board>
     </div>
     <!--------------------------BOARD------------------------------------->
-    <mat-card
-    fxFlexOffset="2.5"
-    fxFlex="60"
-    class="container">
+    <mat-card fxFlexOffset="2.5" fxFlex="60" class="container">
       <mat-card-content class="container">
         <mat-grid-list
-        class="container"
+          class="container"
           cols="{{ boardSize }}"
-          gutterSize="0"
+          gutterSize="1px"
           rowHeight="fit"
         >
           <mat-grid-tile
@@ -27,11 +24,11 @@
             <div *ngIf="castleIds.includes(i); else unit" class="container">
               <div *ngIf="i === castle.tileId">
                 <div class="ground">
-                  <img
+                  <!--                   <img
                     fxFlexFill
                     src="assets/img/grass.jpg"
                     [ngClass]="{ withinRange: tile.withinRange }"
-                  />
+                  /> -->
                 </div>
                 <div class="unit">
                   <img
@@ -142,20 +139,16 @@
 
             <!--------------------------GROUND------------------------------------->
             <ng-template #ground>
-              <div (click)="play(i)" class="container">
-                <div class="ground">
-                  <img
-                    fxFlexFill
-                    src="assets/img/grass.jpg"
-                    [ngClass]="{
-                      invisible: !(visibleTileIds$ | async).includes(i),
-                      reachable: tile.isReachable,
-                      selected: tile.isSelected,
-                      withinRange: tile.withinRange
-                    }"
-                  />
-                </div>
-              </div>
+              <div
+                (click)="play(i)"
+                class="container"
+                [ngClass]="{
+                  invisible: !(visibleTileIds$ | async).includes(i),
+                  reachable: tile.isReachable,
+                  selected: tile.isSelected,
+                  withinRange: tile.withinRange
+                }"
+              ></div>
             </ng-template>
           </mat-grid-tile>
         </mat-grid-list>
