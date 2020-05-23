@@ -29,20 +29,17 @@
               ></div>
 
               <!--------------------------OPPONENT CASTLE------------------------------------->
-              <div *ngIf="i === opponentCastle.tileId" (click)="play(i)">
-                <div class="ground">
-                  <img fxFlexFill src="assets/img/grass.jpg" />
-                </div>
-                <div class="unit">
-                  <img
-                    class="img-unit"
-                    [ngClass]="{
-                      fog: !(visibleTileIds$ | async).includes(i),
-                      reachable: tile.isReachable
-                    }"
-                    src="assets/img/{{ opponentCastle.color }}_castle.png"
-                  />
-                </div>
+              <div
+                *ngIf="i === opponentCastle.tileId"
+                (click)="play(i)"
+                class="castle container"
+                style="--img: url('assets/img/{{ opponentCastle.color }}_castle.png');"
+                [ngClass]="{
+                  fog: !(visibleTileIds$ | async).includes(i),
+                  reachable: tile.isReachable
+                }"
+              >
+              
               </div>
             </div>
 

@@ -65,11 +65,8 @@
   }
 }
 .reachable {
-  background-image: url("/assets/img/grass.jpg");
-  background-size: cover;
-  z-index: 1;
-  filter: brightness(125%);
-  filter: hue-rotate(90deg);
+  background-color: rgb(45, 45, 255, 0.5);
+  z-index: 2;
   cursor: pointer;
 }
 .reachable:hover {
