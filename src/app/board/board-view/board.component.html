@@ -28,48 +28,38 @@
               (click)="play(i)"
               [ngClass]="{
                 castle: i === castle.tileId,
-                invisible: (i === opponentCastle.tileId && !(visibleTileIds$ | async).includes(i)),
-                reachable: (i === opponentCastle.tileId && tile.isReachable),
+                invisible:
+                  i === opponentCastle.tileId &&
+                  !(visibleTileIds$ | async).includes(i),
+                reachable: i === opponentCastle.tileId && tile.isReachable,
                 opponentCastle: i === opponentCastle.tileId
               }"
-            >
-
-            </div>
+            ></div>
 
             <!--------------------------UNIT------------------------------------->
             <ng-template #unit>
               <div
-                *ngIf="(unitTileIds$ | async).includes(i); else opponentUnit"
+                *ngIf="(unitTileIds$ | async).includes(i) ||  (visibleOpponentUnitTileIds$ | async).includes(i) ; else opponentUnit"
                 (click)="play(i)"
-                class="container unit-ground"
+                class="container"
+
+            style="--img: url({{getUnitImgUrl(i)}});"
+                [ngClass]="{
+                  reachable: tile.isReachable,
+                  selected: tile.isSelected,
+                  withinRange: tile.withinRange,
+                  unit: ((unitTileIds$ | async).includes(i) || (visibleOpponentUnitTileIds$ | async).includes(i)),
+                  playerUnit: (unitTileIds$ | async).includes(i)
+                }"
               >
-                <div class="ground">
-                  <img
-                    fxFlexFill
-                    src="assets/img/grass.jpg"
-                    [ngClass]="{
-                      reachable: tile.isReachable,
-                      selected: tile.isSelected,
-                      withinRange: tile.withinRange
-                    }"
-                  />
-                </div>
-                <div class="unit">
-                  <img
-                    class="img-unit"
-                    src="assets/img/{{ getUnitByTileId(i).color }}_{{
-                      getUnitByTileId(i).type
-                    }}.png"
-                  />
-                </div>
-                <span
+<!--                 <span
                   class="unit-quantity"
                   [ngClass]="{
                     white: getUnitByTileId(i).color === 'white',
                     black: getUnitByTileId(i).color === 'black'
                   }"
                   >{{ getUnitByTileId(i).quantity }}</span
-                >
+                > -->
               </div>
             </ng-template>
 
@@ -86,7 +76,7 @@
                   reachable: tile.isReachable,
                   withinRange: tile.withinRange
                 }"
-              >
+              ><!--
                 <div class="unit">
                   <img
                     class="img-unit"
@@ -102,7 +92,7 @@
                     black: getOpponentUnitByTileId(i).color === 'black'
                   }"
                   >{{ getOpponentUnitByTileId(i).quantity }}</span
-                >
+                > -->
               </div>
             </ng-template>
 

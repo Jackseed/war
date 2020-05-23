@@ -7,25 +7,7 @@
   margin: auto;
   width: 100%;
 }
-.img-unit {
-  height: 100%;
-  width: auto;
-  display: block;
-  position: relative;
-  left: 40%;
-}
-.ground {
-  z-index: 0;
-  position: absolute;
-}
-.unit {
-  z-index: 3;
-  position: absolute;
-  height: 100%;
-  width: auto;
-  -webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px #222);
-}
+
 .unit-quantity {
   position: absolute;
   z-index: 2;
@@ -38,10 +20,10 @@
 .black {
   right: 20%;
 }
-.unit-ground {
+.playerUnit {
   cursor: pointer;
 }
-.unit-ground:hover {
+.playerUnit:hover {
   filter: brightness(92%);
 }
 .invisible {
@@ -104,4 +86,15 @@ mat-grid-tile {
   @extend .castle;
   -webkit-filter: invert(1);
   filter: invert(1);
+}
+
+
+.unit {
+  z-index: 2;
+  background-image: var(--img);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
 }

@@ -16,6 +16,7 @@ import {
   OpponentUnitStore,
 } from "../unit/opponent/+state";
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-board",
@@ -56,7 +57,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
-    private opponentUnitQuery: OpponentUnitQuery
+    private opponentUnitQuery: OpponentUnitQuery,
+    public sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -280,6 +282,25 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.tileService.removeSelected();
       this.tileService.removeInRangeTiles();
     }
+  }
+
+  getUnitImgUrl(i: number): string {
+    let url: string;
+    const unitTileIds = this.unitQuery.unitTileIds;
+    const oppUnitTileIds = this.opponentUnitQuery.unitTileIds;
+
+    if (unitTileIds.includes(i)) {
+      url = `/assets/img/${this.getUnitByTileId(i).color}_${
+        this.getUnitByTileId(i).type
+      }.png`;
+    } else if (oppUnitTileIds.includes(i)) {
+      url = `/assets/img/${this.getOpponentUnitByTileId(i).color}_${
+        this.getOpponentUnitByTileId(i).type
+      }.png`;
+    } else {
+      url = "";
+    }
+    return url;
   }
 
   ngOnDestroy() {
