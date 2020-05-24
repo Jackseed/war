@@ -1,25 +1,28 @@
 <div class="container">
-  <div fxLayout="column" fxLayoutAlign="end center" fxFlexFill fxFill>
+  <div fxLayout="column" fxLayoutAlign="end center" class="container">
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
       (mouseover)="mouseOvers[i] = true"
       (mouseout)="mouseOvers[i] = false"
-      fxFill
+      class="container"
     >
-      <div fxFlexLayout="row" class="unit-container">
+      <div fxFlexLayout="row" class="container">
         <!--------------------- Units --------------------->
         <div
           fxFlex="50"
           fxLayout="column"
           fxLayoutAlign="end center"
           fxFlexAlign="center"
+          class="container"
         >
-          <div fxFlex="100" class="img-container">
-            <img src="assets/img/black_{{ unitType }}.png" />
-          </div>
+          <div
+            fxFlex="80"
+            class="container unit-img"
+            style="--img: url(assets/img/black_{{ unitType }}.png);"
+          ></div>
 
-          <div fxFlex="100" *ngIf="(gameStatus$ | async) === 'unit creation'">
+          <div fxFlex="20" *ngIf="(gameStatus$ | async) === 'unit creation'">
             <button
               mat-icon-button
               class="small"
