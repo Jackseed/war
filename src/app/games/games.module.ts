@@ -22,6 +22,7 @@ import { ChampionsComponent } from "./pages/champions/champions.component";
 import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { MenuTopBarComponent } from "./pages/menu-top-bar/menu-top-bar.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { ClipboardModule } from "@angular/cdk/clipboard";
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatTableModule,
     MatSortModule,
     MatTooltipModule,
+    ClipboardModule,
   ],
 })
 export class GamesModule {}

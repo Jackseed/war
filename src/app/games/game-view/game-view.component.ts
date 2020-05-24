@@ -4,6 +4,7 @@ import { tap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-game-view",
@@ -21,12 +22,12 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private gameQuery: GameQuery,
     private gameService: GameService,
     private playerQuery: PlayerQuery,
-    private tileService: TileService
+    private tileService: TileService,
+    public router: Router
   ) {}
 
   ngOnInit() {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
       this.gameStatus$,

@@ -13,6 +13,8 @@ import { MessageModule } from "./message/message.module";
 import { UnitsModule } from "./unit/units.module";
 import { PlayerModule } from "./player/player.module";
 import { MatCardModule } from "@angular/material/card";
+import { RouterModule } from "@angular/router";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -28,6 +30,8 @@ import { MatCardModule } from "@angular/material/card";
     UnitsModule,
     PlayerModule,
     MatCardModule,
+    RouterModule,
+    MatTooltipModule,
   ],
   exports: [BoardComponent, TopBarComponent, BottomBarComponent],
 })

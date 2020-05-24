@@ -17,7 +17,7 @@ export interface Unit {
 
 export const unitCols = 10;
 export const unitMaxTiles = 10;
-export const maxTotalUnitValue = 20;
+export const maxTotalUnitValue = 12;
 
 export function createUnit(
   unitType: "soldier" | "musketeer" | "knight" | "cannon",
