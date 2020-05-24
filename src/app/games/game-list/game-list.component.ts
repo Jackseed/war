@@ -15,6 +15,6 @@ export class GameListComponent implements OnInit {
   ngOnInit() {}
 
   joinGame(game: Game) {
-    this.service.joinGame(game);
+    this.service.joinGame(game.id);
   }
 }

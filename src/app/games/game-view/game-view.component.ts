@@ -4,7 +4,7 @@ import { tap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-game-view",
@@ -23,10 +23,12 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private playerQuery: PlayerQuery,
     private tileService: TileService,
-    public router: Router
+    public router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),

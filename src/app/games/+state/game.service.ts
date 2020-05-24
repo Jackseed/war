@@ -1,22 +1,20 @@
-import { Injectable } from '@angular/core';
-import { GameStore, GameState } from './game.store';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { CollectionService, CollectionConfig } from 'akita-ng-fire';
-import { GameQuery } from './game.query';
-import { Game, createGame } from './game.model';
-import { createPlayer } from 'src/app/board/player/+state/player.model';
+import { Injectable } from "@angular/core";
+import { GameStore, GameState } from "./game.store";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { Router } from "@angular/router";
+import { CollectionService, CollectionConfig } from "akita-ng-fire";
+import { GameQuery } from "./game.query";
+import { Game, createGame } from "./game.model";
+import { createPlayer } from "src/app/board/player/+state/player.model";
 
-@Injectable({ providedIn: 'root' })
-@CollectionConfig({ path: 'games' })
-
+@Injectable({ providedIn: "root" })
+@CollectionConfig({ path: "games" })
 export class GameService extends CollectionService<GameState> {
-
   constructor(
     store: GameStore,
     private query: GameQuery,
     private afAuth: AngularFireAuth,
-    private router: Router,
+    private router: Router
   ) {
     super(store);
   }
@@ -25,18 +23,26 @@ export class GameService extends CollectionService<GameState> {
     const id = this.db.createId();
     const user = this.afAuth.auth.currentUser;
     const playerIds = [user.uid];
-    const game = createGame({id, name, playerIds});
+    const game = createGame({ id, name, playerIds });
     // Create the game
     this.collection.doc(id).set(game);
-    this.addPlayer(id, user.uid, 'white', true);
+    this.addPlayer(id, user.uid, "white", true);
     return id;
   }
 
   /**
    * Add a player to the game
    */
-  addPlayer(gameId: string, id: string, color: 'white' | 'black', isActive: boolean) {
-    const playerCollection = this.db.collection('games').doc(gameId).collection('players');
+  addPlayer(
+    gameId: string,
+    id: string,
+    color: "white" | "black",
+    isActive: boolean
+  ) {
+    const playerCollection = this.db
+      .collection("games")
+      .doc(gameId)
+      .collection("players");
     const player = createPlayer({
       id,
       color,
@@ -49,10 +55,11 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Join a player to a game
    */
-  async joinGame(game: Game) {
+  async joinGame(gameId: string) {
     const user = this.afAuth.auth.currentUser;
+    const game = this.query.getEntity(gameId);
 
-      // check if the player is already included in the game
+    // check if the player is already included in the game
     if (game.playerIds.includes(user.uid)) {
       this.router.navigate([`/games/${game.id}`]);
 
@@ -61,14 +68,13 @@ export class GameService extends CollectionService<GameState> {
       const playerIds: string[] = game.playerIds.concat([user.uid]);
 
       // add the player to the game playerIds
-      this.db.collection('games').doc(game.id).update({playerIds});
+      this.db.collection("games").doc(game.id).update({ playerIds });
 
       // add the player to the player collection
-      this.addPlayer(game.id, user.uid, 'black', false);
+      this.addPlayer(game.id, user.uid, "black", false);
       this.router.navigate([`/games/${game.id}`]);
-
     } else {
-      console.log('game is full');
+      console.log("game is full");
     }
   }
 
@@ -77,10 +83,10 @@ export class GameService extends CollectionService<GameState> {
    */
   switchStatus(status: string) {
     const game = this.query.getActive();
-    const doc = this.db.collection('games').doc(game.id);
+    const doc = this.db.collection("games").doc(game.id);
     doc.update({
       status,
-      playersReady: []
+      playersReady: [],
     });
   }
 
@@ -90,9 +96,8 @@ export class GameService extends CollectionService<GameState> {
   markReady(playerId: string) {
     const game = this.query.getActive();
     const playersReady: string[] = game.playersReady.concat([playerId]);
-    const doc = this.db.collection('games').doc(game.id);
+    const doc = this.db.collection("games").doc(game.id);
 
-    doc.update({playersReady});
+    doc.update({ playersReady });
   }
-
 }
