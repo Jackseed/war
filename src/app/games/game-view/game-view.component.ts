@@ -22,6 +22,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private gameQuery: GameQuery,
     private gameService: GameService,
     private playerQuery: PlayerQuery,
+    
     private tileService: TileService,
     public router: Router,
     private route: ActivatedRoute

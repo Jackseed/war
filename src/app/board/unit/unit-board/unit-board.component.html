@@ -35,9 +35,9 @@
               </button>
             </div>
             <div
-              fxFlexFill
-              fxFlex="50"
-              class="container unit-img"
+
+              fxFlex="grow"
+              class="unit-img"
               style="--img: url(assets/img/black_{{ unitType }}.png);"
             ></div>
             <div fxFlex *ngIf="(gameStatus$ | async) === 'unit creation'">
@@ -48,7 +48,7 @@
           </div>
         </div>
         <!--------------------- Stats --------------------->
-        <div fxFlex="35">
+        <div fxFlexOffset="5" fxFlex="35">
           <div
             fxLayout="column"
             *ngIf="mouseOvers[i] && !isOpponent"

@@ -5,6 +5,8 @@
 }
 
 .unit-img {
+  height: 100%;
+  width: auto;
   background-image: var(--img);
   background-position: center;
   background-size: contain;
@@ -17,10 +19,10 @@
   line-height: 1.5vw;
 
   .mat-icon {
-    font-size: 1.2vw;
-    width: 1.2vw;
-    height: 1.2vw;
-    line-height: 1.2vw;
+    font-size: 1.5vw;
+    width: 1.5vw;
+    height: 1.5vw;
+    line-height: 1.5vw;
   }
 }
 .mat-divider {
