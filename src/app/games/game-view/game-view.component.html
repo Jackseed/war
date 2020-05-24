@@ -12,7 +12,7 @@
     <app-menu-top-bar></app-menu-top-bar>
   </div>
 
-  <div [ngSwitch]="true" fxFlexOffset="5" fxFlex="60" fxFlexFill>
+  <div [ngSwitch]="true" fxFlex="60" fxFlexFill>
     <!--------------------- Waiting room --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
       <div fxLayout="column" fxFlex fxFlexFill fxLayoutAlign="start center">
@@ -32,16 +32,20 @@
     </ng-container>
 
     <!--------------------- Unit Creation --------------------->
-    <ng-container
-      *ngSwitchCase="(gameStatus$ | async) === 'unit creation'"
-      class="container"
-    >
-      <div fxFlexOffset="5" fxFlex="15">
-        <app-unit-board></app-unit-board>
-      </div>
+    <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
+      <div fxLayout="column" fxFlexFill>
+        <div fxFlexOffset="2.5" fxFlex="10" fxFlexAlign="center">
+          <h2>Compose your army</h2>
+        </div>
+        <div fxFlexOffset="2.5" fxFlex="80" fxFlex.lt-md="90">
+          <div fxFlexOffset="20" fxFlex="15">
+            <app-unit-board></app-unit-board>
+          </div>
 
-      <div fxFlex="70">
-        <app-unit-creation></app-unit-creation>
+          <div fxFlex="55">
+            <app-unit-creation></app-unit-creation>
+          </div>
+        </div>
       </div>
     </ng-container>
   </div>
