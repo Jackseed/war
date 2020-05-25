@@ -21,7 +21,9 @@
         <table mat-table [dataSource]="dataSource" matSort>
           <!-- Rank Column -->
           <ng-container matColumnDef="rank">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header><h4>Rank</h4></th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <h4>Rank</h4>
+            </th>
             <td
               mat-cell
               *matCellDef="let element; let i = index"
@@ -33,7 +35,9 @@
 
           <!-- Name Column -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header><h4>Name</h4></th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <h4>Name</h4>
+            </th>
             <td
               mat-cell
               *matCellDef="let element"
@@ -44,8 +48,27 @@
           </ng-container>
 
           <!-- #Wins Column -->
-          <ng-container matColumnDef="wins">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header><h4>#Wins</h4></th>
+          <ng-container matColumnDef="gameWon">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <h4>#Wins</h4>
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="{ you: element.id === user.id }"
+            >
+              <p>
+                {{ element.gameWon }}
+              </p>
+              <p></p>
+            </td>
+          </ng-container>
+
+          <!-- Winrate Column -->
+          <ng-container matColumnDef="winrate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <h4>Win rate</h4>
+            </th>
             <td
               mat-cell
               *matCellDef="let element"
@@ -54,9 +77,9 @@
               <p [ngPlural]="element.gamePlayed.length">
                 <ng-template ngPluralCase="=0">0</ng-template>
                 <ng-template ngPluralCase="other">
-                  {{ element.gameWon }} ({{
+                  {{
                     element.gameWon / element.gamePlayed.length | percent
-                  }})</ng-template
+                  }}</ng-template
                 >
               </p>
               <p></p>
@@ -64,11 +87,11 @@
           </ng-container>
           <tr
             mat-header-row
-            *matHeaderRowDef="['rank', 'name', 'wins']; sticky: true"
+            *matHeaderRowDef="['rank', 'name', 'gameWon', 'winrate']; sticky: true"
           ></tr>
           <tr
             mat-row
-            *matRowDef="let row; columns: ['rank', 'name', 'wins']"
+            *matRowDef="let row; columns: ['rank', 'name', 'gameWon', 'winrate']"
           ></tr>
         </table>
       </div>

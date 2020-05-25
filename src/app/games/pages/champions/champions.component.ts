@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { User, AuthQuery } from "src/app/auth/+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -11,11 +10,9 @@ import { MatTableDataSource } from "@angular/material/table";
   templateUrl: "./champions.component.html",
   styleUrls: ["./champions.component.scss"],
 })
-export class ChampionsComponent implements OnInit, OnDestroy {
-  users$: Observable<User[]>;
+export class ChampionsComponent implements OnInit {
   user: User;
-  dataSource = new MatTableDataSource<User>();
-  dataSubscription: Subscription;
+  dataSource: MatTableDataSource<User>;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -24,6 +21,9 @@ export class ChampionsComponent implements OnInit, OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
+    const users = this.authQuery.getAll();
+    this.dataSource = new MatTableDataSource(users);
+
     this.matIconRegistry.addSvgIcon(
       "crown",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -33,15 +33,7 @@ export class ChampionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.users$ = this.authQuery.selectAll();
     this.user = this.authQuery.getActive();
-    this.dataSubscription = this.users$.subscribe((users) => {
-      this.dataSource.data = users;
-      this.dataSource.sort = this.sort;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.dataSubscription.unsubscribe();
+    this.dataSource.sort = this.sort;
   }
 }
