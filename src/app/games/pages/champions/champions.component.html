@@ -29,7 +29,7 @@
               *matCellDef="let element; let i = index"
               [ngClass]="{ you: element.id === user.id }"
             >
-              <p>{{ i + 1 }}</p>
+              <p>{{element.rank}}</p>
             </td>
           </ng-container>
 
@@ -66,7 +66,7 @@
 
           <!-- Winrate Column -->
           <ng-container matColumnDef="winrate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th mat-header-cell *matHeaderCellDef>
               <h4>Win rate</h4>
             </th>
             <td
