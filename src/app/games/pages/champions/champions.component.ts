@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { User, AuthQuery } from "src/app/auth/+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: "app-champions",
@@ -10,14 +11,26 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ["./champions.component.scss"],
 })
 export class ChampionsComponent implements OnInit {
-  users$: Observable<User[]>;
   user: User;
+  dataSource: MatTableDataSource<User>;
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private authQuery: AuthQuery,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
+    const users = this.authQuery.getAll();
+    users.sort((a, b) => b.gameWon - a.gameWon);
+    for (let i = 0; i < users.length; i++) {
+      users[i] = {
+        ...users[i],
+        rank: i + 1,
+      };
+    }
+    this.dataSource = new MatTableDataSource(users);
+
     this.matIconRegistry.addSvgIcon(
       "crown",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -27,7 +40,7 @@ export class ChampionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.users$ = this.authQuery.selectAll();
     this.user = this.authQuery.getActive();
+    this.dataSource.sort = this.sort;
   }
 }
