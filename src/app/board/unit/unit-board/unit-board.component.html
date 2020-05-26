@@ -1,5 +1,5 @@
 <div class="container">
-  <div fxLayout="column" fxLayoutAlign="end center" class="container">
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" class="container">
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
@@ -35,7 +35,6 @@
               </button>
             </div>
             <div
-
               fxFlex="grow"
               class="unit-img"
               style="--img: url(assets/img/black_{{ unitType }}.png);"

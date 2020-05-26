@@ -4,9 +4,10 @@
   height: 100%;
 }
 
-.player-container {
-  margin: auto;
-  width: 100%;
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 mat-grid-tile {

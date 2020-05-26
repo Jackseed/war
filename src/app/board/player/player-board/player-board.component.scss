@@ -2,11 +2,23 @@
 .title {
   text-transform: uppercase;
 }
-.mat-card {
-  min-height: 380px;
-  max-width: 150px;
-  width: auto;
+
+mat-card{
+  height: 80%;
+  
 }
+
+
+mat-card-content{
+  height: 70%;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .buttons {
   align-content: flex-end;
 }
@@ -16,4 +28,6 @@
 
 .center {
   text-align: center;
+  margin-bottom: 10px;
+
 }
