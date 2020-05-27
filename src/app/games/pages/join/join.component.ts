@@ -15,7 +15,8 @@ export class JoinComponent implements OnInit {
 
   ngOnInit(): void {
     this.otherGames$ = this.gameQuery.otherGames.pipe(
-      map((games) => games.filter((game) => game.playerIds.length < 1))
+      map((games) => games.filter((game) => game.playerIds.length < 2)),
+      map((games) => games.sort((a, b) => a.name.localeCompare(b.name)))
     );
   }
 }

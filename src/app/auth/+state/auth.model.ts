@@ -12,6 +12,5 @@ export function createUser(params: Partial<User>) {
     name: "Vagabond",
     gamePlayed: [],
     gameWon: 0,
-    rank: params.rank,
   };
 }
