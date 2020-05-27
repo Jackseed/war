@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { Game, GameQuery } from "../../+state";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-join",
@@ -10,11 +11,12 @@ import { Game, GameQuery } from "../../+state";
 export class JoinComponent implements OnInit {
   public otherGames$: Observable<Game[]>;
 
-  constructor(
-    private gameQuery: GameQuery,
-  ) {}
+  constructor(private gameQuery: GameQuery) {}
 
   ngOnInit(): void {
-    this.otherGames$ = this.gameQuery.otherGames;
+    this.otherGames$ = this.gameQuery.otherGames.pipe(
+      map((games) => games.filter((game) => game.playerIds.length < 2)),
+      map((games) => games.sort((a, b) => a.name.localeCompare(b.name)))
+    );
   }
 }
