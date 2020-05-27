@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap } from "rxjs/operators";
+import { map, tap, distinct, filter } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -181,6 +181,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
+        distinct((player) => player.isActive),
         tap((player) => {
           if (player.isActive) {
             this.playAudio();
