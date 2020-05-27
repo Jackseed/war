@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -29,6 +29,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   private castleVictorySub: Subscription;
   private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
+  private isActiveSub: Subscription;
   public boardSize = boardCols;
   public player: Player;
   public opponentPlayer: Player;
@@ -176,6 +177,17 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    this.isActiveSub = this.playerQuery
+      .selectActive()
+      .pipe(
+        tap((player) => {
+          if (player.isActive) {
+            this.playAudio();
+          }
+        })
+      )
+      .subscribe();
   }
 
   play(i: number) {
@@ -313,6 +325,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.snackBar.open(message, "close", {
       duration: 2000,
     });
+  }
+
+  private playAudio() {
+    const audio = new Audio();
+    audio.src = "../../../assets/audio/change_turn.wav";
+    audio.load();
+    audio.play();
   }
 
   ngOnDestroy() {
