@@ -15,6 +15,7 @@ import { PlayerModule } from "./player/player.module";
 import { MatCardModule } from "@angular/material/card";
 import { RouterModule } from "@angular/router";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -32,6 +33,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatCardModule,
     RouterModule,
     MatTooltipModule,
+    MatSnackBarModule,
   ],
   exports: [BoardComponent, TopBarComponent, BottomBarComponent],
 })
