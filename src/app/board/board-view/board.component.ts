@@ -17,6 +17,7 @@ import {
 } from "../unit/opponent/+state";
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-board",
@@ -58,6 +59,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
+    private snackBar: MatSnackBar,
     public sanitizer: DomSanitizer
   ) {}
 
@@ -246,17 +248,17 @@ export class BoardComponent implements OnInit, OnDestroy {
               this.tileService.removeReachable();
               this.tileService.removeSelected();
               this.tileService.removeInRangeTiles();
-              console.log("rest first");
+              this.openSnackBar("This battalion needs to rest first.");
             } else {
               this.tileService.removeReachable();
               this.tileService.removeSelected();
               this.tileService.removeInRangeTiles();
-              console.log("you cannot reach this place");
+              this.openSnackBar("You cannot reach this place.");
             }
           }
         }
       } else {
-        console.log("not your turn");
+        this.openSnackBar("It's not your turn.");
       }
     }
 
@@ -305,6 +307,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       url = "";
     }
     return url;
+  }
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, "close", {
+      duration: 2000,
+    });
   }
 
   ngOnDestroy() {
