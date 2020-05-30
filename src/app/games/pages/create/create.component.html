@@ -1,18 +1,17 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <div fxFlex="25" fxFlexFill>
-    <app-menu-top-bar></app-menu-top-bar>
+  <div fxFlex="20" fxFlexFill>
+    <app-menu-top-bar [subtitle]="'Create a game'"></app-menu-top-bar>
   </div>
   <div
-    fxFlexOffset="5"
     fxFlex="60"
     fxFlexOffset.lt-lg="20"
     fxLayout="column"
-    fxLayoutAlign="start center"
+    fxLayoutAlign="center center"
   >
     <app-game-form></app-game-form>
   </div>
-  <div fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
-    <button mat-icon-button [routerLink]="'/home'"  matTooltip="Back">
+  <div fxFlex="20" fxLayout="row" fxLayoutAlign="center center">
+    <button mat-icon-button [routerLink]="'/home'" matTooltip="Back">
       <mat-icon>arrow_back</mat-icon>
     </button>
   </div>

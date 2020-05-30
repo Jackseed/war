@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { AuthService } from "src/app/auth/+state";
 
 @Component({
@@ -7,6 +7,8 @@ import { AuthService } from "src/app/auth/+state";
   styleUrls: ["./menu-top-bar.component.scss"],
 })
 export class MenuTopBarComponent implements OnInit {
+  @Input() subtitle: string;
+
   constructor(public auth: AuthService) {}
 
   ngOnInit(): void {}
