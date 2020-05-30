@@ -43,4 +43,10 @@ export class AuthService extends CollectionService<AuthState> {
     const id = this.query.getActiveId();
     this.db.collection(this.currentPath).doc(id).update({ name });
   }
+
+  public updateEmail(email: string) {
+    const id = this.query.getActiveId();
+    this.db.collection(this.currentPath).doc(id).update({ email });
+    console.log("saving ", email);
+  }
 }

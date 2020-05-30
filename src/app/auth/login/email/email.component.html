@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()">
+  <div fxLayout="row">
+    <h2 fxFlex="80" style="font-size: 3.5px;">
+      <mat-form-field appearance="legacy" color="warn">
+        <h2><input matInput type="text" [formControl]="email" /></h2>
+      </mat-form-field>
+    </h2>
+    <button
+      fxFlex="20"
+      type="submit"
+      mat-icon-button
+      matTooltip="Save"
+      (click)="updateEmail(email.value);"
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+</form>
+
+
+{{user.email}}
+

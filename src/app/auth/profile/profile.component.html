@@ -29,4 +29,8 @@
     <p>Game played: {{ (user$ | async).gamePlayed.length }}</p>
     <p>Game won: {{ (user$ | async).gameWon }}</p>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-button routerLink="/save-account">Save account</button>
+  </mat-card-actions>
 </mat-card>
+
