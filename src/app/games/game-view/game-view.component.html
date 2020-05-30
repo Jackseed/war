@@ -12,7 +12,7 @@
     <app-menu-top-bar fxFlexFill></app-menu-top-bar>
   </div>
 
-  <div [ngSwitch]="true" fxFlex="55" fxFlexFill>
+  <div [ngSwitch]="true" fxFlex="65" fxFlexFill>
     <!--------------------- Waiting room --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
       <div fxLayout="column" fxFlex fxFlexFill fxLayoutAlign="center center">
@@ -55,7 +55,7 @@
     </ng-container>
   </div>
 
-  <div fxFlex="25" fxFlexFill fxLayoutAlign="center center">
+  <div fxFlex="15" fxFlexFill fxLayoutAlign="center start">
     <app-bottom-bar></app-bottom-bar>
   </div>
 </div>

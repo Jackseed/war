@@ -1,4 +1,17 @@
 <div [ngSwitch]="true" class="container">
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
+    <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
+      <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="auth.signOut()">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
+        <h1 class="war"><a href="/home">WAR</a></h1>
+      </div>
+    </div>
+  </ng-container>
+
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
     <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
       <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
@@ -10,12 +23,7 @@
         <div fxFlexOffset="40" fxFlex="10">
           <h1 class="war"><a href="/home">WAR</a></h1>
         </div>
-        <div
-          *ngIf="(gameStatus$ | async) === 'battle'"
-          fxFlexFill
-          fxFlexOffset="15"
-          fxFlex="25"
-        >
+        <div fxFlexFill fxFlexOffset="15" fxFlex="25">
           <app-message-board fxFlexFill></app-message-board>
         </div>
       </div>
