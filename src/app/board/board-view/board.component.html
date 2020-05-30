@@ -1,77 +1,83 @@
-<div fxLayout="column" fxLayoutAlign="center" class="container">
-  <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
-    <!--------------------------WHITE PLAYER BOARD------------------------------------->
-    <div fxFlexOffset="2.5" fxFlex="15" fxFlexFill>
-      <app-player-board
-        [player$]="whitePlayer$"
-        [isOpponent]="isWhiteOpponent"
-        class="container"
-      ></app-player-board>
+<div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
+  <!--------------------------WHITE PLAYER BOARD------------------------------------->
+  <div fxFlex="20" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <div fxFlexFill fxFlex="90" fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex="70" fxFlexFill>
+        <app-player-board
+          [player$]="whitePlayer$"
+          [isOpponent]="isWhiteOpponent"
+          fxFlexFill
+        ></app-player-board>
+      </div>
     </div>
-    <!--------------------------BOARD------------------------------------->
-    <mat-card fxFlexOffset="5" fxFlex="55" class="container">
-      <mat-card-content class="container">
-        <mat-grid-list
-          class="container"
-          cols="{{ boardSize }}"
-          gutterSize="1px"
-          rowHeight="fit"
+  </div>
+  <!--------------------------BOARD------------------------------------->
+  <mat-card fxFlex="60" class="container">
+    <mat-card-content class="container">
+      <mat-grid-list
+        class="container"
+        cols="{{ boardSize }}"
+        gutterSize="1px"
+        rowHeight="fit"
+      >
+        <mat-grid-tile
+          *ngFor="let tile of tiles$ | async; let i = index"
+          [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
         >
-          <mat-grid-tile
-            *ngFor="let tile of tiles$ | async; let i = index"
-            [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
+          <div
+            (click)="play(i)"
+            class="container"
+            style="--img: url({{ getUnitImgUrl(i) }});"
+            [ngClass]="{
+              invisible: !(visibleTileIds$ | async).includes(i),
+              reachable: tile.isReachable,
+              selected: tile.isSelected,
+              withinRange: tile.withinRange,
+              unit:
+                castleIds.includes(i) ||
+                (unitTileIds$ | async).includes(i) ||
+                (visibleOpponentUnitTileIds$ | async).includes(i),
+              playerUnit: (unitTileIds$ | async).includes(i)
+            }"
           >
             <div
-              (click)="play(i)"
-              class="container"
-              style="--img: url({{ getUnitImgUrl(i) }});"
-              [ngClass]="{
-                invisible: !(visibleTileIds$ | async).includes(i),
-                reachable: tile.isReachable,
-                selected: tile.isSelected,
-                withinRange: tile.withinRange,
-                unit:
-                  castleIds.includes(i) ||
-                  (unitTileIds$ | async).includes(i) ||
-                  (visibleOpponentUnitTileIds$ | async).includes(i),
-                playerUnit: (unitTileIds$ | async).includes(i)
-              }"
+              *ngIf="
+                (unitTileIds$ | async).includes(i) ||
+                (visibleOpponentUnitTileIds$ | async).includes(i)
+              "
             >
-              <div
-                *ngIf="
-                  (unitTileIds$ | async).includes(i) ||
-                  (visibleOpponentUnitTileIds$ | async).includes(i)
-                "
+              <span
+                class="unit-quantity"
+                [ngClass]="{
+                  white: getUnitByTileId(i)
+                    ? getUnitByTileId(i).color === 'white'
+                    : getOpponentUnitByTileId(i).color === 'white',
+                  black: getUnitByTileId(i)
+                    ? getUnitByTileId(i).color === 'black'
+                    : getOpponentUnitByTileId(i).color === 'black'
+                }"
+                >{{
+                  getUnitByTileId(i)
+                    ? getUnitByTileId(i).quantity
+                    : getOpponentUnitByTileId(i).quantity
+                }}</span
               >
-                <span
-                  class="unit-quantity"
-                  [ngClass]="{
-                    white: getUnitByTileId(i)
-                      ? getUnitByTileId(i).color === 'white'
-                      : getOpponentUnitByTileId(i).color === 'white',
-                    black: getUnitByTileId(i)
-                      ? getUnitByTileId(i).color === 'black'
-                      : getOpponentUnitByTileId(i).color === 'black'
-                  }"
-                  >{{
-                    getUnitByTileId(i)
-                      ? getUnitByTileId(i).quantity
-                      : getOpponentUnitByTileId(i).quantity
-                  }}</span
-                >
-              </div>
             </div>
-          </mat-grid-tile>
-        </mat-grid-list>
-      </mat-card-content>
-    </mat-card>
-    <!--------------------------BLACK PLAYER BOARD------------------------------------->
-    <div fxFlexOffset="2.5" fxFlex="15" fxFlexFill>
-      <app-player-board
-        [player$]="blackPlayer$"
-        [isOpponent]="isBlackOpponent"
-        class="container"
-      ></app-player-board>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+  </mat-card>
+  <!--------------------------BLACK PLAYER BOARD------------------------------------->
+  <div fxFlex="20" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <div fxFlexFill fxFlex="90" fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex="70" fxFlexFill>
+        <app-player-board
+          [player$]="blackPlayer$"
+          [isOpponent]="isBlackOpponent"
+          fxFlexFill
+        ></app-player-board>
+      </div>
     </div>
   </div>
 </div>
