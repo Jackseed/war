@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { GameQuery, actionsPerTurn } from "src/app/games/+state";
 import { PlayerQuery, Player } from "../../player/+state";
 import { Observable } from "rxjs";
+import { AuthService } from "src/app/auth/+state";
 
 @Component({
   selector: "app-top-bar",
@@ -16,7 +17,11 @@ export class TopBarComponent implements OnInit {
   public opponent$: Observable<Player>;
   public actionsPerTurn = actionsPerTurn;
 
-  constructor(private gameQuery: GameQuery, private playerQuery: PlayerQuery) {}
+  constructor(
+    public auth: AuthService,
+    private gameQuery: GameQuery,
+    private playerQuery: PlayerQuery
+  ) {}
 
   ngOnInit() {
     this.gameStatus$ = this.gameQuery.gameStatus$;
