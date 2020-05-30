@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap, distinct, filter } from "rxjs/operators";
+import { map, tap, distinct } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
