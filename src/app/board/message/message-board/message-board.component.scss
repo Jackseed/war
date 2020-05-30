@@ -1,5 +1,8 @@
-.message-board {
-  height: 100px;
+mat-card {
+  height: 60%;
+}
+mat-card-content{
+  height: 100%;
   overflow-y: scroll;
 }
 .active {
