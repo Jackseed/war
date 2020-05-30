@@ -62,16 +62,16 @@
 
 <!--------------------- Board --------------------->
 <ng-template #board>
-  <div class="container" fxLayout="column">
-    <div fxFlex="25" fxFill>
-      <app-top-bar></app-top-bar>
+  <div class="container" fxLayout="column" fxLayoutAlign="center center" fxFill>
+    <div fxFlex="20" fxFlexFill>
+      <app-menu-top-bar></app-menu-top-bar>
     </div>
 
-    <div fxFlex="65" fxFill class="container">
+    <div fxFlex="55" fxFlexFill>
       <app-board class="container"></app-board>
     </div>
 
-    <div fxFlex="10" fxFill>
+    <div fxFlex="25" fxLayout="row" fxLayoutAlign="center center">
       <app-bottom-bar></app-bottom-bar>
     </div>
   </div>
