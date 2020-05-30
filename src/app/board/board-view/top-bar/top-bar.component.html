@@ -12,7 +12,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
+  <ng-container *ngSwitchCase="((gameStatus$ | async) === 'battle') || ((gameStatus$ | async) === 'finished')">
     <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
       <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
         <button mat-icon-button (click)="auth.signOut()">
@@ -30,19 +30,5 @@
     </div>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
-    <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
-      <div class="title">
-        <h1>VICTORY</h1>
-        <p>Well done, General.</p>
-      </div>
-    </ng-container>
 
-    <ng-template #defeat>
-      <div class="title">
-        <h1>DEFEAT</h1>
-        <p>Try again.</p>
-      </div>
-    </ng-template>
-  </ng-container>
 </div>

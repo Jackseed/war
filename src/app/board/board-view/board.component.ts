@@ -47,6 +47,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public isWhiteOpponent: boolean;
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
+  public player$: Observable<Player>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -69,6 +70,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
     this.player = this.playerQuery.getActive();
+    this.player$ = this.playerQuery.selectActive();
     this.opponentPlayer = this.playerQuery.opponent;
     this.castle = Castle(this.player.color);
     this.opponentCastle = Castle(this.opponentPlayer.color);

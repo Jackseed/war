@@ -3,6 +3,15 @@
     <div *ngIf="(gameStatus$ | async) === 'placement'">
       <h2>Position your army</h2>
     </div>
+    <div *ngIf="(gameStatus$ | async) === 'finished'">
+      <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
+        <h2>Victory, well done General!</h2>
+      </ng-container>
+
+      <ng-template #defeat>
+        <h2>Defeat, try again...</h2>
+      </ng-template>
+    </div>
     <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
       <!--------------------------WHITE PLAYER BOARD------------------------------------->
       <div

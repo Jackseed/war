@@ -43,4 +43,18 @@
       <mat-icon svgIcon="flag" class="margin-left"></mat-icon>
     </button>
   </ng-container>
+
+    <!--------------------- FINISHED --------------------->
+    <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
+      <div>
+        <button
+          mat-raised-button
+          color="warn"
+          [routerLink]="'/home'"
+        >
+          <span>Home</span>
+          <mat-icon class="margin-left">home</mat-icon>
+        </button>
+      </div>
+    </ng-container>
 </div>
