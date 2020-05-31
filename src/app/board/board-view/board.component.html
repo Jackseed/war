@@ -36,10 +36,10 @@
         </div>
       </div>
       <!--------------------------BOARD------------------------------------->
-      <mat-card fxFlex="50" class="container">
-        <mat-card-content class="container">
+      <mat-card fxFlex="50" fxFlexFill>
+        <mat-card-content fxFlexFill>
           <mat-grid-list
-            class="container"
+          fxFlexFill
             cols="{{ boardSize }}"
             gutterSize="1px"
             rowHeight="fit"
@@ -50,7 +50,7 @@
             >
               <div
                 (click)="play(i)"
-                class="container"
+                fxFlexFill
                 style="--img: url({{ getUnitImgUrl(i) }});"
                 [ngClass]="{
                   invisible: !(visibleTileIds$ | async).includes(i),

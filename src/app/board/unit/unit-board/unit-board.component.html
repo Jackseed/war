@@ -1,23 +1,23 @@
-<div class="container">
-  <div fxLayout="column" fxLayoutAlign="space-evenly center" class="container">
+<div fxFlexFill>
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" fxFlexFill>
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
       (mouseover)="mouseOvers[i] = true"
       (mouseout)="mouseOvers[i] = false"
-      class="container"
+      fxFlexFill
     >
-      <div fxFlexLayout="row" class="container">
+      <div fxFlexLayout="row" fxFlexFill>
         <!--------------------- Units --------------------->
         <div
           fxFlex="65"
           fxLayout="column"
           fxLayoutAlign="end center"
           fxFlexAlign="center"
-          class="container"
+          fxFlexFill
         >
           <div
-            class="container"
+          fxFlexFill
             fxFlexLayout="row"
             fxLayoutAlign="center center"
           >

@@ -2,42 +2,44 @@
 html, body {
   height: 100%;
 }
+html {
+  font-size: 62.5%;
+}
 body {
   margin: 0;
 }
 h1 {
   margin: 0;
   font-family: 'Viaoda Libre', cursive;
-  font-size: 45px;
+  font-size: calc(2rem + 6vmin);
   font-weight: normal;
 }
 h2 {
   margin: 0;
   font-family: 'Viaoda Libre', cursive;
-  font-size: 35px;
+  font-size: calc(1.5rem + 3.5vmin);
   font-weight: normal;
 }
 h3 {
   margin: 0;
   font-family: 'Viaoda Libre', cursive;
-  font-size: 20px;
+  font-size: calc(1rem + 2.5vmin);
   font-weight: normal;
 }
 h4 {
   margin: 0;
   font-family: 'Viaoda Libre', cursive;
-  font-size: 15px;
+  font-size: calc(1.1rem + 0.5vmin);
   font-weight: normal;
 }
 p {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-size: 15px;
+  font-size: calc(1.1rem + 0.5vmin);
   font-weight: normal;
 }
 span {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-size: 12px;
+  font-size: calc(1.1rem + 0.5vmin);
 }
-
