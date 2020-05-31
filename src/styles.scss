@@ -41,6 +41,6 @@ p {
 span {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-size: 12px;
+  font-size: calc(1rem + 0.3vmin);
 }
 
