@@ -35,7 +35,7 @@ h4 {
 p {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-size: 15px;
+  font-size: calc(1rem + 0.5vmin);
   font-weight: normal;
 }
 span {
