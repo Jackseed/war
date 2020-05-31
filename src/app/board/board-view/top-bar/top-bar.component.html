@@ -1,4 +1,4 @@
-<div [ngSwitch]="true" class="container">
+<div [ngSwitch]="true" fxFlexFill>
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
     <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
       <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
