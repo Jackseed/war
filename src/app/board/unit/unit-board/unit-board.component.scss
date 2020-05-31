@@ -27,20 +27,19 @@
 }
 
 .stats-icon {
-  font-size: 15px;
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
+  font-size: calc(1.1rem + 0.5vmin);
+  width: calc(1.1rem + 0.5vmin);
+  height: calc(1.1rem + 0.5vmin);
+  line-height: calc(1.1rem + 0.5vmin);
   position: relative;
-  top: 4px;
+  top: calc(0.25rem + 0.1vmin);
 }
 
 .stats {
-  padding-right: 5px;
+  padding-right: calc(0.25rem + 0.1vmin);
+  padding-left: calc(0.5rem + 0.2vmin);
 }
-p {
-  font-size: 17px;
-}
+
 
 .death-count {
   margin-bottom: 8px;
