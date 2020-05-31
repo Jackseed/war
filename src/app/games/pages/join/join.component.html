@@ -1,25 +1,19 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <div fxFlex="25" fxFlexFill>
+  <div fxFlex="20" fxFlexFill>
     <app-menu-top-bar></app-menu-top-bar>
   </div>
-  <div
-    fxFlexOffset="5"
-    fxFlexOffset.lt-lg="15"
-    fxFlex="60"
-    fxFlexFill
-    fxLayout="row"
-    fxLayoutAlign="center start"
-  >
-    <div *ngIf="(otherGames$ | async).length === 0; else games" fxLayout="column" fxLayoutAlign="center center">
-      <h2>No games for now</h2>
-      <button
-      mat-raised-button
-      color="warn"
-      [routerLink]="'/create'"
+  <div fxFlex="65" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
+    <div
+      *ngIf="(otherGames$ | async).length === 0; else games"
+      fxLayout="column"
+      fxLayoutAlign="center center"
     >
-      <span>Create</span>
-    </button>
+      <h2>No games for now</h2>
+      <button mat-raised-button color="warn" [routerLink]="'/create'">
+        <span>Create</span>
+      </button>
     </div>
+
     <ng-template #games>
       <div fxFlex="40" fxFlex.lt-lg="60">
         <h2>Join a game</h2>
@@ -27,10 +21,10 @@
       </div>
     </ng-template>
   </div>
-  <div fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
+  
+  <div fxFlex="15" fxLayout="row" fxLayoutAlign="center start">
     <button mat-icon-button [routerLink]="'/home'" matTooltip="Back">
       <mat-icon>arrow_back</mat-icon>
     </button>
-
   </div>
 </div>

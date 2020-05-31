@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit} from "@angular/core";
 import { User, AuthQuery } from "src/app/auth/+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
@@ -13,8 +12,6 @@ import { MatTableDataSource } from "@angular/material/table";
 export class ChampionsComponent implements OnInit {
   user: User;
   dataSource: MatTableDataSource<User>;
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private authQuery: AuthQuery,
@@ -41,6 +38,5 @@ export class ChampionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authQuery.getActive();
-    this.dataSource.sort = this.sort;
   }
 }

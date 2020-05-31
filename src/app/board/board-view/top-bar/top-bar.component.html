@@ -1,52 +1,34 @@
 <div [ngSwitch]="true" class="container">
-  <ng-container
-    *ngSwitchCase="(gameStatus$ | async) === 'waiting'"
-    class="center"
-  >
-    <div class="title">
-      <h1>WAITING FOR AN OPPONENT</h1>
-      <p>Prepare yourself with the dino :)</p>
-    </div>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
-    <div class="title">
-      <h1>CREATE YOUR ARMY</h1>
-      <p>Be wise, your opponent is doing the same.</p>
-    </div>
-  </ng-container>
-
-  <ng-container
-    *ngSwitchCase="(gameStatus$ | async) === 'placement'"
-    class="center"
-  >
-    <div class="title">
-      <h1>POSITION YOUR ARMY</h1>
-      <p>Battle will start soon.</p>
-    </div>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <div fxFlexOffset="67.5" fxFlex="30" class="messages">
-        <app-message-board></app-message-board>
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
+    <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
+      <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="auth.signOut()">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
+        <h1 class="war"><a href="/home">WAR</a></h1>
       </div>
     </div>
   </ng-container>
 
-  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
-    <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
-      <div class="title">
-        <h1>VICTORY</h1>
-        <p>Well done, General.</p>
+  <ng-container *ngSwitchCase="((gameStatus$ | async) === 'battle') || ((gameStatus$ | async) === 'finished')">
+    <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
+      <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="auth.signOut()">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
       </div>
-    </ng-container>
-
-    <ng-template #defeat>
-      <div class="title">
-        <h1>DEFEAT</h1>
-        <p>Try again.</p>
+      <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
+        <div fxFlexOffset="40" fxFlex="10">
+          <h1 class="war"><a href="/home">WAR</a></h1>
+        </div>
+        <div fxFlexFill fxFlexOffset="15" fxFlex="25">
+          <app-message-board fxFlexFill></app-message-board>
+        </div>
       </div>
-    </ng-template>
+    </div>
   </ng-container>
+
+
 </div>
