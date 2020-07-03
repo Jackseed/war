@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap, distinct, distinctUntilChanged } from "rxjs/operators";
+import { map, tap, distinctUntilChanged } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -180,7 +180,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    // Add a sound when switching player turn
+    // Emit a sound when it's player's turn
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
