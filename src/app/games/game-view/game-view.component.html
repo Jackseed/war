@@ -34,7 +34,7 @@
     <!--------------------- Unit Creation --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
       <div fxLayout="column" fxFlexFill>
-        <div fxFlexAlign="center">
+        <div fxFlexAlign="center" class="small-margin-bottom">
           <h2>Compose your army</h2>
         </div>
         <div fxFlex>
@@ -42,13 +42,13 @@
             fxFlexOffset="20"
             fxFlex="15"
             fxFlexOffset.lt-md="10"
-            fxFlexOffset.xs="5"
+            fxFlexOffset.xs="7.5"
             fxFlex.lt-md="25"
           >
             <app-unit-board></app-unit-board>
           </div>
 
-          <div fxFlex="50" fxFlexOffset.lt-md="10" fxFlexOffset.xs="5">
+          <div fxFlex="50" fxFlex.xs="60" fxFlexOffset.lt-md="10" fxFlexOffset.xs="5">
             <app-unit-creation></app-unit-creation>
           </div>
         </div>

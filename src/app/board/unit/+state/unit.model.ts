@@ -14,9 +14,8 @@ export interface Unit {
   value?: number;
   playerId?: string | number;
 }
-
-export const unitCols = 7;
-export const unitMaxTiles = 10;
+export const unitColsXs = 4;
+export const unitColsLtMd = 7;
 export const maxTotalUnitValue = 12;
 
 export function createUnit(

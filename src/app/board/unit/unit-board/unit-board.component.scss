@@ -8,15 +8,15 @@
 }
 
 .mat-icon-button.small {
-  width: 1.8vmax;
-  height: 1.8vmax;
-  line-height: 1.8vmax;
+  width: calc(1rem + 2.5vmin);
+  height: calc(1rem + 2.5vmin);
+  line-height: calc(1rem + 2.5vmin);
 
   .mat-icon {
-    font-size: 1.8vmax;
-    width: 1.8vmax;
-    height: 1.8vmax;
-    line-height: 1.8vmax;
+    font-size: calc(1rem + 2.5vmin);
+    width: calc(1rem + 2.5vmin);
+    height: calc(1rem + 2.5vmin);
+    line-height: calc(1rem + 2.5vmin);
   }
 }
 .mat-divider {
@@ -39,7 +39,6 @@
   padding-right: calc(0.25rem + 0.1vmin);
   padding-left: calc(0.5rem + 0.2vmin);
 }
-
 
 .death-count {
   margin-bottom: 8px;
