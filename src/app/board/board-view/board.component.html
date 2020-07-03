@@ -1,9 +1,9 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-  <div fxFlex="20" fxFlexFill fxHide.lt-md>
+  <div fxFlex="20" fxFlexFill *ngIf="isOpen">
     <app-top-bar fxFlexFill></app-top-bar>
   </div>
 
-  <div fxFlex="65" fxFlexFill fxFlex.lt-md>
+  <div fxFlex="65" fxFlexFill [fxFlex.lt-md]="isOpen? '65' : '100'">
     <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
       <div
         fxFlex="90"
@@ -144,7 +144,7 @@
     fxFlex="15"
     fxLayout="row"
     fxLayoutAlign="center start"
-    fxHide.lt-md
+    *ngIf="isOpen"
   >
     <app-bottom-bar></app-bottom-bar>
   </div>
