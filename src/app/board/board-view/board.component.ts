@@ -48,6 +48,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
   public player$: Observable<Player>;
+  public isOpen = false;
 
   constructor(
     private gameQuery: GameQuery,
@@ -338,6 +339,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     audio.src = "../../../assets/audio/change_turn.wav";
     audio.load();
     audio.play();
+  }
+
+  // open menu for small device
+  public toggleMenu() {
+    this.isOpen = !this.isOpen;
   }
 
   ngOnDestroy() {
