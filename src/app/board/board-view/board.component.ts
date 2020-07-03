@@ -48,7 +48,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
   public player$: Observable<Player>;
-  public isOpen = false;
+  public isOpen = true;
 
   constructor(
     private gameQuery: GameQuery,

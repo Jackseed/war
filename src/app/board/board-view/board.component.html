@@ -3,7 +3,7 @@
     <app-top-bar fxFlexFill></app-top-bar>
   </div>
 
-  <div fxFlex="65" fxFlexFill [fxFlex.lt-md]="isOpen? '65' : '100'">
+  <div fxFlex="65" fxFlexFill [fxFlex.lt-md]="isOpen ? '65' : '100'">
     <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
       <div
         fxFlex="90"
@@ -32,20 +32,11 @@
             fxLayoutAlign="center center"
             *ngIf="isOpen"
           >
-            <div
+            <app-player-board
+              [player$]="whitePlayer$"
+              [isOpponent]="isWhiteOpponent"
               fxFlexFill
-              fxFlex="90"
-              fxLayout="row"
-              fxLayoutAlign="center center"
-            >
-              <div fxFlex="50" fxFlexFill>
-                <app-player-board
-                  [player$]="whitePlayer$"
-                  [isOpponent]="isWhiteOpponent"
-                  fxFlexFill
-                ></app-player-board>
-              </div>
-            </div>
+            ></app-player-board>
           </div>
           <!--------------------------BOARD------------------------------------->
           <mat-card fxFlex="50" fxFlex.lt-md="90" fxFlexFill *ngIf="!isOpen">
@@ -112,20 +103,11 @@
             fxLayoutAlign="center center"
             *ngIf="isOpen"
           >
-            <div
+            <app-player-board
+              [player$]="blackPlayer$"
+              [isOpponent]="isBlackOpponent"
               fxFlexFill
-              fxFlex="90"
-              fxLayout="row"
-              fxLayoutAlign="center center"
-            >
-              <div fxFlex="50" fxFlexFill>
-                <app-player-board
-                  [player$]="blackPlayer$"
-                  [isOpponent]="isBlackOpponent"
-                  fxFlexFill
-                ></app-player-board>
-              </div>
-            </div>
+            ></app-player-board>
           </div>
           <button
             mat-mini-fab

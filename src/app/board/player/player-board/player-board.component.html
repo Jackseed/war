@@ -1,23 +1,13 @@
 <mat-card
+  class="card-container"
   [ngClass]="{ isActive: (player$ | async).isActive }"
   fxLayout="column"
 >
-  <mat-card-header fxFlex="20">
-    <mat-card-title class="title">
-      <h3>{{ (player$ | async).color }}</h3>
-    </mat-card-title>
-    <mat-card-subtitle>
-      <p>{{ playerName }}</p>
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content
-    fxFlex="80"
-    fxFlexFill
-    fxLayout="row"
-    fxLayoutAlign="center center"
-  >
-    <div fxFlex="5" *ngIf="(gameStatus$ | async) === 'battle'">
-      <div *ngIf="(player$ | async).isActive; else waiting" class="center">
+  <div fxFlex="20" class="title-container">
+    <h3 class="title">{{ (user$ | async).name }}</h3>
+
+    <div class="subtitle" *ngIf="(gameStatus$ | async) === 'battle'">
+      <div *ngIf="(player$ | async).isActive; else waiting">
         <p [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
           <ng-template ngPluralCase="=1"
             >{{ actionsPerTurn - (player$ | async).actionCount }} action
@@ -29,10 +19,13 @@
           >
         </p>
       </div>
+
       <ng-template #waiting>
-        <p class="center">Waiting</p>
+        <p>Waiting</p>
       </ng-template>
     </div>
+  </div>
+  <mat-card-content fxFlex="80" fxLayout="row" fxLayoutAlign="center center">
     <div fxFlex class="container">
       <app-unit-board
         fxFlexFill
