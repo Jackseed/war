@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap, distinct } from "rxjs/operators";
+import { map, tap, distinct, distinctUntilChanged } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -180,12 +180,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    // Add a sound when switching player turn
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
-        distinct((player) => player.isActive),
-        tap((player) => {
-          if (player.isActive) {
+        map((player) => player.isActive),
+        distinctUntilChanged(),
+        tap((isActive) => {
+          if (isActive) {
             this.playAudio();
           }
         })
@@ -291,6 +293,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     return this.opponentUnitQuery.getUnitByTileId(tileId);
   }
 
+  // Remove the unit focus when using "esc" keyboard
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
@@ -343,5 +346,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.castleVictorySub.unsubscribe();
     this.noUnitVictorySub.unsubscribe();
     this.finishedSub.unsubscribe();
+    this.isActiveSub.unsubscribe();
   }
 }
