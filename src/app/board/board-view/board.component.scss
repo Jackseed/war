@@ -76,3 +76,10 @@ mat-grid-tile {
 .finished {
   filter: brightness(70%);
 }
+
+.menu-button {
+  z-index: 2;
+  right: 15px;
+  bottom: 15px;
+  position: absolute;
+}

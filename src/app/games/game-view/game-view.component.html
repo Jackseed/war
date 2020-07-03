@@ -64,15 +64,15 @@
 <!--------------------- Board --------------------->
 <ng-template #board>
   <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-    <div fxFlex="20" fxFlexFill>
+    <div fxFlex="20" fxFlexFill fxHide.lt-md>
       <app-top-bar fxFlexFill></app-top-bar>
     </div>
 
-    <div fxFlex="65" fxFlexFill>
+    <div fxFlex="65" fxFlexFill fxFlex.lt-md>
       <app-board></app-board>
     </div>
 
-    <div fxFlexFill fxFlex="15" fxLayout="row" fxLayoutAlign="center start">
+    <div fxFlexFill fxFlex="15" fxLayout="row" fxLayoutAlign="center start" fxHide.lt-md>
       <app-bottom-bar></app-bottom-bar>
     </div>
   </div>

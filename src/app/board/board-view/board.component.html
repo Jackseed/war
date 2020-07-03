@@ -19,6 +19,7 @@
         fxFlexFill
         fxLayout="column"
         fxLayoutAlign="center center"
+        fxHide.lt-md
       >
         <div
           fxFlexFill
@@ -36,10 +37,10 @@
         </div>
       </div>
       <!--------------------------BOARD------------------------------------->
-      <mat-card fxFlex="50" fxFlexFill>
+      <mat-card fxFlex="50" fxFlex.lt-md="90" fxFlexFill>
         <mat-card-content fxFlexFill>
           <mat-grid-list
-          fxFlexFill
+            fxFlexFill
             cols="{{ boardSize }}"
             gutterSize="1px"
             rowHeight="fit"
@@ -98,6 +99,7 @@
         fxFlexFill
         fxLayout="column"
         fxLayoutAlign="center center"
+        fxHide.lt-md
       >
         <div
           fxFlexFill
@@ -114,6 +116,9 @@
           </div>
         </div>
       </div>
+      <button mat-mini-fab color="warn" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
     </div>
   </div>
 </div>
