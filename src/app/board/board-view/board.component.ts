@@ -18,6 +18,7 @@ import {
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-board",
@@ -48,7 +49,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
   public player$: Observable<Player>;
-  public isOpen = true;
+  public isOpen = false;
 
   constructor(
     private gameQuery: GameQuery,
@@ -63,7 +64,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
     private snackBar: MatSnackBar,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public mediaObserver: MediaObserver
   ) {}
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.opponentCastle = Castle(this.opponentPlayer.color);
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
     this.gameStatus$ = this.gameQuery.gameStatus$;
-
+    console.log(this.mediaObserver.isActive("sm"));
     // get the visible tile ids, except during placement
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,

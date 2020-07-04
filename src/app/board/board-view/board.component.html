@@ -1,5 +1,15 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-  <div fxFlex="20" fxFlexFill *ngIf="isOpen">
+  <div
+    fxFlex="20"
+    fxFlexFill
+    *ngIf="
+      (!isOpen &&
+        !mediaObserver.isActive('xs') &&
+        !mediaObserver.isActive('sm')) ||
+      (mediaObserver.isActive('xs') && isOpen) ||
+      (mediaObserver.isActive('sm') && isOpen)
+    "
+  >
     <app-top-bar fxFlexFill></app-top-bar>
   </div>
 
@@ -26,11 +36,18 @@
         <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
           <!--------------------------WHITE PLAYER BOARD------------------------------------->
           <div
-            fxFlex="25"
+            fxFlex="15"
+            fxFlex.lt-md="25"
             fxFlexFill
             fxLayout="column"
             fxLayoutAlign="center center"
-            *ngIf="isOpen"
+            *ngIf="
+              (!isOpen &&
+                !mediaObserver.isActive('xs') &&
+                !mediaObserver.isActive('sm')) ||
+              (mediaObserver.isActive('xs') && isOpen) ||
+              (mediaObserver.isActive('sm') && isOpen)
+            "
           >
             <app-player-board
               [player$]="whitePlayer$"
@@ -39,7 +56,13 @@
             ></app-player-board>
           </div>
           <!--------------------------BOARD------------------------------------->
-          <mat-card fxFlex="50" fxFlex.lt-md="90" fxFlexFill *ngIf="!isOpen">
+          <mat-card
+            fxFlex="50"
+            fxFlexOffset.gt-sm="5"
+            fxFlex.lt-md="90"
+            fxFlexFill
+            *ngIf="!isOpen"
+          >
             <mat-card-content fxFlexFill>
               <mat-grid-list
                 fxFlexFill
@@ -97,11 +120,19 @@
           </mat-card>
           <!--------------------------BLACK PLAYER BOARD------------------------------------->
           <div
-            fxFlex="25"
+            fxFlex="15"
+            fxFlex.lt-md="25"
+            fxFlexOffset.gt-sm="5"
             fxFlexFill
             fxLayout="column"
             fxLayoutAlign="center center"
-            *ngIf="isOpen"
+            *ngIf="
+              (!isOpen &&
+                !mediaObserver.isActive('xs') &&
+                !mediaObserver.isActive('sm')) ||
+              (mediaObserver.isActive('xs') && isOpen) ||
+              (mediaObserver.isActive('sm') && isOpen)
+            "
           >
             <app-player-board
               [player$]="blackPlayer$"
@@ -114,6 +145,7 @@
             color="warn"
             class="menu-button"
             (click)="toggleMenu()"
+            *ngIf="mediaObserver.isActive('xs') || mediaObserver.isActive('sm')"
           >
             <mat-icon>menu</mat-icon>
           </button>
@@ -126,7 +158,13 @@
     fxFlex="15"
     fxLayout="row"
     fxLayoutAlign="center start"
-    *ngIf="isOpen"
+    *ngIf="
+      (!isOpen &&
+        !mediaObserver.isActive('xs') &&
+        !mediaObserver.isActive('sm')) ||
+      (mediaObserver.isActive('xs') && isOpen) ||
+      (mediaObserver.isActive('sm') && isOpen)
+    "
   >
     <app-bottom-bar></app-bottom-bar>
   </div>
