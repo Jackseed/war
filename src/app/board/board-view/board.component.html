@@ -145,7 +145,10 @@
             color="warn"
             class="menu-button"
             (click)="toggleMenu()"
-            *ngIf="mediaObserver.isActive('xs') || mediaObserver.isActive('sm')"
+            *ngIf="
+              (mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) &&
+              (gameStatus$ | async) != 'placement'
+            "
           >
             <mat-icon>menu</mat-icon>
           </button>
@@ -163,7 +166,8 @@
         !mediaObserver.isActive('xs') &&
         !mediaObserver.isActive('sm')) ||
       (mediaObserver.isActive('xs') && isOpen) ||
-      (mediaObserver.isActive('sm') && isOpen)
+      (mediaObserver.isActive('sm') && isOpen) ||
+      (gameStatus$ | async) === 'placement'
     "
   >
     <app-bottom-bar></app-bottom-bar>
