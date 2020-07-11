@@ -79,7 +79,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.opponentCastle = Castle(this.opponentPlayer.color);
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    console.log(this.mediaObserver.isActive("sm"));
     // get the visible tile ids, except during placement
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
