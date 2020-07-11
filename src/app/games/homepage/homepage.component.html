@@ -13,11 +13,15 @@
 
   <!------------------ BOTTOM -------------------->
   <div fxFlex="35" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+
+    <!------------ CROWN -------------->
     <div fxFlex="20">
-      <button mat-icon-button [routerLink]="'/champions'">
+      <button class="crown-button" mat-icon-button [routerLink]="'/champions'">
         <mat-icon class="crown" svgIcon="crown"></mat-icon>
       </button>
     </div>
+
+    <!------------ JOIN & CREATE -------------->
     <div fxFlex="80" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
       <button
         fxFlexOffset="30"
