@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { User } from "../+state/auth.model";
 import { AuthQuery } from "../+state/auth.query";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { AuthService } from "../+state/auth.service";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { EmailComponent } from "../login/email/email.component";
+import { MediaObserver, MediaChange } from "@angular/flex-layout";
+import { filter, map } from "rxjs/operators";
 
 @Component({
   selector: "app-profile",
@@ -17,12 +19,35 @@ export class ProfileComponent implements OnInit {
   public user = this.query.getActive();
   public isEditing = false;
   name = new FormControl(this.user.name);
+  private watcher: Subscription;
+  private activeMediaQuery: string;
+  public dialogWidth: string;
 
   constructor(
     private query: AuthQuery,
     private service: AuthService,
-    public dialog: MatDialog
-  ) {}
+    public dialog: MatDialog,
+    private mediaObserver: MediaObserver
+  ) {
+    this.watcher = mediaObserver
+      .asObservable()
+      .pipe(
+        filter((changes: MediaChange[]) => changes.length > 0),
+        map((changes: MediaChange[]) => changes[0])
+      )
+      .subscribe((change: MediaChange) => {
+        this.activeMediaQuery = change
+          ? `'${change.mqAlias}' = (${change.mediaQuery})`
+          : "";
+        if (change.mqAlias === "xs") {
+          console.log("xs ou sm");
+          this.dialogWidth = "80vw";
+        } else {
+          console.log("other");
+          this.dialogWidth = "35vw";
+        }
+      });
+  }
 
   ngOnInit(): void {
     this.user$ = this.query.selectActive();
@@ -41,8 +66,8 @@ export class ProfileComponent implements OnInit {
 
   public openDialog() {
     this.dialog.open(EmailComponent, {
-      width: "60vw",
-      maxWidth: "60vw",
+      width: this.dialogWidth,
+      maxWidth: this.dialogWidth,
     });
   }
 }
