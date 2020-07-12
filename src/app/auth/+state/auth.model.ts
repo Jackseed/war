@@ -4,6 +4,8 @@ export interface User {
   gamePlayed?: string[];
   gameWon?: number;
   rank?: number;
+  email?: string;
+  oldId?: string;
 }
 
 export function createUser(params: Partial<User>) {

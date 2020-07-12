@@ -4,6 +4,8 @@ import { AuthQuery } from "../+state/auth.query";
 import { Observable } from "rxjs";
 import { AuthService } from "../+state/auth.service";
 import { FormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { EmailComponent } from "../login/email/email.component";
 
 @Component({
   selector: "app-profile",
@@ -16,7 +18,11 @@ export class ProfileComponent implements OnInit {
   public isEditing = false;
   name = new FormControl(this.user.name);
 
-  constructor(private query: AuthQuery, private service: AuthService) {}
+  constructor(
+    private query: AuthQuery,
+    private service: AuthService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.user$ = this.query.selectActive();
@@ -31,5 +37,12 @@ export class ProfileComponent implements OnInit {
 
   public switchEditing() {
     this.isEditing = !this.isEditing;
+  }
+
+  public openDialog() {
+    this.dialog.open(EmailComponent, {
+      width: "60vw",
+      maxWidth: "60vw",
+    });
   }
 }

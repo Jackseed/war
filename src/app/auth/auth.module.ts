@@ -10,9 +10,12 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
+import { EmailComponent } from "./login/email/email.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
-  declarations: [LoginComponent, ProfileComponent],
+  declarations: [LoginComponent, ProfileComponent, EmailComponent],
   exports: [LoginComponent, ProfileComponent],
   imports: [
     CommonModule,
@@ -25,6 +28,8 @@ import { MatInputModule } from "@angular/material/input";
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
+    MatDialogModule,
+    RouterModule,
   ],
 })
 export class AuthModule {}

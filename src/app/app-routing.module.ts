@@ -16,6 +16,7 @@ import { HomepageComponent } from "./games/homepage/homepage.component";
 import { CreateComponent } from "./games/pages/create/create.component";
 import { ChampionsComponent } from "./games/pages/champions/champions.component";
 import { JoinComponent } from "./games/pages/join/join.component";
+import { EmailComponent } from "./auth/login/email/email.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["welcome"]);
 
@@ -30,6 +31,13 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: HomepageComponent,
+  },
+  {
+    path: "save-account",
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    component: EmailComponent,
   },
   {
     path: "create",
