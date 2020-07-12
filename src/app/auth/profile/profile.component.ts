@@ -40,6 +40,9 @@ export class ProfileComponent implements OnInit {
   }
 
   public openDialog() {
-    this.dialog.open(EmailComponent);
+    this.dialog.open(EmailComponent, {
+      width: "60vw",
+      maxWidth: "60vw",
+    });
   }
 }
