@@ -3,13 +3,14 @@
     "rules": "database.rules.json"
   },
   "hosting": {
-
     "public": "dist/War",
 
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }

@@ -1,23 +1,24 @@
-<div class="container">
-  <div fxLayout="column" fxLayoutAlign="space-evenly center" class="container">
+<div fxFlexFill>
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" fxFlexFill>
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
       (mouseover)="mouseOvers[i] = true"
       (mouseout)="mouseOvers[i] = false"
-      class="container"
+      fxFlexFill
     >
-      <div fxFlexLayout="row" class="container">
+      <div fxFlexLayout="row" fxFlexFill>
         <!--------------------- Units --------------------->
         <div
           fxFlex="65"
           fxLayout="column"
           fxLayoutAlign="end center"
           fxFlexAlign="center"
-          class="container"
+          fxFlexFill
+          fxFlex.xs
         >
           <div
-            class="container"
+          fxFlexFill
             fxFlexLayout="row"
             fxLayoutAlign="center center"
           >
@@ -47,11 +48,11 @@
           </div>
         </div>
         <!--------------------- Stats --------------------->
-        <div fxFlexOffset="5" fxFlex="35">
+        <div fxFlexOffset="5" fxFlex="35" fxHide.xs>
           <div
             fxLayout="column"
-            *ngIf="mouseOvers[i] && !isOpponent"
-            fxLayoutAlign="center center"
+            *ngIf="mouseOvers[i] && !isOpponent && !mediaObserver.isActive('xs')"
+            fxLayoutAlign="center space-evenly"
             fxFill
           >
             <div
@@ -143,8 +144,8 @@
       fxLayoutAlign="start start"
       *ngIf="(gameStatus$ | async) === 'unit creation'"
     >
-      <div fxFlex="65" fxLayout="column" fxLayoutAlign="center center">
-        <mat-divider fxFlex="50"></mat-divider>
+      <div fxFlex="65" fxFlex.xs fxLayout="column" fxLayoutAlign="center center">
+        <mat-divider fxFlex="50" fxFlex.xs="85"></mat-divider>
         <h3 fxFlexOffset="20" fxFlex="30">
           {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
         </h3>

@@ -12,6 +12,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { GameQuery } from "src/app/games/+state";
 import { Player } from "../../player/+state";
 import { OpponentUnitQuery } from "../opponent/+state";
+import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-unit-board",
@@ -35,7 +36,8 @@ export class UnitBoardComponent implements OnInit {
     private query: UnitQuery,
     private service: UnitService,
     private gameQuery: GameQuery,
-    private opponentUnitQuery: OpponentUnitQuery
+    private opponentUnitQuery: OpponentUnitQuery,
+    public mediaObserver: MediaObserver
   ) {
     this.matIconRegistry.addSvgIcon(
       "hp",

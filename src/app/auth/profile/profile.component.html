@@ -1,4 +1,4 @@
-<mat-card class="container">
+<mat-card>
   <div fxLayout="row" *ngIf="!isEditing; else editing">
     <h2 fxFlex="80" class="word-break">{{ (user$ | async).name }}</h2>
     <button
@@ -23,6 +23,7 @@
           type="submit"
           mat-icon-button
           matTooltip="Save"
+          color="warn"
           (click)="updateName(name.value); switchEditing()"
         >
           <mat-icon>save</mat-icon>

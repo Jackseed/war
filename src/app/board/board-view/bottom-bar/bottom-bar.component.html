@@ -33,15 +33,29 @@
   </ng-container>
   <!--------------------- BATTLE --------------------->
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'battle'">
-    <div fxLayout="row" fxLayoutAlign="center center">
-      <button mat-button fxFlex="10" (click)="skipTurn()">
-        <span>Skip turn</span>
-        <mat-icon svgIcon="camp" class="margin-left"></mat-icon>
-      </button>
+    <button class="width" mat-button fxFlex="20" (click)="skipTurn()">
+      <span>Skip turn</span>
+      <mat-icon svgIcon="camp" class="margin-left"></mat-icon>
+    </button>
 
-      <button mat-button fxFlex="10" class="margin-left" (click)="forfeit()">
-        <span>Forfeit</span>
-        <mat-icon svgIcon="flag" class="margin-left"></mat-icon>
+    <button
+      class="width"
+      mat-button
+
+      fxFlex="20"
+      (click)="forfeit()"
+    >
+      <span>Forfeit</span>
+      <mat-icon svgIcon="flag" class="margin-left"></mat-icon>
+    </button>
+  </ng-container>
+
+  <!--------------------- FINISHED --------------------->
+  <ng-container *ngSwitchCase="(gameStatus$ | async) === 'finished'">
+    <div>
+      <button mat-raised-button color="warn" routerLink="/home">
+        <span>Home</span>
+        <mat-icon class="margin-left">home</mat-icon>
       </button>
     </div>
   </ng-container>

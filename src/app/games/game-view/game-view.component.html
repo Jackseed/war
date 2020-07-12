@@ -4,45 +4,57 @@
       (gameStatus$ | async) === 'unit creation';
     else board
   "
-  class="container"
+  fxFlexFill
   fxLayout="column"
   fxLayoutAlign="center center"
 >
-  <div fxFlex="25" fxFlexFill>
-    <app-menu-top-bar></app-menu-top-bar>
+  <div fxFlex="20" fxFlexFill>
+    <app-menu-top-bar fxFlexFill></app-menu-top-bar>
   </div>
 
-  <div [ngSwitch]="true" fxFlex="60" fxFlexFill>
+  <div [ngSwitch]="true" fxFlex="65" fxFlexFill>
     <!--------------------- Waiting room --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'waiting'">
-      <div fxLayout="column" fxFlex fxFlexFill fxLayoutAlign="start center">
+      <div fxLayout="column" fxFlex fxFlexFill fxLayoutAlign="center center">
         <h2 class="margin-bottom">Waiting for a player</h2>
         <button
-          class="margin-bottom"
+          class="margin-bottom min-height"
           fxFlex="12"
+
           mat-raised-button
           color="warn"
-          [cdkCopyToClipboard]="'localhost:4200' + this.router.url"
+          [cdkCopyToClipboard]="'https://war-77bc4.web.app' + this.router.url"
         >
           <span>Copy url to share</span>
           <mat-icon class="margin-left">file_copy</mat-icon>
         </button>
-        <div fxFlexOffset="5" fxFlex="25" fxFlexFill class="hourglass"></div>
+        <div fxFlex="15" fxFlexFill class="hourglass"></div>
       </div>
     </ng-container>
 
     <!--------------------- Unit Creation --------------------->
     <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
       <div fxLayout="column" fxFlexFill>
-        <div fxFlexOffset="2.5" fxFlex="10" fxFlexAlign="center">
+        <div fxFlexAlign="center" class="small-margin-bottom">
           <h2>Compose your army</h2>
         </div>
-        <div fxFlexOffset="2.5" fxFlex="90">
-          <div fxFlexOffset="20" fxFlex="15" fxFlexOffset.lt-md="10" fxFlex.lt-md="25">
+        <div fxFlex>
+          <div
+            fxFlexOffset="20"
+            fxFlex="15"
+            fxFlexOffset.lt-md="10"
+            fxFlexOffset.xs="7.5"
+            fxFlex.lt-md="25"
+          >
             <app-unit-board></app-unit-board>
           </div>
 
-          <div fxFlex="50">
+          <div
+            fxFlex="50"
+            fxFlex.xs="60"
+            fxFlexOffset.lt-md="10"
+            fxFlexOffset.xs="5"
+          >
             <app-unit-creation></app-unit-creation>
           </div>
         </div>
@@ -50,24 +62,12 @@
     </ng-container>
   </div>
 
-  <div fxFlex="15" fxFlexFill fxLayoutAlign="center center">
+  <div fxFlex="15" fxFlexFill fxLayoutAlign="center start">
     <app-bottom-bar></app-bottom-bar>
   </div>
 </div>
 
 <!--------------------- Board --------------------->
 <ng-template #board>
-  <div class="container" fxLayout="column">
-    <div fxFlex="25" fxFill>
-      <app-top-bar></app-top-bar>
-    </div>
-
-    <div fxFlex="65" fxFill class="container">
-      <app-board class="container"></app-board>
-    </div>
-
-    <div fxFlex="10" fxFill>
-      <app-bottom-bar></app-bottom-bar>
-    </div>
-  </div>
+  <app-board></app-board>
 </ng-template>

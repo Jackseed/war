@@ -9,7 +9,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap, distinct, filter } from "rxjs/operators";
+import { map, tap, distinctUntilChanged } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -18,6 +18,7 @@ import {
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-board",
@@ -47,6 +48,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   public isWhiteOpponent: boolean;
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
+  public player$: Observable<Player>;
+  public isOpen = false;
 
   constructor(
     private gameQuery: GameQuery,
@@ -61,7 +64,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
     private snackBar: MatSnackBar,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public mediaObserver: MediaObserver
   ) {}
 
   ngOnInit() {
@@ -69,12 +73,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
     this.player = this.playerQuery.getActive();
+    this.player$ = this.playerQuery.selectActive();
     this.opponentPlayer = this.playerQuery.opponent;
     this.castle = Castle(this.player.color);
     this.opponentCastle = Castle(this.opponentPlayer.color);
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
     this.gameStatus$ = this.gameQuery.gameStatus$;
-
     // get the visible tile ids, except during placement
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
@@ -131,38 +135,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.noUnitVictorySub = combineLatest([
       this.unitQuery.selectCount((unit) => unit.tileId !== null),
       this.unitQuery.selectLoading(),
-      this.opponentUnitQuery.selectCount((unit) => unit.tileId !== null),
-      this.opponentUnitQuery.selectLoading(),
       this.gameStatus$,
     ])
       .pipe(
-        map(
-          ([
-            unitCount,
-            unitLoading,
-            oppUnitCount,
-            oppUnitLoading,
-            gameStatus,
-          ]) => {
-            if (gameStatus === "battle" && !unitLoading && !oppUnitLoading) {
-              if (unitCount === 0) {
-                this.gameService.switchStatus("finished");
-                console.log("your army is destroyed, game over");
-                this.playerService.setVictorious(
-                  this.opponentPlayer,
-                  this.player
-                );
-              } else if (oppUnitCount === 0) {
-                this.gameService.switchStatus("finished");
-                console.log("you crushed him, congratz");
-                this.playerService.setVictorious(
-                  this.player,
-                  this.opponentPlayer
-                );
-              }
+        map(([unitCount, unitLoading, gameStatus]) => {
+          if (gameStatus === "battle" && !unitLoading) {
+            if (unitCount === 0) {
+              this.gameService.switchStatus("finished");
+              this.playerService.setVictorious(
+                this.opponentPlayer,
+                this.player
+              );
             }
           }
-        )
+        })
       )
       .subscribe();
 
@@ -178,12 +164,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    // Emit a sound when it's player's turn
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
-        distinct((player) => player.isActive),
-        tap((player) => {
-          if (player.isActive) {
+        map((player) => player.isActive),
+        distinctUntilChanged(),
+        tap((isActive) => {
+          if (isActive) {
             this.playAudio();
           }
         })
@@ -289,6 +277,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     return this.opponentUnitQuery.getUnitByTileId(tileId);
   }
 
+  // Remove the unit focus when using "esc" keyboard
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
@@ -335,11 +324,17 @@ export class BoardComponent implements OnInit, OnDestroy {
     audio.play();
   }
 
+  // open menu for small device
+  public toggleMenu() {
+    this.isOpen = !this.isOpen;
+  }
+
   ngOnDestroy() {
     this.opponentUnitStore.reset();
     this.oppUnitsync.unsubscribe();
     this.castleVictorySub.unsubscribe();
     this.noUnitVictorySub.unsubscribe();
     this.finishedSub.unsubscribe();
+    this.isActiveSub.unsubscribe();
   }
 }

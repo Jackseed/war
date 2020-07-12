@@ -1,26 +1,27 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <div fxFlex="25" fxFlexFill>
+  <!------------------ HEADER -------------------->
+  <div fxFlex="20" fxFlexFill>
     <app-menu-top-bar></app-menu-top-bar>
   </div>
 
-  <div
-    fxFlex="40"
-    fxLayout="row"
-    fxLayoutAlign.lt-md="start center"
-    fxLayoutAlign="center center"
-    fxFlexFill
-  >
-    <div fxFlexOffset.xs="17" fxFlexOffset.lt-md="35" fxFlex="20">
-
+  <!------------------ PROFILE -------------------->
+  <div fxFlex="45" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+    <div fxFlex="nogrow">
       <app-profile></app-profile>
     </div>
   </div>
+
+  <!------------------ BOTTOM -------------------->
   <div fxFlex="35" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+
+    <!------------ CROWN -------------->
     <div fxFlex="20">
-      <button mat-icon-button [routerLink]="'/champions'">
+      <button class="crown-button" mat-icon-button [routerLink]="'/champions'">
         <mat-icon class="crown" svgIcon="crown"></mat-icon>
       </button>
     </div>
+
+    <!------------ JOIN & CREATE -------------->
     <div fxFlex="80" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
       <button
         fxFlexOffset="30"
