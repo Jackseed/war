@@ -71,7 +71,7 @@
     color="warn"
     [disabled]="form.invalid || !passwordDoesMatch || loading"
   >
-    Submit
+    <span>Submit</span>
   </button>
 
   <button
@@ -81,7 +81,7 @@
     color="warn"
     [disabled]="password.invalid || email.invalid || loading"
   >
-    Log in
+    <span>Log in</span>
   </button>
 
   <button
@@ -91,7 +91,7 @@
     type="submit"
     [disabled]="loading || email.invalid"
   >
-    Send Reset Email
+    <span>Send reset email</span>
   </button>
 
   <button
@@ -99,11 +99,11 @@
     *ngIf="isLogin && !isPasswordReset"
     (click)="changeType('reset')"
   >
-    Forgot password?
+    <span>Forgot password?</span>
   </button>
 
   <button mat-button (click)="changeType('login')" *ngIf="isSignup">
-    Returning user?
+    <span>Returning user?</span>
   </button>
 
   <button
@@ -112,7 +112,7 @@
     (click)="changeType('signup')"
     *ngIf="isLogin"
   >
-    New user?
+    <span>New user?</span>
   </button>
 
   <button
@@ -121,6 +121,6 @@
     (click)="changeType('login')"
     *ngIf="isPasswordReset"
   >
-    Back
+    <span>Back</span>
   </button>
 </form>

@@ -35,6 +35,6 @@
     <p>Game won: {{ (user$ | async).gameWon }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button (click)="openDialog()">Save account</button>
+    <button mat-stroked-button (click)="openDialog()"><span>Save your account</span></button>
   </mat-card-actions>
 </mat-card>
