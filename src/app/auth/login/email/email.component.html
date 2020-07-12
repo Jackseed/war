@@ -1,58 +1,89 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <!---------------EMAIL--------------->
-  <mat-form-field appearance="legacy">
-    <mat-label>Email address</mat-label>
+<mat-card>
+  <div *ngIf="isSignup">
+    <h3>Create Account</h3>
 
-    <input
-      matInput
-      type="email"
-      formControlName="email"
-      placeholder="john.doe@war.love"
-    />
+    <button mat-stroked-button (click)="changeType('login')">
+      Returning user?
+    </button>
+  </div>
 
-    <mat-error *ngIf="email.invalid && email.dirty"
-      >Your email address is not valid</mat-error
+  <div *ngIf="isLogin">
+    <h3>Sign In</h3>
+    <button size="small" mat-stroked-button (click)="changeType('signup')">
+      New user?
+    </button>
+  </div>
+
+  <div *ngIf="isPasswordReset">
+    <h3>Reset Password</h3>
+    <button size="small" mat-button (click)="changeType('login')">Back</button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!---------------EMAIL--------------->
+    <mat-form-field appearance="legacy">
+      <mat-label>Email address</mat-label>
+
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="john.doe@war.love"
+      />
+
+      <mat-error *ngIf="email.invalid && email.dirty"
+        >Your email address is not valid</mat-error
+      >
+    </mat-form-field>
+    <!---------------PASSWORD--------------->
+    <mat-form-field appearance="legacy" *ngIf="!isPasswordReset">
+      <mat-label>Password</mat-label>
+
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        placeholder="Your secret password"
+      />
+
+      <mat-error *ngIf="password.invalid && password.dirty"
+        >Password must be at least 5 characters long</mat-error
+      >
+    </mat-form-field>
+    <!---------------PASSWORD CONFIRM--------------->
+    <mat-form-field appearance="legacy" *ngIf="isSignup">
+      <mat-label>Password confirmation</mat-label>
+
+      <input
+        matInput
+        type="password"
+        formControlName="passwordConfirm"
+        placeholder="Confirm your password"
+      />
+
+      <mat-error *ngIf="passwordConfirm.dirty && !passwordDoesMatch"
+        >Password does not match</mat-error
+      >
+    </mat-form-field>
+
+    <mat-error>{{ serverMessage }}</mat-error>
+    <!-----------------SAVE----------------->
+    <button
+      *ngIf="!isPasswordReset"
+      type="submit"
+      mat-icon-button
+      matTooltip="Save"
+      [disabled]="form.invalid || !passwordDoesMatch || loading"
     >
-  </mat-form-field>
-  <!---------------PASSWORD--------------->
-  <mat-form-field appearance="legacy">
-    <mat-label>Password</mat-label>
+      <mat-icon>save</mat-icon>
+    </button>
 
-    <input
-      matInput
-      type="password"
-      formControlName="password"
-      placeholder="Your secret password"
-    />
-
-    <mat-error *ngIf="password.invalid && password.dirty"
-      >Password must be at least 5 characters long</mat-error
+    <button
+      mat-button
+      *ngIf="isLogin && !isPasswordReset"
+      (click)="changeType('reset')"
     >
-  </mat-form-field>
-  <!---------------PASSWORD CONFIRM--------------->
-  <mat-form-field appearance="legacy">
-    <mat-label>Password confirmation</mat-label>
-
-    <input
-      matInput
-      type="password"
-      formControlName="passwordConfirm"
-      placeholder="Confirm your password"
-    />
-
-    <mat-error *ngIf="passwordConfirm.dirty && !passwordDoesMatch"
-      >Password does not match</mat-error
-    >
-  </mat-form-field>
-
-  <mat-error>{{ serverMessage }}</mat-error>
-  <!-----------------SAVE----------------->
-  <button
-    type="submit"
-    mat-icon-button
-    matTooltip="Save"
-    [disabled]="form.invalid || !passwordDoesMatch || loading"
-  >
-    <mat-icon>save</mat-icon>
-  </button>
-</form>
+      Forgot password?
+    </button>
+  </form>
+</mat-card>

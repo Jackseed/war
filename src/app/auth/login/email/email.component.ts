@@ -54,7 +54,7 @@ export class EmailComponent implements OnInit {
     return this.type === "login";
   }
 
-  get isSignUp() {
+  get isSignup() {
     return this.type === "signup";
   }
 
