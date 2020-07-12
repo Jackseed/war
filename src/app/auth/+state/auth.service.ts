@@ -50,7 +50,7 @@ export class AuthService extends CollectionService<AuthState> {
     console.log("saving ", email);
   }
 
-  public async emailSignup(email: string, password: string) {
+  public async emailSignup(email: string, password: string): Promise<string> {
     const oldUser = this.query.getActive();
     let errorMessage: string;
 
@@ -81,6 +81,30 @@ export class AuthService extends CollectionService<AuthState> {
 
         batch.commit();
       }
+    } catch (err) {
+      errorMessage = err;
+    }
+
+    return errorMessage;
+  }
+
+  public async emailLogin(email: string, password: string): Promise<string> {
+    let errorMessage: string;
+
+    try {
+      await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      errorMessage = err;
+    }
+
+    return errorMessage;
+  }
+
+  public async resetPassword(email: string): Promise<string> {
+    let errorMessage: string;
+
+    try {
+      await this.afAuth.auth.sendPasswordResetEmail(email);
     } catch (err) {
       errorMessage = err;
     }

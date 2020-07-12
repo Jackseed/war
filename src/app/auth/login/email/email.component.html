@@ -65,14 +65,33 @@
   <mat-error>{{ serverMessage }}</mat-error>
   <!-----------------SAVE----------------->
   <button
-    *ngIf="!isPasswordReset"
+    *ngIf="isSignup"
     type="submit"
     mat-raised-button
     color="warn"
-    matTooltip="Save"
     [disabled]="form.invalid || !passwordDoesMatch || loading"
   >
     Submit
+  </button>
+
+  <button
+    *ngIf="isLogin"
+    type="submit"
+    mat-raised-button
+    color="warn"
+    [disabled]="password.invalid || email.invalid || loading"
+  >
+    Log in
+  </button>
+
+  <button
+    *ngIf="isPasswordReset"
+    mat-raised-button
+    color="warn"
+    type="submit"
+    [disabled]="loading || email.invalid"
+  >
+    Send Reset Email
   </button>
 
   <button

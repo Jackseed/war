@@ -37,15 +37,24 @@ export class EmailComponent implements OnInit {
     this.loading = true;
     const email = this.email.value;
     const password = this.password.value;
+    let snackBarMessage: string;
 
-    this.serverMessage = await this.service.emailSignup(email, password);
+    if (this.isSignup) {
+      this.serverMessage = await this.service.emailSignup(email, password);
+      snackBarMessage = "Account saved";
+    } else if (this.isLogin) {
+      this.serverMessage = await this.service.emailLogin(email, password);
+      snackBarMessage = "Successfully connected";
+    } else if (this.isPasswordReset) {
+      this.serverMessage = await this.service.resetPassword(email);
+      snackBarMessage = "Email sent";
+    }
 
     if (!this.serverMessage) {
-      this.openSnackBar("Account saved!");
+      this.openSnackBar(snackBarMessage);
       this.form.reset();
       this.dialogRef.close();
     }
-
     this.loading = false;
   }
 
