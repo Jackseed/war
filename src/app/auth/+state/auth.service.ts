@@ -3,7 +3,7 @@ import { AuthStore, AuthState } from "./auth.store";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { CollectionConfig, CollectionService } from "akita-ng-fire";
-import { createUser } from "./auth.model";
+import { createUser, User } from "./auth.model";
 import { first } from "rxjs/operators";
 import { AuthQuery } from "./auth.query";
 
@@ -48,5 +48,43 @@ export class AuthService extends CollectionService<AuthState> {
     const id = this.query.getActiveId();
     this.db.collection(this.currentPath).doc(id).update({ email });
     console.log("saving ", email);
+  }
+
+  public async emailSignup(email: string, password: string) {
+    const oldUser = this.query.getActive();
+    let errorMessage: string;
+
+    try {
+      await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+
+      const newUser = await this.afAuth.authState.pipe(first()).toPromise();
+      // merge old account and new one
+      if (newUser) {
+        const batch = this.db.firestore.batch();
+        const newUserDoc = this.db.firestore
+          .collection("users")
+          .doc(newUser.uid);
+        const oldUserDoc = this.db.firestore
+          .collection("users")
+          .doc(oldUser.id);
+        const user: User = {
+          id: newUser.uid,
+          email: newUser.email,
+          name: oldUser.name,
+          gamePlayed: oldUser.gamePlayed,
+          gameWon: oldUser.gameWon,
+          oldId: oldUser.id,
+        };
+
+        batch.set(newUserDoc, user);
+        batch.delete(oldUserDoc);
+
+        batch.commit();
+      }
+    } catch (err) {
+      errorMessage = err;
+    }
+
+    return errorMessage;
   }
 }

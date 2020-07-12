@@ -1,22 +1,53 @@
-<form (ngSubmit)="onSubmit()">
-  <div fxLayout="row">
-    <h2 fxFlex="80" style="font-size: 3.5px;">
-      <mat-form-field appearance="legacy" color="warn">
-        <h2><input matInput type="text" [formControl]="email" /></h2>
-      </mat-form-field>
-    </h2>
-    <button
-      fxFlex="20"
-      type="submit"
-      mat-icon-button
-      matTooltip="Save"
-      (click)="updateEmail(email.value);"
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!---------------EMAIL--------------->
+  <mat-form-field appearance="legacy">
+    <mat-label>Email address</mat-label>
+
+    <input
+      matInput
+      type="email"
+      formControlName="email"
+      placeholder="john.doe@war.love"
+    />
+
+    <mat-error *ngIf="email.invalid && email.dirty"
+      >Your email address is not valid</mat-error
     >
-      <mat-icon>save</mat-icon>
-    </button>
-  </div>
+  </mat-form-field>
+  <!---------------PASSWORD--------------->
+  <mat-form-field appearance="legacy">
+    <mat-label>Password</mat-label>
+
+    <input
+      matInput
+      type="password"
+      formControlName="password"
+      placeholder="Your secret password"
+    />
+
+    <mat-error *ngIf="password.invalid && password.dirty"
+      >Password must be at least 5 characters long</mat-error
+    >
+  </mat-form-field>
+  <!---------------PASSWORD CONFIRM--------------->
+  <mat-form-field appearance="legacy">
+    <mat-label>Password confirmation</mat-label>
+
+    <input
+      matInput
+      type="password"
+      formControlName="passwordConfirm"
+      placeholder="Confirm your password"
+    />
+
+    <mat-error *ngIf="passwordConfirm.dirty && !passwordDoesMatch"
+      >Password does not match</mat-error
+    >
+  </mat-form-field>
+
+  <mat-error>{{ serverMessage }}</mat-error>
+  <!-----------------SAVE----------------->
+  <button type="submit" mat-icon-button matTooltip="Save">
+    <mat-icon>save</mat-icon>
+  </button>
 </form>
-
-
-{{user.email}}
-

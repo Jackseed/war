@@ -32,8 +32,4 @@ export class ProfileComponent implements OnInit {
   public switchEditing() {
     this.isEditing = !this.isEditing;
   }
-
-  public openDialog() {
-    console.log("coucou");
-  }
 }
