@@ -1,10 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormControl,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService, AuthQuery, User } from "../../+state";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -17,6 +12,8 @@ export class EmailComponent implements OnInit {
   form: FormGroup;
   user: User;
   serverMessage: string;
+  type: "login" | "signup" | "reset" = "signup";
+  loading = false;
 
   constructor(
     private query: AuthQuery,
@@ -35,14 +32,34 @@ export class EmailComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.loading = true;
     const email = this.email.value;
     const password = this.password.value;
 
     this.serverMessage = await this.service.emailSignup(email, password);
+
     if (!this.serverMessage) {
       this.openSnackBar("Account saved!");
+      this.form.reset();
     }
-    this.form.reset();
+
+    this.loading = false;
+  }
+
+  changeType(type) {
+    this.type = type;
+  }
+
+  get isLogin() {
+    return this.type === "login";
+  }
+
+  get isSignUp() {
+    return this.type === "signup";
+  }
+
+  get isPasswordReset() {
+    return this.type === "reset";
   }
 
   get email() {

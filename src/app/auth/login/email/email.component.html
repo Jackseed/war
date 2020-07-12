@@ -47,7 +47,12 @@
 
   <mat-error>{{ serverMessage }}</mat-error>
   <!-----------------SAVE----------------->
-  <button type="submit" mat-icon-button matTooltip="Save">
+  <button
+    type="submit"
+    mat-icon-button
+    matTooltip="Save"
+    [disabled]="form.invalid || !passwordDoesMatch || loading"
+  >
     <mat-icon>save</mat-icon>
   </button>
 </form>
