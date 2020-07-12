@@ -135,38 +135,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.noUnitVictorySub = combineLatest([
       this.unitQuery.selectCount((unit) => unit.tileId !== null),
       this.unitQuery.selectLoading(),
-      this.opponentUnitQuery.selectCount((unit) => unit.tileId !== null),
-      this.opponentUnitQuery.selectLoading(),
       this.gameStatus$,
     ])
       .pipe(
-        map(
-          ([
-            unitCount,
-            unitLoading,
-            oppUnitCount,
-            oppUnitLoading,
-            gameStatus,
-          ]) => {
-            if (gameStatus === "battle" && !unitLoading && !oppUnitLoading) {
-              if (unitCount === 0) {
-                this.gameService.switchStatus("finished");
-                console.log("your army is destroyed, game over");
-                this.playerService.setVictorious(
-                  this.opponentPlayer,
-                  this.player
-                );
-              } else if (oppUnitCount === 0) {
-                this.gameService.switchStatus("finished");
-                console.log("you crushed him, congratz");
-                this.playerService.setVictorious(
-                  this.player,
-                  this.opponentPlayer
-                );
-              }
+        map(([unitCount, unitLoading, gameStatus]) => {
+          if (gameStatus === "battle" && !unitLoading) {
+            if (unitCount === 0) {
+              this.gameService.switchStatus("finished");
+              this.playerService.setVictorious(
+                this.opponentPlayer,
+                this.player
+              );
             }
           }
-        )
+        })
       )
       .subscribe();
 
