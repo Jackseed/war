@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService, AuthQuery, User } from "../../+state";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-email",
@@ -19,7 +20,8 @@ export class EmailComponent implements OnInit {
     private query: AuthQuery,
     private service: AuthService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<EmailComponent>
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class EmailComponent implements OnInit {
     if (!this.serverMessage) {
       this.openSnackBar("Account saved!");
       this.form.reset();
+      this.dialogRef.close();
     }
 
     this.loading = false;
