@@ -12,11 +12,12 @@
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()" fxLayout="column">
   <!---------------EMAIL--------------->
-  <mat-form-field appearance="legacy" color="warn" fxFlex>
+  <mat-form-field id="form-text" appearance="legacy" color="warn" fxFlex>
     <mat-label>Email address</mat-label>
 
     <input
       matInput
+      id="form-text"
       type="email"
       formControlName="email"
       placeholder="john.doe@war.love"
@@ -28,6 +29,7 @@
   </mat-form-field>
   <!---------------PASSWORD--------------->
   <mat-form-field
+    id="form-text"
     appearance="legacy"
     color="warn"
     fxFlex
@@ -37,6 +39,7 @@
 
     <input
       matInput
+      id="form-text"
       type="password"
       formControlName="password"
       placeholder="Your secret password"
@@ -47,11 +50,18 @@
     >
   </mat-form-field>
   <!---------------PASSWORD CONFIRM--------------->
-  <mat-form-field appearance="legacy" color="warn" fxFlex *ngIf="isSignup">
+  <mat-form-field
+    id="form-text"
+    appearance="legacy"
+    color="warn"
+    fxFlex
+    *ngIf="isSignup"
+  >
     <mat-label>Password confirmation</mat-label>
 
     <input
       matInput
+      id="form-text"
       type="password"
       formControlName="passwordConfirm"
       placeholder="Confirm your password"

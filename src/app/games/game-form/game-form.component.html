@@ -1,11 +1,11 @@
 <form (ngSubmit)="onSubmit()" #gameForm="ngForm">
   <div>
     <mat-form-field appearance="legacy" color="warn">
-      <mat-label id="text">Enter a name</mat-label>
+      <mat-label id="form-text">Enter a name</mat-label>
       <input
         matInput
-        id="text"
-        type="text"
+        id="form-text"
+        type="form-text"
         name="name"
         required
         [(ngModel)]="game.name"
