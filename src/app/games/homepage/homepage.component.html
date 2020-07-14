@@ -1,19 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <!------------------ HEADER -------------------->
-  <div fxFlex="20" fxFlexFill>
-    <app-menu-top-bar></app-menu-top-bar>
-  </div>
-
   <!------------------ PROFILE -------------------->
-  <div fxFlex="45" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+  <div fxFlex="55" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
     <div fxFlex="nogrow">
       <app-profile></app-profile>
     </div>
   </div>
 
   <!------------------ BOTTOM -------------------->
-  <div fxFlex="35" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-
+  <div fxFlex="45" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
     <!------------ CROWN -------------->
     <div fxFlex="20">
       <button class="crown-button" mat-icon-button [routerLink]="'/champions'">
