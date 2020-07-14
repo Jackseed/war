@@ -17,6 +17,7 @@ export const slider = trigger("routeAnimations", [
 function slideTo(direction) {
   const optional = { optional: true };
   return [
+    style({ position: "relative" }),
     query(
       ":enter, :leave",
       [
@@ -24,7 +25,8 @@ function slideTo(direction) {
           position: "absolute",
           top: 0,
           [direction]: 0,
-          width: "100%",
+          width: "80%",
+          height: "100%",
         }),
       ],
       optional
@@ -33,15 +35,12 @@ function slideTo(direction) {
     group([
       query(
         ":leave",
-        [animate("600ms ease", style({ [direction]: "100%" }))],
+        [animate("500ms ease-in-out", style({ [direction]: "100%" }))],
         optional
       ),
-      query(":enter", [animate("600ms ease", style({ [direction]: "0%" }))]),
+      query(":enter", [
+        animate("500ms ease-in-out", style({ [direction]: "0%" })),
+      ]),
     ]),
-    // Normalize the page style... Might not be necessary
-
-    // Required only if you have child animations on the page
-    // query(':leave', animateChild()),
-    // query(':enter', animateChild()),
   ];
 }

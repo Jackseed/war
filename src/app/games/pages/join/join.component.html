@@ -1,8 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <div fxFlex="20" fxFlexFill>
-    <app-menu-top-bar></app-menu-top-bar>
-  </div>
-  <div fxFlex="65" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex="80" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
     <div
       *ngIf="(otherGames$ | async).length === 0; else games"
       fxLayout="column"
@@ -22,7 +19,7 @@
     </ng-template>
   </div>
 
-  <div fxFlex="15" fxLayout="row" fxLayoutAlign="center start">
+  <div fxFlex="20" fxLayout="row" fxLayoutAlign="center start">
     <button mat-icon-button [routerLink]="'/home'" matTooltip="Back">
       <mat-icon>arrow_back</mat-icon>
     </button>
