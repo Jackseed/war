@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <!------------------ HEADER -------------------->
+  <div fxFlex="20" fxFlexFill>
+    <app-menu-top-bar></app-menu-top-bar>
+  </div>
+  <div fxFlex="80" fxFlexFill>
+    <div [@routeAnimations]="prepareRoute(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>
+  </div>
+</div>

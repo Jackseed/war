@@ -42,7 +42,7 @@ export const routes: Routes = [
   {
     path: "create",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isRight" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: CreateComponent,
   },
@@ -56,7 +56,7 @@ export const routes: Routes = [
   {
     path: "games",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isLeft" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: JoinComponent,
   },

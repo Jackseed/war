@@ -51,5 +51,6 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
     MatTooltipModule,
     ClipboardModule,
   ],
+  exports: [MenuTopBarComponent],
 })
 export class GamesModule {}
