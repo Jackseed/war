@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy } from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
 import { Unit, UnitQuery, UnitService } from "../unit/+state";
@@ -19,11 +19,13 @@ import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MediaObserver } from "@angular/flex-layout";
+import { AuthService, AuthQuery } from "src/app/auth/+state";
 
 @Component({
   selector: "app-board",
   templateUrl: "./board.component.html",
   styleUrls: ["./board.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
@@ -49,9 +51,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   public blackPlayer$: Observable<Player>;
   public isBlackOpponent: boolean;
   public player$: Observable<Player>;
-  public isOpen = false;
+  public isOpen$: Observable<boolean>;
 
   constructor(
+    private authQuery: AuthQuery,
+    private authService: AuthService,
     private gameQuery: GameQuery,
     private gameService: GameService,
     private tileQuery: TileQuery,
@@ -69,6 +73,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.isOpen$ = this.authQuery.selectIsOpen();
+    this.authService.updateIsOpen(true);
     this.tileService.setTiles();
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
@@ -326,7 +332,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   // open menu for small device
   public toggleMenu() {
-    this.isOpen = !this.isOpen;
+    const isOpen = this.authQuery.getIsOpen();
+    this.authService.updateIsOpen(!isOpen);
   }
 
   ngOnDestroy() {
@@ -336,5 +343,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.noUnitVictorySub.unsubscribe();
     this.finishedSub.unsubscribe();
     this.isActiveSub.unsubscribe();
+    this.authService.updateIsOpen(false);
   }
 }

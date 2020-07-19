@@ -111,4 +111,12 @@ export class AuthService extends CollectionService<AuthState> {
 
     return errorMessage;
   }
+
+  public updateIsOpen(isOpen: boolean) {
+    this.store.update({
+      ui: {
+        isOpen,
+      },
+    });
+  }
 }
