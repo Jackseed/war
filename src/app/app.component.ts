@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.user$ = this.authQuery.selectActive();
-    this.user$.subscribe(console.log);
   }
 
   public prepareRoute(outlet: RouterOutlet) {
