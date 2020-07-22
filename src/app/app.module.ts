@@ -26,22 +26,14 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk",
-  authDomain: "war-77bc4.firebaseapp.com",
-  databaseURL: "https://war-77bc4.firebaseio.com",
-  projectId: "war-77bc4",
-  storageBucket: "war-77bc4.appspot.com",
-  messagingSenderId: "891027548677",
-  appId: "1:891027548677:web:4553ee924d68363adeca6c",
-};
+
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
     NoopAnimationsModule,
