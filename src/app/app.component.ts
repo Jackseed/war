@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { slider } from "./animations/animations";
-import { AuthQuery } from "./auth/+state";
+import { AuthQuery, User } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable } from "rxjs";
 
@@ -15,6 +15,7 @@ import { Observable } from "rxjs";
 export class AppComponent implements OnInit {
   title = "War";
   public isOpen$: Observable<boolean>;
+  public user$: Observable<User>;
 
   constructor(
     public authQuery: AuthQuery,
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isOpen$ = this.authQuery.selectIsOpen();
+    this.user$ = this.authQuery.selectActive();
+    this.user$.subscribe(console.log);
   }
 
   public prepareRoute(outlet: RouterOutlet) {

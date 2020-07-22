@@ -13,7 +13,6 @@ export const slider = trigger("routeAnimations", [
   transition("* => isLeft", slideTo("left")),
   transition("* => isRight", slideTo("right")),
   transition("* => scaleIn", scale(0.95)),
-
   transition("isRight => *", slideTo("left")),
   transition("isLeft => *", slideTo("right")),
   transition("* => homePage", scale(0.95)),

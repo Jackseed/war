@@ -4,9 +4,12 @@
     fxFlex="20"
     fxFlexFill
     *ngIf="
-      !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-      (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-      (mediaObserver.isActive('sm') && !(isOpen$ | async))
+      (user$ | async) === undefined
+        ? false
+        : true ||
+          !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+          (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
+          (mediaObserver.isActive('sm') && !(isOpen$ | async))
     "
   >
     <app-top-bar></app-top-bar>
