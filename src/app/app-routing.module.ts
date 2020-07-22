@@ -28,7 +28,7 @@ export const routes: Routes = [
   {
     path: "home",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "homePage" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: HomepageComponent,
   },
@@ -49,7 +49,7 @@ export const routes: Routes = [
   {
     path: "champions",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: ChampionsComponent,
   },
@@ -63,7 +63,7 @@ export const routes: Routes = [
   {
     path: "games/:id",
     canActivate: [ActiveGameGuard, AngularFireAuthGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [ActiveGameGuard, ActiveAuthGuard],
     children: [
       {

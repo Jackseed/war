@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { slider } from "./animations/slider";
+import { slider } from "./animations/animations";
 import { AuthQuery } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable } from "rxjs";
