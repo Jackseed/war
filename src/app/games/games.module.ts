@@ -19,7 +19,6 @@ import { HomepageComponent } from "./homepage/homepage.component";
 import { CreateComponent } from "./pages/create/create.component";
 import { JoinComponent } from "./pages/join/join.component";
 import { ChampionsComponent } from "./pages/champions/champions.component";
-import { MenuTopBarComponent } from "./pages/menu-top-bar/menu-top-bar.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 
@@ -32,7 +31,6 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
     CreateComponent,
     JoinComponent,
     ChampionsComponent,
-    MenuTopBarComponent,
   ],
   imports: [
     CommonModule,

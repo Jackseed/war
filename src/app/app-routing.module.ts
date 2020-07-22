@@ -28,7 +28,7 @@ export const routes: Routes = [
   {
     path: "home",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "homePage" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: HomepageComponent,
   },
@@ -42,28 +42,28 @@ export const routes: Routes = [
   {
     path: "create",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isRight" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: CreateComponent,
   },
   {
     path: "champions",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: ChampionsComponent,
   },
   {
     path: "games",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isLeft" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: JoinComponent,
   },
   {
     path: "games/:id",
     canActivate: [ActiveGameGuard, AngularFireAuthGuard, ActiveAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [ActiveGameGuard, ActiveAuthGuard],
     children: [
       {

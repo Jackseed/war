@@ -4,7 +4,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { AngularFireModule } from "@angular/fire";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { NoopAnimationsModule, BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { GamesModule } from "./games/games.module";
 import { BoardModule } from "./board/board.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -52,6 +52,7 @@ const firebaseConfig = {
     PlayerModule,
     MessageModule,
     FlexLayoutModule,
+    BrowserAnimationsModule,
     AuthModule,
     FormsModule,
     RouterModule,

@@ -1,1 +1,25 @@
-<router-outlet></router-outlet>
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <!------------------ HEADER -------------------->
+  <div
+    fxFlex="20"
+    fxFlexFill
+    *ngIf="
+      (user$ | async) === undefined
+        ? false
+        : true ||
+          !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+          (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
+          (mediaObserver.isActive('sm') && !(isOpen$ | async))
+    "
+  >
+    <app-top-bar></app-top-bar>
+  </div>
+  <div
+    fxFlex="80"
+    fxFlexFill
+    [fxFlex.lt-md]="(isOpen$ | async) ? '100' : '80'"
+    [@routeAnimations]="prepareRoute(outlet)"
+  >
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
+</div>

@@ -1,19 +1,5 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-  <div
-    fxFlex="20"
-    fxFlexFill
-    *ngIf="
-      (!isOpen &&
-        !mediaObserver.isActive('xs') &&
-        !mediaObserver.isActive('sm')) ||
-      (mediaObserver.isActive('xs') && isOpen) ||
-      (mediaObserver.isActive('sm') && isOpen)
-    "
-  >
-    <app-top-bar fxFlexFill></app-top-bar>
-  </div>
-
-  <div fxFlex="65" fxFlexFill [fxFlex.lt-md]="isOpen ? '65' : '100'">
+  <div fxFlex="80" fxFlexFill>
     <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
       <div
         fxFlex="90"
@@ -21,6 +7,7 @@
         fxLayout="column"
         fxLayoutAlign="center center"
       >
+        <!--------------------------SUBTITLES------------------------------------->
         <div *ngIf="(gameStatus$ | async) === 'placement'">
           <h2>Position your army</h2>
         </div>
@@ -43,11 +30,9 @@
             fxLayout="column"
             fxLayoutAlign="center center"
             *ngIf="
-              (!isOpen &&
-                !mediaObserver.isActive('xs') &&
-                !mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && isOpen) ||
-              (mediaObserver.isActive('sm') && isOpen)
+              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
+              (mediaObserver.isActive('sm') && !(isOpen$ | async))
             "
           >
             <app-player-board
@@ -62,7 +47,10 @@
             fxFlexOffset.gt-sm="5"
             fxFlex.lt-md="90"
             fxFlexFill
-            *ngIf="!isOpen"
+            *ngIf="
+              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+              (isOpen$ | async)
+            "
           >
             <mat-card-content fxFlexFill>
               <mat-grid-list
@@ -129,11 +117,9 @@
             fxLayout="column"
             fxLayoutAlign="center center"
             *ngIf="
-              (!isOpen &&
-                !mediaObserver.isActive('xs') &&
-                !mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && isOpen) ||
-              (mediaObserver.isActive('sm') && isOpen)
+              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
+              (mediaObserver.isActive('sm') && !(isOpen$ | async))
             "
           >
             <app-player-board
@@ -142,6 +128,7 @@
               fxFlexFill
             ></app-player-board>
           </div>
+          <!--------------------------MENU BUTTON------------------------------------->
           <button
             mat-mini-fab
             color="warn"
@@ -158,17 +145,16 @@
       </div>
     </div>
   </div>
+  <!--------------------------BOTTOM BAR------------------------------------->
   <div
     fxFlexFill
-    fxFlex="15"
+    fxFlex="20"
     fxLayout="row"
     fxLayoutAlign="center start"
     *ngIf="
-      (!isOpen &&
-        !mediaObserver.isActive('xs') &&
-        !mediaObserver.isActive('sm')) ||
-      (mediaObserver.isActive('xs') && isOpen) ||
-      (mediaObserver.isActive('sm') && isOpen) ||
+      !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+      (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
+      (mediaObserver.isActive('sm') && !(isOpen$ | async)) ||
       (gameStatus$ | async) === 'placement'
     "
   >

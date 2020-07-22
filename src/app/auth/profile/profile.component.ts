@@ -40,10 +40,8 @@ export class ProfileComponent implements OnInit {
           ? `'${change.mqAlias}' = (${change.mediaQuery})`
           : "";
         if (change.mqAlias === "xs") {
-          console.log("xs ou sm");
           this.dialogWidth = "80vw";
         } else {
-          console.log("other");
           this.dialogWidth = "35vw";
         }
       });

@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { GameQuery, actionsPerTurn } from "src/app/games/+state";
-import { PlayerQuery, Player } from "../../player/+state";
+import { GameQuery, Game } from "src/app/games/+state";
 import { Observable } from "rxjs";
-import { AuthService } from "src/app/auth/+state";
+import { AuthService, AuthQuery } from "src/app/auth/+state";
+import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-top-bar",
@@ -10,22 +10,18 @@ import { AuthService } from "src/app/auth/+state";
   styleUrls: ["./top-bar.component.scss"],
 })
 export class TopBarComponent implements OnInit {
-  public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
-  >;
-  public player$: Observable<Player>;
-  public opponent$: Observable<Player>;
-  public actionsPerTurn = actionsPerTurn;
+  public game$: Observable<Game>;
+  public isOpen: boolean;
 
   constructor(
-    public auth: AuthService,
+    public authQuery: AuthQuery,
+    public authService: AuthService,
     private gameQuery: GameQuery,
-    private playerQuery: PlayerQuery
+    public mediaObserver: MediaObserver
   ) {}
 
   ngOnInit() {
-    this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.player$ = this.playerQuery.selectActive();
-    this.opponent$ = this.playerQuery.opponent$;
+    this.game$ = this.gameQuery.selectActive();
+    this.isOpen = this.authQuery.getIsOpen();
   }
 }
