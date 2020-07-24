@@ -7,6 +7,9 @@
 >
   <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+      <button class="rules-button" mat-stroked-button (click)="openDialog()">
+        Rules
+      </button>
       <button
         class="power-button"
         mat-icon-button
@@ -29,7 +32,9 @@
 <ng-template #classicTopBar>
   <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
-      <button class="rules-button" mat-stroked-button>Rules</button>
+      <button class="rules-button" mat-stroked-button (click)="openDialog()">
+        Rules
+      </button>
       <button
         class="power-button"
         mat-icon-button
