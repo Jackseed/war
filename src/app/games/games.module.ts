@@ -21,6 +21,7 @@ import { JoinComponent } from "./pages/join/join.component";
 import { ChampionsComponent } from "./pages/champions/champions.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClipboardModule } from "@angular/cdk/clipboard";
+import { GameHistoryComponent } from "./pages/game-history/game-history.component";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
     CreateComponent,
     JoinComponent,
     ChampionsComponent,
+    GameHistoryComponent,
   ],
   imports: [
     CommonModule,
