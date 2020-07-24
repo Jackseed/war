@@ -4,7 +4,7 @@
     fxFlex="20"
     fxFlexFill
     *ngIf="
-      (user$ | async) === undefined
+      ((user$ | async) === undefined || (isOpen$ | async))
         ? false
         : true ||
           !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
