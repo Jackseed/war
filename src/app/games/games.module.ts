@@ -22,6 +22,7 @@ import { ChampionsComponent } from "./pages/champions/champions.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { GameHistoryComponent } from "./pages/game-history/game-history.component";
+import { RulesComponent } from './pages/rules/rules.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { GameHistoryComponent } from "./pages/game-history/game-history.componen
     JoinComponent,
     ChampionsComponent,
     GameHistoryComponent,
+    RulesComponent,
   ],
   imports: [
     CommonModule,

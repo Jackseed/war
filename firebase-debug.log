@@ -1,0 +1,120 @@
+[debug] [2020-07-24T16:44:28.199Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:44:28.212Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:44:28.213Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:44:28.213Z] Platform:      win32
+[debug] [2020-07-24T16:44:28.214Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:44:28.266Z] Time:          Fri Jul 24 2020 18:44:28 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:44:28.266Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:44:28.350Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:44:28.352Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:44:28.367Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:44:41.348Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:45:28.079Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:45:28.096Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:45:28.097Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:45:28.098Z] Platform:      win32
+[debug] [2020-07-24T16:45:28.098Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:45:28.105Z] Time:          Fri Jul 24 2020 18:45:28 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:45:28.106Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:45:28.135Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:45:28.136Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:45:28.144Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:45:40.611Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:45:47.957Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:45:47.963Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:45:47.964Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:45:47.964Z] Platform:      win32
+[debug] [2020-07-24T16:45:47.964Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:45:47.971Z] Time:          Fri Jul 24 2020 18:45:47 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:45:47.971Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:45:47.995Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:45:47.996Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:45:48.002Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:46:00.240Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:46:15.321Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:46:15.325Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:46:15.325Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:46:15.326Z] Platform:      win32
+[debug] [2020-07-24T16:46:15.326Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:46:15.331Z] Time:          Fri Jul 24 2020 18:46:15 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:46:15.332Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:46:15.355Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:46:15.356Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:46:15.360Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:46:29.558Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:48:01.648Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:48:01.660Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:48:01.661Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:48:01.662Z] Platform:      win32
+[debug] [2020-07-24T16:48:01.662Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:48:01.707Z] Time:          Fri Jul 24 2020 18:48:01 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:48:01.707Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:48:01.755Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:48:01.756Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:48:01.769Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:51:44.497Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:51:44.502Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:51:44.503Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:51:44.503Z] Platform:      win32
+[debug] [2020-07-24T16:51:44.503Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:51:44.509Z] Time:          Fri Jul 24 2020 18:51:44 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:51:44.509Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:51:44.530Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:51:44.530Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:51:44.535Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:51:56.824Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:52:04.749Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:52:04.757Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:52:04.758Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:52:04.758Z] Platform:      win32
+[debug] [2020-07-24T16:52:04.758Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:52:04.765Z] Time:          Fri Jul 24 2020 18:52:04 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:52:04.765Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:52:04.790Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:52:04.791Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:52:04.797Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
+[debug] [2020-07-24T16:52:17.208Z] Error: read ECONNRESET
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+[error] 
+[error] Error: Server Error. read ECONNRESET
+[debug] [2020-07-24T16:52:31.333Z] ----------------------------------------------------------------------
+[debug] [2020-07-24T16:52:31.340Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vincent\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js use prod
+[debug] [2020-07-24T16:52:31.341Z] CLI Version:   6.1.2
+[debug] [2020-07-24T16:52:31.341Z] Platform:      win32
+[debug] [2020-07-24T16:52:31.341Z] Node Version:  v10.13.0
+[debug] [2020-07-24T16:52:31.348Z] Time:          Fri Jul 24 2020 18:52:31 GMT+0200 (GMT+02:00)
+[debug] [2020-07-24T16:52:31.348Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-07-24T16:52:31.373Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-24T16:52:31.374Z] > authorizing via signed-in user
+[debug] [2020-07-24T16:52:31.382Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ 
