@@ -17,6 +17,7 @@ import { CreateComponent } from "./games/pages/create/create.component";
 import { ChampionsComponent } from "./games/pages/champions/champions.component";
 import { JoinComponent } from "./games/pages/join/join.component";
 import { EmailComponent } from "./auth/login/email/email.component";
+import { GameHistoryComponent } from "./games/pages/game-history/game-history.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["welcome"]);
 
@@ -59,6 +60,13 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isLeft" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
     component: JoinComponent,
+  },
+  {
+    path: "history",
+    canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
+    canDeactivate: [GameGuard, ActiveAuthGuard],
+    component: GameHistoryComponent,
   },
   {
     path: "games/:id",
