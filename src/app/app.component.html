@@ -7,7 +7,7 @@
       ((user$ | async) === undefined || (isOpen$ | async))
         ? false
         : true ||
-          !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
+          !(mediaObserver.isActive('xs') || !mediaObserver.isActive('sm')) ||
           (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
           (mediaObserver.isActive('sm') && !(isOpen$ | async))
     "

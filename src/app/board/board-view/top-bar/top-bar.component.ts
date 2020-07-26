@@ -1,8 +1,10 @@
+import { RulesComponent } from "./../../../games/pages/rules/rules.component";
 import { Component, OnInit } from "@angular/core";
 import { GameQuery, Game } from "src/app/games/+state";
 import { Observable } from "rxjs";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-top-bar",
@@ -17,11 +19,16 @@ export class TopBarComponent implements OnInit {
     public authQuery: AuthQuery,
     public authService: AuthService,
     private gameQuery: GameQuery,
-    public mediaObserver: MediaObserver
+    public mediaObserver: MediaObserver,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.game$ = this.gameQuery.selectActive();
     this.isOpen = this.authQuery.getIsOpen();
+  }
+
+  public openDialog() {
+    this.dialog.open(RulesComponent);
   }
 }
