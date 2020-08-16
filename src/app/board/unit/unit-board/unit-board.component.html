@@ -15,13 +15,9 @@
           fxLayoutAlign="end center"
           fxFlexAlign="center"
           fxFlexFill
-          fxFlex.xs
+          [fxFlex.xs]="(gameStatus$ | async) === 'unit creation' ? 100 : 65"
         >
-          <div
-          fxFlexFill
-            fxFlexLayout="row"
-            fxLayoutAlign="center center"
-          >
+          <div fxFlexFill fxFlexLayout="row" fxLayoutAlign="center center">
             <div
               fxFlex
               dir="rtl"
@@ -48,10 +44,18 @@
           </div>
         </div>
         <!--------------------- Stats --------------------->
-        <div fxFlexOffset="5" fxFlex="35" fxHide.xs>
+        <div
+          fxFlexOffset="5"
+          fxFlex="35"
+          *ngIf="
+            !(mediaObserver.isActive('xs') && (gameStatus$ | async) === 'unit creation')
+          "
+        >
           <div
             fxLayout="column"
-            *ngIf="mouseOvers[i] && !isOpponent && !mediaObserver.isActive('xs')"
+            *ngIf="
+              mouseOvers[i] && !isOpponent && !mediaObserver.isActive('xs')
+            "
             fxLayoutAlign="center space-evenly"
             fxFill
           >
@@ -144,7 +148,12 @@
       fxLayoutAlign="start start"
       *ngIf="(gameStatus$ | async) === 'unit creation'"
     >
-      <div fxFlex="65" fxFlex.xs fxLayout="column" fxLayoutAlign="center center">
+      <div
+        fxFlex="65"
+        fxFlex.xs
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
         <mat-divider fxFlex="50" fxFlex.xs="85"></mat-divider>
         <h3 fxFlexOffset="20" fxFlex="30">
           {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
