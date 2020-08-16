@@ -15,7 +15,7 @@
           fxLayoutAlign="end center"
           fxFlexAlign="center"
           fxFlexFill
-          [fxFlex.xs]="(gameStatus$ | async) === 'unit creation' ? 100 : 65"
+          [fxFlex.xs]="(gameStatus$ | async) === 'unit creation' ? 100 : 50"
         >
           <div fxFlexFill fxFlexLayout="row" fxLayoutAlign="center center">
             <div
@@ -54,7 +54,7 @@
           <div
             fxLayout="column"
             *ngIf="
-              mouseOvers[i] && !isOpponent && !mediaObserver.isActive('xs')
+              mouseOvers[i] && !isOpponent
             "
             fxLayoutAlign="center space-evenly"
             fxFill

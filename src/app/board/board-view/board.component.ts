@@ -98,10 +98,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           change.mqAlias === "md"
         ) {
           this.authService.updateIsOpen(false);
-          console.log("lt-lg", change.mqAlias);
         } else {
           this.authService.updateIsOpen(true);
-          console.log("gt-md", change.mqAlias);
         }
       });
     this.isOpen$ = this.authQuery.selectIsOpen();

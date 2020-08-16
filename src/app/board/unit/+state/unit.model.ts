@@ -88,7 +88,7 @@ export function createUnit(
       hp: 1,
       range: 3,
       power: 3,
-      move: 3,
+      move: 1,
       stamina: 1,
       vision: 1,
       noise: 1,
