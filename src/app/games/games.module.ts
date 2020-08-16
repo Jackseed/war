@@ -22,8 +22,8 @@ import { ChampionsComponent } from "./pages/champions/champions.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { GameHistoryComponent } from "./pages/game-history/game-history.component";
-import { RulesComponent } from './pages/rules/rules.component';
-
+import { RulesComponent } from "./pages/rules/rules.component";
+import { MatDialogModule } from "@angular/material/dialog";
 @NgModule({
   declarations: [
     GameViewComponent,
@@ -52,6 +52,7 @@ import { RulesComponent } from './pages/rules/rules.component';
     MatSortModule,
     MatTooltipModule,
     ClipboardModule,
+    MatDialogModule,
   ],
 })
 export class GamesModule {}
