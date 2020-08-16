@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
 import { Unit, UnitQuery, UnitService } from "../unit/+state";
@@ -9,7 +15,7 @@ import {
   GameService,
   GameQuery,
 } from "src/app/games/+state";
-import { map, tap, distinctUntilChanged } from "rxjs/operators";
+import { map, tap, distinctUntilChanged, filter } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
@@ -18,7 +24,7 @@ import {
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MediaObserver } from "@angular/flex-layout";
+import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 
 @Component({
@@ -52,6 +58,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   public isBlackOpponent: boolean;
   public player$: Observable<Player>;
   public isOpen$: Observable<boolean>;
+  private watcher: Subscription;
+  private activeMediaQuery: string;
 
   constructor(
     private authQuery: AuthQuery,
@@ -73,8 +81,30 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.gameStatus$ = this.gameQuery.gameStatus$;
+    this.watcher = this.mediaObserver
+      .asObservable()
+      .pipe(
+        filter((changes: MediaChange[]) => changes.length > 0),
+        map((changes: MediaChange[]) => changes[0])
+      )
+      .subscribe((change: MediaChange) => {
+        this.activeMediaQuery = change
+          ? `'${change.mqAlias}' = (${change.mediaQuery})`
+          : "";
+        if (
+          change.mqAlias === "xs" ||
+          change.mqAlias === "sm" ||
+          change.mqAlias === "md"
+        ) {
+          this.authService.updateIsOpen(false);
+          console.log("lt-lg", change.mqAlias);
+        } else {
+          this.authService.updateIsOpen(true);
+          console.log("gt-md", change.mqAlias);
+        }
+      });
     this.isOpen$ = this.authQuery.selectIsOpen();
-    this.authService.updateIsOpen(true);
     this.tileService.setTiles();
     this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
     this.tiles$ = this.tileQuery.selectAll();
@@ -84,7 +114,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.castle = Castle(this.player.color);
     this.opponentCastle = Castle(this.opponentPlayer.color);
     this.castleIds = [this.castle.tileId, this.opponentCastle.tileId];
-    this.gameStatus$ = this.gameQuery.gameStatus$;
+
     // get the visible tile ids, except during placement
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
@@ -343,6 +373,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.noUnitVictorySub.unsubscribe();
     this.finishedSub.unsubscribe();
     this.isActiveSub.unsubscribe();
-    this.authService.updateIsOpen(false);
+    this.authService.updateIsOpen(true);
+    this.watcher.unsubscribe();
   }
 }

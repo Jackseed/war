@@ -2,6 +2,7 @@
   <div fxFlex="80" fxFlexFill>
     <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
       <div
+        fxFlex.xs="95"
         fxFlex="90"
         fxFlexFill
         fxLayout="column"
@@ -20,6 +21,12 @@
             <h2>Defeat, try again...</h2>
           </ng-template>
         </div>
+        <div
+          class="messages"
+          *ngIf="mediaObserver.isActive('xs') && !(isOpen$ | async)"
+        >
+          <app-message-board></app-message-board>
+        </div>
         <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
           <!--------------------------WHITE PLAYER BOARD------------------------------------->
           <div
@@ -29,11 +36,7 @@
             fxFlexFill
             fxLayout="column"
             fxLayoutAlign="center center"
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-              (mediaObserver.isActive('sm') && !(isOpen$ | async))
-            "
+            *ngIf="isOpen$ | async"
           >
             <app-player-board
               [player$]="whitePlayer$"
@@ -43,22 +46,16 @@
           </div>
           <!--------------------------BOARD------------------------------------->
           <mat-card
-            fxFlex="50"
-            fxFlexOffset.gt-sm="5"
-            fxFlex.lt-md="90"
-            fxFlexFill
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (isOpen$ | async)
-            "
+            fxFlex.xs="100"
+            fxFlex.sm="50"
+            fxFlex.md="80"
+            fxFlex.gt-md="35"
+            fxFlexOffset.gt-md="5"
+            fxFlexAlign.xs="start"
+            *ngIf="mediaObserver.isActive('gt-md') || !(isOpen$ | async)"
           >
             <mat-card-content fxFlexFill>
-              <mat-grid-list
-                fxFlexFill
-                cols="{{ boardSize }}"
-                gutterSize="1px"
-                rowHeight="fit"
-              >
+              <mat-grid-list fxFlexFill cols="{{ boardSize }}" gutterSize="1px">
                 <mat-grid-tile
                   *ngFor="let tile of tiles$ | async; let i = index"
                   [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
@@ -116,11 +113,7 @@
             fxFlexFill
             fxLayout="column"
             fxLayoutAlign="center center"
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-              (mediaObserver.isActive('sm') && !(isOpen$ | async))
-            "
+            *ngIf="isOpen$ | async"
           >
             <app-player-board
               [player$]="blackPlayer$"
@@ -135,7 +128,7 @@
             class="menu-button"
             (click)="toggleMenu()"
             *ngIf="
-              (mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) &&
+              mediaObserver.isActive('lt-lg') &&
               (gameStatus$ | async) != 'placement'
             "
           >
@@ -146,18 +139,7 @@
     </div>
   </div>
   <!--------------------------BOTTOM BAR------------------------------------->
-  <div
-    fxFlexFill
-    fxFlex="20"
-    fxLayout="row"
-    fxLayoutAlign="center start"
-    *ngIf="
-      !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-      (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-      (mediaObserver.isActive('sm') && !(isOpen$ | async)) ||
-      (gameStatus$ | async) === 'placement'
-    "
-  >
+  <div fxFlexFill fxFlex="20" fxLayout="row" fxLayoutAlign="center center">
     <app-bottom-bar></app-bottom-bar>
   </div>
 </div>

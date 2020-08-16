@@ -1,9 +1,6 @@
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.messages {
+  max-height: 60px;
 }
-
 mat-grid-tile {
   background-image: url("/assets/img/grass.jpg");
   background-size: cover;

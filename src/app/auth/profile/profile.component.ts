@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { User } from "../+state/auth.model";
 import { AuthQuery } from "../+state/auth.query";
 import { Observable, Subscription } from "rxjs";
@@ -14,7 +14,7 @@ import { filter, map } from "rxjs/operators";
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.scss"],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   public user$: Observable<User>;
   public user = this.query.getActive();
   public isEditing = false;
@@ -67,5 +67,9 @@ export class ProfileComponent implements OnInit {
       width: this.dialogWidth,
       maxWidth: this.dialogWidth,
     });
+  }
+
+  ngOnDestroy() {
+    this.watcher.unsubscribe();
   }
 }
