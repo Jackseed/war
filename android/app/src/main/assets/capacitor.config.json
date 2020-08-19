@@ -1,0 +1,13 @@
+{
+  "appId": "com.example.app",
+  "appName": "war",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "src",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
