@@ -32,6 +32,9 @@
       <div fxLayout="column" fxFlexFill>
         <div fxFlexAlign="center" class="small-margin-bottom">
           <h2>Compose your army</h2>
+          <div *ngIf="isOpponentReady$ | async" class="text-centered">
+            <p>Your opponent is ready!</p>
+          </div>
         </div>
         <div fxFlex>
           <div

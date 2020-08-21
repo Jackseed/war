@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { GameQuery } from "src/app/games/+state";
-import { Player } from "../../player/+state";
+import { Player, PlayerQuery } from "../../player/+state";
 import { OpponentUnitQuery } from "../opponent/+state";
 import { MediaObserver } from "@angular/flex-layout";
 
@@ -37,6 +37,7 @@ export class UnitBoardComponent implements OnInit {
     private query: UnitQuery,
     private service: UnitService,
     private gameQuery: GameQuery,
+    private playerQuery: PlayerQuery,
     private opponentUnitQuery: OpponentUnitQuery,
     public mediaObserver: MediaObserver
   ) {
@@ -88,7 +89,7 @@ export class UnitBoardComponent implements OnInit {
   ngOnInit(): void {
     this.unitsValue$ = this.query.selectCount();
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.isPlayerReady$ = this.playerQuery.isPlayerReady(false);
   }
 
   selectUnitType(

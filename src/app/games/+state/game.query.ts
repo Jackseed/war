@@ -30,13 +30,6 @@ export class GameQuery extends QueryEntity<GameState> {
     return this.selectActive().pipe(map((game) => game.playersReady.length));
   }
 
-  get isPlayerReady(): Observable<boolean> {
-    const user = this.afAuth.auth.currentUser;
-    return this.selectActive().pipe(
-      map((game) => game.playersReady.includes(user.uid))
-    );
-  }
-
   get gameStatus$(): Observable<
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   > {

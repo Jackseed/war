@@ -29,10 +29,10 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     );
   }
 
-  public get isOpponentReady(): Observable<boolean> {
-    const opponent = this.opponent;
+  public isPlayerReady(isOpponent: boolean): Observable<boolean> {
+    const player = isOpponent ? this.opponent : this.getActive();
     return this.gameQuery
       .selectActive()
-      .pipe(map((game) => game.playersReady.includes(opponent.id)));
+      .pipe(map((game) => game.playersReady.includes(player.id)));
   }
 }

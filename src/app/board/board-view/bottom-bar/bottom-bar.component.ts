@@ -29,7 +29,7 @@ export class BottomBarComponent implements OnInit {
     private tileService: TileService
   ) {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.isPlayerReady$ = this.playerQuery.isPlayerReady(false);
     this.matIconRegistry.addSvgIcon(
       "fight",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
