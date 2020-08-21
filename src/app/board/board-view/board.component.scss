@@ -31,14 +31,25 @@ mat-grid-tile {
 .unit-quantity {
   position: absolute;
   z-index: 2;
-  bottom: 10%;
+  bottom: 0%;
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: 0.9;
+  font-size: 11px;
 }
 .white {
-  color: white;
-  left: 10%;
+  background-color: white;
+  left: 0%;
+  -webkit-transform: translateX(-0%);
+  transform: translateX(-0%);
+
 }
 .black {
-  right: 10%;
+  color: white;
+  background-color: black;
+  right: 0%;
+  -webkit-transform: translateX(-0%);
+  transform: translateX(-0%);
 }
 
 .invisible {
