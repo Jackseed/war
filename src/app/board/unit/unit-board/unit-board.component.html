@@ -26,6 +26,7 @@
               <button
                 mat-icon-button
                 class="small"
+                [disabled]="isPlayerReady$ | async"
                 (click)="removeUnit(unitType)"
               >
                 <mat-icon>remove</mat-icon>
@@ -37,7 +38,12 @@
               style="--img: url(assets/img/black_{{ unitType }}.png);"
             ></div>
             <div fxFlex *ngIf="(gameStatus$ | async) === 'unit creation'">
-              <button mat-icon-button class="small" (click)="addUnit(unitType)">
+              <button
+                mat-icon-button
+                class="small"
+                [disabled]="isPlayerReady$ | async"
+                (click)="addUnit(unitType)"
+              >
                 <mat-icon>add</mat-icon>
               </button>
             </div>
@@ -48,14 +54,15 @@
           fxFlexOffset="5"
           fxFlex="35"
           *ngIf="
-            !(mediaObserver.isActive('xs') && (gameStatus$ | async) === 'unit creation')
+            !(
+              mediaObserver.isActive('xs') &&
+              (gameStatus$ | async) === 'unit creation'
+            )
           "
         >
           <div
             fxLayout="column"
-            *ngIf="
-              mouseOvers[i] && !isOpponent
-            "
+            *ngIf="mouseOvers[i] && !isOpponent"
             fxLayoutAlign="center space-evenly"
             fxFill
           >

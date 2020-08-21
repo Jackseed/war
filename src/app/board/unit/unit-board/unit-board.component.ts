@@ -29,6 +29,7 @@ export class UnitBoardComponent implements OnInit {
   public gameStatus$: Observable<
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
+  public isPlayerReady$: Observable<boolean>;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -87,6 +88,7 @@ export class UnitBoardComponent implements OnInit {
   ngOnInit(): void {
     this.unitsValue$ = this.query.selectCount();
     this.gameStatus$ = this.gameQuery.gameStatus$;
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
   }
 
   selectUnitType(
