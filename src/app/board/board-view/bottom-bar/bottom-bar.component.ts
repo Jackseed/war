@@ -6,6 +6,8 @@ import { GameService, GameQuery } from "src/app/games/+state";
 import { PlayerQuery, PlayerService } from "../../player/+state";
 import { Observable } from "rxjs";
 import { TileService } from "../../tile/+state";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: "app-bottom-bar",
@@ -26,7 +28,9 @@ export class BottomBarComponent implements OnInit {
     private gameService: GameService,
     private playerQuery: PlayerQuery,
     private playerService: PlayerService,
-    private tileService: TileService
+    private tileService: TileService,
+    public dialog: MatDialog,
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>
   ) {
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.isPlayerReady$ = this.playerQuery.isPlayerReady(false);
@@ -72,14 +76,24 @@ export class BottomBarComponent implements OnInit {
     this.playerService.switchActivePlayer();
   }
 
-  public forfeit(): void {
-    const game = this.gameQuery.getActive();
+  public confirmForfeit(): void {
+    this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      disableClose: false,
+    });
+    this.dialogRef.componentInstance.message =
+      "Are you sure you want to forfeit?";
 
-    if (game.status === "battle") {
-      const loser = this.playerQuery.getActive();
-      const winner = this.playerQuery.opponent;
-      this.gameService.switchStatus("finished");
-      this.playerService.setVictorious(winner, loser);
-    }
+    this.dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const game = this.gameQuery.getActive();
+
+        if (game.status === "battle") {
+          const loser = this.playerQuery.getActive();
+          const winner = this.playerQuery.opponent;
+          this.gameService.switchStatus("finished");
+          this.playerService.setVictorious(winner, loser);
+        }
+      }
+    });
   }
 }

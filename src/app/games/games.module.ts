@@ -24,6 +24,7 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
 import { GameHistoryComponent } from "./pages/game-history/game-history.component";
 import { RulesComponent } from "./pages/rules/rules.component";
 import { MatDialogModule } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "./pages/confirmation-dialog/confirmation-dialog.component";
 @NgModule({
   declarations: [
     GameViewComponent,
@@ -35,6 +36,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     ChampionsComponent,
     GameHistoryComponent,
     RulesComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -54,5 +56,6 @@ import { MatDialogModule } from "@angular/material/dialog";
     ClipboardModule,
     MatDialogModule,
   ],
+  exports: [ConfirmationDialogComponent],
 })
 export class GamesModule {}

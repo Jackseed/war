@@ -28,6 +28,7 @@ import { GameGuard } from "./games/guard/game.guard";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [AppComponent],
@@ -59,6 +60,10 @@ import { MessageGuard } from "./board/message/guard/message.guard";
     GameGuard,
     ActiveGameGuard,
     MessageGuard,
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
   ],
   bootstrap: [AppComponent],
 })

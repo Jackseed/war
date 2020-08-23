@@ -1,5 +1,5 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-  <div fxFlex="10" class="messages">
+  <div fxFlex="15" class="messages">
     <!--------------------------SUBTITLES------------------------------------->
     <div *ngIf="(gameStatus$ | async) === 'placement'" class="text-centered">
       <h2>Position your army</h2>
@@ -23,7 +23,7 @@
       <app-message-board></app-message-board>
     </div>
   </div>
-  <div fxFlex="70" fxFlexFill>
+  <div fxFlex="65" fxFlexFill>
     <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
       <!--------------------------WHITE PLAYER BOARD------------------------------------->
       <div
