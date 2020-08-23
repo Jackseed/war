@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card [ngClass]="{ mobile: mediaObserver.isActive('xs') }">
   <mat-card-content #list [scrollTop]="list.scrollHeight">
     <p
       *ngFor="let message of messages$ | async"

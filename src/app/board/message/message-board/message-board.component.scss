@@ -1,7 +1,7 @@
 mat-card {
   height: 60%;
 }
-mat-card-content{
+mat-card-content {
   height: 100%;
   overflow-y: scroll;
 }
@@ -17,4 +17,10 @@ p {
 #date {
   font-style: normal;
   font-weight: normal;
+}
+
+.mobile {
+  height: 40px;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }

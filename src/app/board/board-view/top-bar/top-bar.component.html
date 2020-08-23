@@ -19,13 +19,18 @@
       </button>
     </div>
     <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
-      <div fxFlexFill fxFlexOffset="5" fxFlex="30">
-        <app-message-board fxHide.xs fxFlexFill></app-message-board>
+      <div
+        *ngIf="!mediaObserver.isActive('xs')"
+        fxFlexFill
+        fxFlexOffset="5"
+        fxFlex="30"
+      >
+        <app-message-board fxFlexFill></app-message-board>
       </div>
-      <div fxFlexOffset="8.5" fxFlex="10">
+      <div fxFlexOffset.gt-xs="10" fxFlex="5" fxFlex.xs="20">
         <h1><a href="/home">WAR</a></h1>
       </div>
-      <div fxFlex="50"></div>
+      <div *ngIf="!mediaObserver.isActive('xs')" fxFlex="50"></div>
     </div>
   </div>
 </div>
