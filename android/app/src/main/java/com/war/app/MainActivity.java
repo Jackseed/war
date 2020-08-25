@@ -1,4 +1,4 @@
-package com.example.app;
+package com.war.app;
 
 import android.os.Bundle;
 
