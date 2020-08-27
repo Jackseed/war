@@ -70,6 +70,11 @@ export class BottomBarComponent implements OnInit {
     }
   }
 
+  cancelReady() {
+    const playerId = this.playerQuery.getActiveId();
+    this.gameService.cancelReady(playerId);
+  }
+
   skipTurn() {
     this.tileService.removeReachable();
     this.tileService.removeSelected();
