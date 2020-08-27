@@ -10,7 +10,7 @@
     <div *ngIf="!(isPlayerReady$ | async); else cancel">
       <button
         mat-raised-button
-        [disabled]="isPlayerReady$ | async"
+        [disabled]="(isPlayerReady$ | async) || (unitCount$ | async) === 0"
         color="warn"
         (click)="setReady()"
       >
@@ -25,7 +25,7 @@
         (click)="cancelReady()"
         matTooltip="Cancel"
       >
-        <mat-icon color="warn">cancel</mat-icon>
+        <mat-icon>clear</mat-icon>
       </button>
     </ng-template>
   </ng-container>

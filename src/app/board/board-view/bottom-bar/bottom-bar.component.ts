@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { UnitService } from "../../unit/+state";
+import { UnitService, UnitQuery } from "../../unit/+state";
 import { GameService, GameQuery } from "src/app/games/+state";
 import { PlayerQuery, PlayerService } from "../../player/+state";
 import { Observable } from "rxjs";
@@ -19,10 +19,12 @@ export class BottomBarComponent implements OnInit {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
+  public unitCount$: Observable<number>;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private unitQuery: UnitQuery,
     private unitService: UnitService,
     private gameQuery: GameQuery,
     private gameService: GameService,
@@ -55,6 +57,7 @@ export class BottomBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.unitCount$ = this.unitQuery.selectCount();
   }
 
   setReady() {
