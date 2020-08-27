@@ -33,7 +33,6 @@ export class BottomBarComponent implements OnInit {
     private dialogRef: MatDialogRef<ConfirmationDialogComponent>
   ) {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.playerQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(
       "fight",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -54,7 +53,9 @@ export class BottomBarComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+  }
 
   setReady() {
     const playerId = this.playerQuery.getActiveId();

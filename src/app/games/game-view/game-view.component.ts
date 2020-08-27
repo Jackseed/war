@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GameQuery, GameService } from "../+state";
-import { tap } from "rxjs/operators";
+import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
-import { Observable, Subscription, combineLatest } from "rxjs";
+import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -32,8 +32,19 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isOpponentReady$ = this.playerQuery.isOpponentReady;
-    this.isPlayerReady$ = this.playerQuery.isPlayerReady;
+
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+
+    this.isOpponentReady$ = this.playerQuery
+      .selectCount()
+      .pipe(
+        switchMap((count) =>
+          count === 2
+            ? (this.isOpponentReady$ = this.playerQuery.isOpponentReady)
+            : of(false)
+        )
+      );
+
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
       this.gameStatus$,
