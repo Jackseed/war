@@ -35,6 +35,9 @@
           <div *ngIf="isOpponentReady$ | async" class="text-centered">
             <p>Your opponent is ready!</p>
           </div>
+          <div *ngIf="isPlayerReady$ | async" class="text-centered">
+            <p>Waiting for your opponent</p>
+          </div>
         </div>
         <div fxFlex>
           <div

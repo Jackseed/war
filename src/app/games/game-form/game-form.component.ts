@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { createGame } from "../+state/game.model";
 import { GameService } from "../+state/game.service";
 import { Router } from "@angular/router";
@@ -10,14 +16,18 @@ import { Router } from "@angular/router";
   encapsulation: ViewEncapsulation.None,
 })
 export class GameFormComponent implements OnInit {
+  @ViewChild("gameName") gameName: ElementRef;
   game = createGame();
 
   constructor(public gameService: GameService, private router: Router) {}
 
   ngOnInit() {}
 
-  onSubmit() {
+  ngAfterViewInit() {
+    this.gameName.nativeElement.focus();
   }
+
+  onSubmit() {}
 
   public createNewGame() {
     const gameName = this.game.name;

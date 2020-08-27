@@ -18,6 +18,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersReadyCountSub$: Subscription;
   private playersCountSub$: Subscription;
   public isOpponentReady$: Observable<boolean>;
+  public isPlayerReady$: Observable<boolean>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -32,6 +33,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.isOpponentReady$ = this.playerQuery.isOpponentReady;
+    this.isPlayerReady$ = this.playerQuery.isPlayerReady;
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
       this.gameStatus$,
