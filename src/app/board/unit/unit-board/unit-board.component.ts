@@ -89,7 +89,7 @@ export class UnitBoardComponent implements OnInit {
   ngOnInit(): void {
     this.unitsValue$ = this.query.selectCount();
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.playerQuery.isPlayerReady(false);
+    this.isPlayerReady$ = this.playerQuery.isPlayerReady;
   }
 
   selectUnitType(

@@ -33,7 +33,7 @@ export class BottomBarComponent implements OnInit {
     private dialogRef: MatDialogRef<ConfirmationDialogComponent>
   ) {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.playerQuery.isPlayerReady(false);
+    this.isPlayerReady$ = this.playerQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(
       "fight",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
