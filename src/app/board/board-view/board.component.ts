@@ -299,7 +299,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // Check if the game is ongoing
     if (game.status === "finished") {
-      console.log("game is over");
+      this.openSnackBar("game is over");
     }
   }
 

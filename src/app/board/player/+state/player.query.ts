@@ -14,7 +14,6 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
 
   public get opponent(): Player {
     const activePlayerId = this.getActiveId();
-    console.log(activePlayerId);
     const players = this.getAll();
     return players.filter((player) => player.id !== activePlayerId)[0];
   }
@@ -32,7 +31,6 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
 
   public get isOpponentReady(): Observable<boolean> {
     const player = this.opponent;
-    console.log(player);
     return this.gameQuery
       .selectActive()
       .pipe(map((game) => game.playersReady.includes(player.id)));

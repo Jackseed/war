@@ -47,7 +47,6 @@ export class AuthService extends CollectionService<AuthState> {
   public updateEmail(email: string) {
     const id = this.query.getActiveId();
     this.db.collection(this.currentPath).doc(id).update({ email });
-    console.log("saving ", email);
   }
 
   public async emailSignup(email: string, password: string): Promise<string> {

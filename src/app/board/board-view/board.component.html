@@ -49,6 +49,7 @@
         fxFlex.gt-md="30"
         fxFlexOffset.gt-md="5"
         *ngIf="mediaObserver.isActive('gt-md') || !(isOpen$ | async)"
+        [ngClass]="{ isActive: (player$ | async).isActive }"
       >
         <mat-card-content fxFlexFill>
           <mat-grid-list fxFlexFill cols="{{ boardSize }}" gutterSize="1px">

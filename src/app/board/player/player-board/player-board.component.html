@@ -1,8 +1,4 @@
-<mat-card
-  class="card-container"
-  [ngClass]="{ isActive: (player$ | async).isActive }"
-  fxLayout="column"
->
+<mat-card class="card-container" fxLayout="column">
   <div fxFlex="20" class="title-container">
     <h3 class="title">{{ (user$ | async).name }}</h3>
 

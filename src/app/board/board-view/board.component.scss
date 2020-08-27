@@ -42,7 +42,6 @@ mat-grid-tile {
   left: 0%;
   -webkit-transform: translateX(-0%);
   transform: translateX(-0%);
-
 }
 .black {
   color: white;
@@ -94,4 +93,8 @@ mat-grid-tile {
   right: 15px;
   bottom: 15px;
   position: absolute;
+}
+@import "~@angular/material/theming";
+.isActive {
+  @include mat-elevation(20, #e91e1ebd);
 }
