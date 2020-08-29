@@ -135,4 +135,16 @@ export class UnitBoardComponent implements OnInit {
 
     return deathCount$;
   }
+
+  public get getTotalDeathCount$(): Observable<number> {
+    let deathCount$: Observable<number>;
+
+    if (!this.isOpponent) {
+      deathCount$ = this.query.deathCount$;
+    } else {
+      deathCount$ = this.opponentUnitQuery.deathCount$;
+    }
+
+    return deathCount$;
+  }
 }

@@ -19,11 +19,18 @@
     line-height: calc(1rem + 2.5vmin);
   }
 }
-.mat-divider {
-  margin-top: 20px;
+mat-divider {
   border-top-color: black;
   height: 20px;
+}
+
+.divider-creation {
+  margin-top: 20px;
   width: 45px;
+}
+
+.divider-board {
+  margin-top: 10px;
 }
 
 .stats-icon {
@@ -51,4 +58,13 @@
   line-height: 23px;
   position: relative;
   top: 5px;
+}
+
+#big-cross {
+  font-size: calc(1.5rem + 2vmin);
+  width: calc(1.5rem + 2vmin);
+  height: calc(1.5rem + 2vmin);
+  line-height: calc(1.5rem + 2vmin);
+  position: relative;
+  top: 3px;
 }

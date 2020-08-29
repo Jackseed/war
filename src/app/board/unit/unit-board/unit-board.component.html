@@ -153,7 +153,7 @@
       fxFlexFill
       fxLayout="row"
       fxLayoutAlign="start start"
-      *ngIf="(gameStatus$ | async) === 'unit creation'"
+      *ngIf="(gameStatus$ | async) === 'unit creation'; else deathCount"
     >
       <div
         fxFlex="65"
@@ -161,11 +161,30 @@
         fxLayout="column"
         fxLayoutAlign="center center"
       >
-        <mat-divider fxFlex="50" fxFlex.xs="85"></mat-divider>
+        <mat-divider
+          class="divider-creation"
+          fxFlex="50"
+          fxFlex.xs="85"
+        ></mat-divider>
         <h3 fxFlexOffset="20" fxFlex="30">
           {{ unitsValue$ | async }}/{{ maxTotalUnitValue }}
         </h3>
       </div>
     </div>
+    <ng-template #deathCount>
+      <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="center start">
+        <mat-divider
+          fxFlexOffset="35"
+          fxFlex="30"
+          class="divider-board"
+          fxFlexOffset.xs="30"
+          fxFlex.xs="40"
+        ></mat-divider>
+        <h3 style="margin-top: 20px">
+          <mat-icon svgIcon="cross" id="big-cross"></mat-icon>
+          {{ getTotalDeathCount$ | async }}
+        </h3>
+      </div>
+    </ng-template>
   </div>
 </div>

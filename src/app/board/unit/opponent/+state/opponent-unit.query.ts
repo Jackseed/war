@@ -96,4 +96,8 @@ export class OpponentUnitQuery extends QueryEntity<OpponentUnitState> {
       (unit) => unit.type === unitType && unit.tileId === null
     );
   }
+
+  public get deathCount$(): Observable<number> {
+    return this.selectCount((unit) => unit.tileId === null);
+  }
 }
