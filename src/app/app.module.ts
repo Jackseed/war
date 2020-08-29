@@ -30,6 +30,7 @@ import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { MatDialogRef } from "@angular/material/dialog";
 
+
 @NgModule({
   declarations: [AppComponent],
   imports: [

@@ -12,6 +12,7 @@ export const environment = {
     storageBucket: "war-77bc4.appspot.com",
     messagingSenderId: "891027548677",
     appId: "1:891027548677:web:4553ee924d68363adeca6c",
+
   },
 };
 /*

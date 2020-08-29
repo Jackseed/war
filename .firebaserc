@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "war-77bc4"
+    "default": "war-77bc4",
+    "prod": "war-prod"
   }
 }
