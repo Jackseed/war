@@ -346,8 +346,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   private openSnackBar(message: string) {
-    this.snackBar.open(message, "close", {
+    this.snackBar.open(message, "", {
       duration: 2000,
+      panelClass: ["snackbar", "center"],
     });
   }
 
