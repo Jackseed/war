@@ -29,7 +29,14 @@ jobs:
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v1.5.0
         with:
-          args: deploy --only hosting[prod]
+          args: use prod
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT: war-prod
+      - name: GitHub Action for Firebase
+        uses: w9jds/firebase-action@v1.5.0
+        with:
+          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: war-prod
