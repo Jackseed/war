@@ -18,6 +18,9 @@ import { OpponentUnitQuery } from "../opponent/+state/opponent-unit.query";
 import { OpponentUnitService } from "../opponent/+state/opponent-unit.service";
 import { TileQuery } from "../../tile/+state/tile.query";
 import { MessageService } from "../../message/+state";
+import { EntityActions } from "@datorama/akita";
+import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games/:gameId/players/:playerId/units" })
@@ -222,5 +225,23 @@ export class UnitService extends CollectionService<UnitState> {
     }
 
     return resultingDefensiveUnit;
+  }
+
+  public get dyingUnit$(): Observable<any> {
+    return this.query
+      .selectEntityAction(EntityActions.Update)
+      .pipe(
+        map((updatedUnitIds) =>
+          updatedUnitIds
+            .map((id) => this.query.getEntity(id))
+            .map((unit) =>
+              unit.tileId === null
+                ? this.messageService.openSnackBar(
+                    `You lost your ${unit.type} battalion.`
+                  )
+                : false
+            )
+        )
+      );
   }
 }

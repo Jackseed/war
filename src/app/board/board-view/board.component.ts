@@ -40,6 +40,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
   private isActiveSub: Subscription;
+  private dyingUnitsSub: Subscription;
   public boardSize = boardCols;
   public player: Player;
   public opponentPlayer: Player;
@@ -213,6 +214,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    this.dyingUnitsSub = this.unitService.dyingUnit$.subscribe();
   }
 
   play(i: number) {
@@ -371,5 +374,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.isActiveSub.unsubscribe();
     this.authService.updateIsOpen(true);
     this.watcher.unsubscribe();
+    this.dyingUnitsSub.unsubscribe();
   }
 }
