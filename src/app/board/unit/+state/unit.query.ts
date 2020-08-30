@@ -23,8 +23,12 @@ export class UnitQuery extends QueryEntity<UnitState> {
     unitType: "soldier" | "musketeer" | "knight" | "cannon"
   ): Observable<number> {
     return this.selectCount(
-      (unit) => (unit.type === unitType) && (unit.tileId === null)
+      (unit) => unit.type === unitType && unit.tileId === null
     );
+  }
+
+  public get deathCount$(): Observable<number> {
+    return this.selectCount((unit) => unit.tileId === null);
   }
 
   public get unitTileIds$(): Observable<number[]> {

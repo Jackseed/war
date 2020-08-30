@@ -12,7 +12,7 @@ export interface AuthState extends CollectionState<User>, ActiveState<string> {
 const initialState = {
   active: null,
   ui: {
-    isOpen: false,
+    isOpen: true,
   },
 };
 

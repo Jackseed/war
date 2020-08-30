@@ -7,6 +7,9 @@
 >
   <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+      <button class="rules-button" mat-stroked-button (click)="openDialog()">
+        Rules
+      </button>
       <button
         class="power-button"
         mat-icon-button
@@ -16,12 +19,18 @@
       </button>
     </div>
     <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
-      <div fxFlexOffset="40" fxFlex="10">
-        <h1><a href="/home">WAR</a></h1>
-      </div>
-      <div fxFlexFill fxFlexOffset="15" fxFlex="25">
+      <div
+        *ngIf="!mediaObserver.isActive('xs')"
+        fxFlexFill
+        fxFlexOffset="5"
+        fxFlex="30"
+      >
         <app-message-board fxFlexFill></app-message-board>
       </div>
+      <div fxFlexOffset.gt-xs="10" fxFlex="5" fxFlex.xs="20">
+        <h1><a href="/home">WAR</a></h1>
+      </div>
+      <div *ngIf="!mediaObserver.isActive('xs')" fxFlex="50"></div>
     </div>
   </div>
 </div>
@@ -29,6 +38,9 @@
 <ng-template #classicTopBar>
   <div fxLayout="column" fxLayoutAlign="center" fxFlexFill>
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end center">
+      <button class="rules-button" mat-stroked-button (click)="openDialog()">
+        Rules
+      </button>
       <button
         class="power-button"
         mat-icon-button

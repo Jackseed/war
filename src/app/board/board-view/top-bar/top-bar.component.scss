@@ -20,8 +20,18 @@ a:hover {
   cursor: pointer;
 }
 
+.rules-button {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
 @media screen and (orientation: landscape) and (min-device-width: 319px) and (max-device-width: 880px) {
   .power-button {
     margin-top: 3%;
   }
+  .rules-button {
+    margin-top: 4%;
+  }
 }
+
+

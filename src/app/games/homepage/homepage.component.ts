@@ -17,7 +17,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private gameQuery: GameQuery,
-    private gameService: GameService,
+    private gameService: GameService
   ) {
     this.matIconRegistry.addSvgIcon(
       "castle",
@@ -37,12 +37,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
         "../../../assets/img/crown.svg"
       )
     );
+    this.sub = this.gameService.syncCollection().subscribe();
   }
 
   ngOnInit(): void {
-    this.sub = this.gameService.syncCollection().subscribe();
     this.playerGames$ = this.gameQuery.playerGames;
   }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }

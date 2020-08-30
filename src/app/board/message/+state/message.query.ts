@@ -17,7 +17,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
 
   public get messages$() {
     const messages$ = this.selectAll();
-    const player = this.playerQuery.getActive();
+
     let title: string;
     let subtitle: string;
     let isActive: boolean;
@@ -26,6 +26,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
     return messages$.pipe(
       map((messages) =>
         messages.map((message) => {
+          const player = this.playerQuery.getActive();
           if (message.type === "attack") {
             // active player killed them all
             if (

@@ -22,7 +22,9 @@ import { ChampionsComponent } from "./pages/champions/champions.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { GameHistoryComponent } from "./pages/game-history/game-history.component";
-
+import { RulesComponent } from "./pages/rules/rules.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "./pages/confirmation-dialog/confirmation-dialog.component";
 @NgModule({
   declarations: [
     GameViewComponent,
@@ -33,6 +35,8 @@ import { GameHistoryComponent } from "./pages/game-history/game-history.componen
     JoinComponent,
     ChampionsComponent,
     GameHistoryComponent,
+    RulesComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +54,8 @@ import { GameHistoryComponent } from "./pages/game-history/game-history.componen
     MatSortModule,
     MatTooltipModule,
     ClipboardModule,
+    MatDialogModule,
   ],
+  exports: [ConfirmationDialogComponent],
 })
 export class GamesModule {}

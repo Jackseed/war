@@ -1,17 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <!------------------ HEADER -------------------->
-  <div
-    fxFlex="20"
-    fxFlexFill
-    *ngIf="
-      ((user$ | async) === undefined || (isOpen$ | async))
-        ? false
-        : true ||
-          !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-          (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-          (mediaObserver.isActive('sm') && !(isOpen$ | async))
-    "
-  >
+  <div fxFlex="20" fxFlexFill *ngIf="!!(user$ | async)">
     <app-top-bar></app-top-bar>
   </div>
   <div

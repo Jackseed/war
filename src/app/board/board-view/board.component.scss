@@ -1,9 +1,10 @@
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.messages {
+  max-height: 60px;
+  min-width: 100%;
 }
-
+.text-centered {
+  text-align: center;
+}
 mat-grid-tile {
   background-image: url("/assets/img/grass.jpg");
   background-size: cover;
@@ -30,14 +31,24 @@ mat-grid-tile {
 .unit-quantity {
   position: absolute;
   z-index: 2;
-  bottom: 10%;
+  bottom: 0%;
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: 0.9;
+  font-size: 11px;
 }
 .white {
-  color: white;
-  left: 10%;
+  background-color: white;
+  left: 0%;
+  -webkit-transform: translateX(-0%);
+  transform: translateX(-0%);
 }
 .black {
-  right: 10%;
+  color: white;
+  background-color: black;
+  right: 0%;
+  -webkit-transform: translateX(-0%);
+  transform: translateX(-0%);
 }
 
 .invisible {
@@ -82,4 +93,8 @@ mat-grid-tile {
   right: 15px;
   bottom: 15px;
   position: absolute;
+}
+@import "~@angular/material/theming";
+.isActive {
+  @include mat-elevation(20, #e91e1ebd);
 }

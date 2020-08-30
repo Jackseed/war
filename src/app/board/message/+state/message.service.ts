@@ -33,7 +33,6 @@ export class MessageService extends CollectionService<MessageState> {
   ) {
     const collection = this.db.collection(this.currentPath);
     const createdAt = firestore.Timestamp.fromDate(new Date());
-    console.log(createdAt);
     const message = createMessage({
       type,
       createdAt,

@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { UnitService } from "../../unit/+state";
+import { UnitService, UnitQuery } from "../../unit/+state";
 import { GameService, GameQuery } from "src/app/games/+state";
 import { PlayerQuery, PlayerService } from "../../player/+state";
 import { Observable } from "rxjs";
 import { TileService } from "../../tile/+state";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: "app-bottom-bar",
@@ -17,19 +19,22 @@ export class BottomBarComponent implements OnInit {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
+  public unitCount$: Observable<number>;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private unitQuery: UnitQuery,
     private unitService: UnitService,
     private gameQuery: GameQuery,
     private gameService: GameService,
     private playerQuery: PlayerQuery,
     private playerService: PlayerService,
-    private tileService: TileService
+    private tileService: TileService,
+    public dialog: MatDialog,
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>
   ) {
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.matIconRegistry.addSvgIcon(
       "fight",
       this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -50,7 +55,10 @@ export class BottomBarComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.unitCount$ = this.unitQuery.selectCount();
+  }
 
   setReady() {
     const playerId = this.playerQuery.getActiveId();
@@ -65,6 +73,11 @@ export class BottomBarComponent implements OnInit {
     }
   }
 
+  cancelReady() {
+    const playerId = this.playerQuery.getActiveId();
+    this.gameService.cancelReady(playerId);
+  }
+
   skipTurn() {
     this.tileService.removeReachable();
     this.tileService.removeSelected();
@@ -72,14 +85,24 @@ export class BottomBarComponent implements OnInit {
     this.playerService.switchActivePlayer();
   }
 
-  public forfeit(): void {
-    const game = this.gameQuery.getActive();
+  public confirmForfeit(): void {
+    this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      disableClose: false,
+    });
+    this.dialogRef.componentInstance.message =
+      "Are you sure you want to forfeit?";
 
-    if (game.status === "battle") {
-      const loser = this.playerQuery.getActive();
-      const winner = this.playerQuery.opponent;
-      this.gameService.switchStatus("finished");
-      this.playerService.setVictorious(winner, loser);
-    }
+    this.dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const game = this.gameQuery.getActive();
+
+        if (game.status === "battle") {
+          const loser = this.playerQuery.getActive();
+          const winner = this.playerQuery.opponent;
+          this.gameService.switchStatus("finished");
+          this.playerService.setVictorious(winner, loser);
+        }
+      }
+    });
   }
 }

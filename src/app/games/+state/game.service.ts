@@ -4,8 +4,9 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { CollectionService, CollectionConfig } from "akita-ng-fire";
 import { GameQuery } from "./game.query";
-import { Game, createGame } from "./game.model";
+import { createGame } from "./game.model";
 import { createPlayer } from "src/app/board/player/+state/player.model";
+import { firestore } from "firebase/app";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games" })
@@ -99,5 +100,14 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
 
     doc.update({ playersReady });
+  }
+
+  cancelReady(playerId: string) {
+    const game = this.query.getActive();
+    const doc = this.db.collection("games").doc(game.id);
+
+    doc.update({
+      playersReady: firestore.FieldValue.arrayRemove(playerId),
+    });
   }
 }

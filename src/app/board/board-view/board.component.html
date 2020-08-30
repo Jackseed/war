@@ -1,163 +1,139 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-  <div fxFlex="80" fxFlexFill>
-    <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex="15" class="messages">
+    <!--------------------------SUBTITLES------------------------------------->
+    <div *ngIf="(gameStatus$ | async) === 'placement'" class="text-centered">
+      <h2>Position your army</h2>
+    </div>
+    <div *ngIf="(gameStatus$ | async) === 'finished'" class="text-centered">
+      <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
+        <h2>Victory, well done General!</h2>
+      </ng-container>
+
+      <ng-template #defeat>
+        <h2>Defeat, try again...</h2>
+      </ng-template>
+    </div>
+    <div
+      *ngIf="
+        mediaObserver.isActive('xs') &&
+        !(isOpen$ | async) &&
+        (gameStatus$ | async) !== 'finished'
+      "
+    >
+      <app-message-board></app-message-board>
+    </div>
+  </div>
+  <div fxFlex="65" fxFlexFill>
+    <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
+      <!--------------------------WHITE PLAYER BOARD------------------------------------->
       <div
-        fxFlex="90"
+        fxFlex="15"
+        fxFlex.xs="40"
+        fxFlex.lt-md="25"
         fxFlexFill
         fxLayout="column"
         fxLayoutAlign="center center"
+        *ngIf="isOpen$ | async"
       >
-        <!--------------------------SUBTITLES------------------------------------->
-        <div *ngIf="(gameStatus$ | async) === 'placement'">
-          <h2>Position your army</h2>
-        </div>
-        <div *ngIf="(gameStatus$ | async) === 'finished'">
-          <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
-            <h2>Victory, well done General!</h2>
-          </ng-container>
-
-          <ng-template #defeat>
-            <h2>Defeat, try again...</h2>
-          </ng-template>
-        </div>
-        <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
-          <!--------------------------WHITE PLAYER BOARD------------------------------------->
-          <div
-            fxFlex="15"
-            fxFlex.xs="40"
-            fxFlex.lt-md="25"
-            fxFlexFill
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-              (mediaObserver.isActive('sm') && !(isOpen$ | async))
-            "
-          >
-            <app-player-board
-              [player$]="whitePlayer$"
-              [isOpponent]="isWhiteOpponent"
-              fxFlexFill
-            ></app-player-board>
-          </div>
-          <!--------------------------BOARD------------------------------------->
-          <mat-card
-            fxFlex="50"
-            fxFlexOffset.gt-sm="5"
-            fxFlex.lt-md="90"
-            fxFlexFill
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (isOpen$ | async)
-            "
-          >
-            <mat-card-content fxFlexFill>
-              <mat-grid-list
+        <app-player-board
+          [player$]="whitePlayer$"
+          [isOpponent]="isWhiteOpponent"
+          fxFlexFill
+        ></app-player-board>
+      </div>
+      <!--------------------------BOARD------------------------------------->
+      <mat-card
+        fxFlex.xs="100"
+        fxFlex.sm="50"
+        fxFlex.md="40"
+        fxFlex.gt-md="30"
+        fxFlexOffset.gt-md="5"
+        *ngIf="mediaObserver.isActive('gt-md') || !(isOpen$ | async)"
+        [ngClass]="{ isActive: (player$ | async).isActive }"
+      >
+        <mat-card-content fxFlexFill>
+          <mat-grid-list fxFlexFill cols="{{ boardSize }}" gutterSize="1px">
+            <mat-grid-tile
+              *ngFor="let tile of tiles$ | async; let i = index"
+              [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
+            >
+              <div
+                (click)="play(i)"
                 fxFlexFill
-                cols="{{ boardSize }}"
-                gutterSize="1px"
-                rowHeight="fit"
+                style="--img: url({{ getUnitImgUrl(i) }});"
+                [ngClass]="{
+                  invisible: !(visibleTileIds$ | async).includes(i),
+                  reachable: tile.isReachable,
+                  selected: tile.isSelected,
+                  withinRange: tile.withinRange,
+                  unit:
+                    castleIds.includes(i) ||
+                    (unitTileIds$ | async).includes(i) ||
+                    (visibleOpponentUnitTileIds$ | async).includes(i),
+                  playerUnit: (unitTileIds$ | async).includes(i)
+                }"
               >
-                <mat-grid-tile
-                  *ngFor="let tile of tiles$ | async; let i = index"
-                  [ngClass]="{ finished: (gameStatus$ | async) === 'finished' }"
+                <div
+                  *ngIf="
+                    (unitTileIds$ | async).includes(i) ||
+                    (visibleOpponentUnitTileIds$ | async).includes(i)
+                  "
                 >
-                  <div
-                    (click)="play(i)"
-                    fxFlexFill
-                    style="--img: url({{ getUnitImgUrl(i) }});"
+                  <span
+                    class="unit-quantity"
                     [ngClass]="{
-                      invisible: !(visibleTileIds$ | async).includes(i),
-                      reachable: tile.isReachable,
-                      selected: tile.isSelected,
-                      withinRange: tile.withinRange,
-                      unit:
-                        castleIds.includes(i) ||
-                        (unitTileIds$ | async).includes(i) ||
-                        (visibleOpponentUnitTileIds$ | async).includes(i),
-                      playerUnit: (unitTileIds$ | async).includes(i)
+                      white: getUnitByTileId(i)
+                        ? getUnitByTileId(i).color === 'white'
+                        : getOpponentUnitByTileId(i).color === 'white',
+                      black: getUnitByTileId(i)
+                        ? getUnitByTileId(i).color === 'black'
+                        : getOpponentUnitByTileId(i).color === 'black'
                     }"
+                    >{{
+                      getUnitByTileId(i)
+                        ? getUnitByTileId(i).quantity
+                        : getOpponentUnitByTileId(i).quantity
+                    }}</span
                   >
-                    <div
-                      *ngIf="
-                        (unitTileIds$ | async).includes(i) ||
-                        (visibleOpponentUnitTileIds$ | async).includes(i)
-                      "
-                    >
-                      <span
-                        class="unit-quantity"
-                        [ngClass]="{
-                          white: getUnitByTileId(i)
-                            ? getUnitByTileId(i).color === 'white'
-                            : getOpponentUnitByTileId(i).color === 'white',
-                          black: getUnitByTileId(i)
-                            ? getUnitByTileId(i).color === 'black'
-                            : getOpponentUnitByTileId(i).color === 'black'
-                        }"
-                        >{{
-                          getUnitByTileId(i)
-                            ? getUnitByTileId(i).quantity
-                            : getOpponentUnitByTileId(i).quantity
-                        }}</span
-                      >
-                    </div>
-                  </div>
-                </mat-grid-tile>
-              </mat-grid-list>
-            </mat-card-content>
-          </mat-card>
-          <!--------------------------BLACK PLAYER BOARD------------------------------------->
-          <div
-            fxFlex="15"
-            fxFlex.xs="40"
-            fxFlex.lt-md="25"
-            fxFlexOffset="5"
-            fxFlexFill
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            *ngIf="
-              !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-              (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-              (mediaObserver.isActive('sm') && !(isOpen$ | async))
-            "
-          >
-            <app-player-board
-              [player$]="blackPlayer$"
-              [isOpponent]="isBlackOpponent"
-              fxFlexFill
-            ></app-player-board>
-          </div>
-          <!--------------------------MENU BUTTON------------------------------------->
-          <button
-            mat-mini-fab
-            color="warn"
-            class="menu-button"
-            (click)="toggleMenu()"
-            *ngIf="
-              (mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) &&
-              (gameStatus$ | async) != 'placement'
-            "
-          >
-            <mat-icon>menu</mat-icon>
-          </button>
-        </div>
+                </div>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card-content>
+      </mat-card>
+      <!--------------------------BLACK PLAYER BOARD------------------------------------->
+      <div
+        fxFlex="15"
+        fxFlex.xs="40"
+        fxFlex.lt-md="25"
+        fxFlexOffset="5"
+        fxFlexFill
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        *ngIf="isOpen$ | async"
+      >
+        <app-player-board
+          [player$]="blackPlayer$"
+          [isOpponent]="isBlackOpponent"
+          fxFlexFill
+        ></app-player-board>
       </div>
     </div>
   </div>
   <!--------------------------BOTTOM BAR------------------------------------->
-  <div
-    fxFlexFill
-    fxFlex="20"
-    fxLayout="row"
-    fxLayoutAlign="center start"
-    *ngIf="
-      !(mediaObserver.isActive('xs') || mediaObserver.isActive('sm')) ||
-      (mediaObserver.isActive('xs') && !(isOpen$ | async)) ||
-      (mediaObserver.isActive('sm') && !(isOpen$ | async)) ||
-      (gameStatus$ | async) === 'placement'
-    "
-  >
+  <div fxFlexFill fxFlex="20" fxLayout="row" fxLayoutAlign="center center">
     <app-bottom-bar></app-bottom-bar>
+    <!--------------------------MENU BUTTON------------------------------------->
+    <button
+      mat-mini-fab
+      color="warn"
+      class="menu-button"
+      (click)="toggleMenu()"
+      *ngIf="
+        mediaObserver.isActive('lt-lg') && (gameStatus$ | async) != 'placement'
+      "
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
   </div>
 </div>

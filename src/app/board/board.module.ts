@@ -17,6 +17,7 @@ import { RouterModule } from "@angular/router";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MessageBoardComponent } from "./message/message-board/message-board.component";
+import { ConfirmationDialogComponent } from "../games/pages/confirmation-dialog/confirmation-dialog.component";
 
 @NgModule({
   declarations: [BoardComponent, TopBarComponent, BottomBarComponent],
@@ -42,5 +43,6 @@ import { MessageBoardComponent } from "./message/message-board/message-board.com
     BottomBarComponent,
     MessageBoardComponent,
   ],
+  entryComponents: [ConfirmationDialogComponent],
 })
 export class BoardModule {}

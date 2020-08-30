@@ -4,6 +4,8 @@ import { slider } from "./animations/animations";
 import { AuthQuery, User } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable } from "rxjs";
+import { Game, GameQuery } from "./games/+state";
+import { Plugins } from '@capacitor/core';
 
 @Component({
   selector: "app-root",
@@ -16,15 +18,18 @@ export class AppComponent implements OnInit {
   title = "War";
   public isOpen$: Observable<boolean>;
   public user$: Observable<User>;
+  public game$: Observable<Game>;
 
   constructor(
     public authQuery: AuthQuery,
+    public gameQuery: GameQuery,
     public mediaObserver: MediaObserver
   ) {}
 
   ngOnInit() {
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.user$ = this.authQuery.selectActive();
+    this.game$ = this.gameQuery.selectActive();
   }
 
   public prepareRoute(outlet: RouterOutlet) {

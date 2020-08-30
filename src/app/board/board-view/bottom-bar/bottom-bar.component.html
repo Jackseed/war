@@ -7,15 +7,27 @@
   </ng-container>
   <!--------------------- UNIT CREATION --------------------->
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'unit creation'">
-    <button
-      mat-raised-button
-      [disabled]="isPlayerReady$ | async"
-      color="warn"
-      (click)="setReady()"
-    >
-      <span>Ready</span>
-      <mat-icon svgIcon="fight" class="margin-left"></mat-icon>
-    </button>
+    <div *ngIf="!(isPlayerReady$ | async); else cancel">
+      <button
+        mat-raised-button
+        [disabled]="(isPlayerReady$ | async) || (unitCount$ | async) === 0"
+        color="warn"
+        (click)="setReady()"
+      >
+        <span>Ready</span>
+        <mat-icon svgIcon="fight" class="margin-left"></mat-icon>
+      </button>
+    </div>
+    <ng-template #cancel>
+      <button
+        mat-icon-button
+        [disabled]="!(isPlayerReady$ | async)"
+        (click)="cancelReady()"
+        matTooltip="Cancel"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </ng-template>
   </ng-container>
   <!--------------------- PLACEMENT --------------------->
   <ng-container *ngSwitchCase="(gameStatus$ | async) === 'placement'">
@@ -38,13 +50,7 @@
       <mat-icon svgIcon="camp" class="margin-left"></mat-icon>
     </button>
 
-    <button
-      class="width"
-      mat-button
-
-      fxFlex="20"
-      (click)="forfeit()"
-    >
+    <button class="width" mat-button fxFlex="20" (click)="confirmForfeit()">
       <span>Forfeit</span>
       <mat-icon svgIcon="flag" class="margin-left"></mat-icon>
     </button>

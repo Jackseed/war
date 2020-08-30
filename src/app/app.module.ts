@@ -4,7 +4,10 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { AngularFireModule } from "@angular/fire";
-import { NoopAnimationsModule, BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  NoopAnimationsModule,
+  BrowserAnimationsModule,
+} from "@angular/platform-browser/animations";
 import { GamesModule } from "./games/games.module";
 import { BoardModule } from "./board/board.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -25,7 +28,7 @@ import { GameGuard } from "./games/guard/game.guard";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
-
+import { MatDialogRef } from "@angular/material/dialog";
 
 
 @NgModule({
@@ -58,6 +61,10 @@ import { MessageGuard } from "./board/message/guard/message.guard";
     GameGuard,
     ActiveGameGuard,
     MessageGuard,
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
   ],
   bootstrap: [AppComponent],
 })

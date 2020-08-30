@@ -1,3 +1,4 @@
+import { GameQuery } from "src/app/games/+state";
 import { Injectable } from "@angular/core";
 import { QueryEntity } from "@datorama/akita";
 import { PlayerStore, PlayerState } from "./player.store";
@@ -7,7 +8,7 @@ import { map } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class PlayerQuery extends QueryEntity<PlayerState> {
-  constructor(protected store: PlayerStore) {
+  constructor(protected store: PlayerStore, private gameQuery: GameQuery) {
     super(store);
   }
 
@@ -26,5 +27,12 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
         (players) => players.filter((player) => player.id !== activePlayerId)[0]
       )
     );
+  }
+
+  public get isOpponentReady(): Observable<boolean> {
+    const player = this.opponent;
+    return this.gameQuery
+      .selectActive()
+      .pipe(map((game) => game.playersReady.includes(player.id)));
   }
 }

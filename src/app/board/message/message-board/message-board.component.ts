@@ -4,6 +4,7 @@ import { Observable, Subscription } from "rxjs";
 import { Player, PlayerQuery } from "../../player/+state";
 import { firestore } from "firebase/app";
 import { map } from "rxjs/operators";
+import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-message-board",
@@ -23,7 +24,11 @@ export class MessageBoardComponent implements OnInit {
   public player: Player;
   private messageSub: Subscription;
 
-  constructor(private query: MessageQuery, private playerQuery: PlayerQuery) {}
+  constructor(
+    private query: MessageQuery,
+    private playerQuery: PlayerQuery,
+    public mediaObserver: MediaObserver
+  ) {}
 
   ngOnInit(): void {
     this.messages$ = this.query.messages$.pipe(

@@ -5,17 +5,16 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyAT7U1JZwZlf1RHIP184HFgJh7s7zVmVHI",
-    authDomain: "war-prod.firebaseapp.com",
-    databaseURL: "https://war-prod.firebaseio.com",
-    projectId: "war-prod",
-    storageBucket: "war-prod.appspot.com",
-    messagingSenderId: "116993685114",
-    appId: "1:116993685114:web:08d8985c03aff9cf2dedc3",
-    measurementId: "G-NQQGTLNZVD",
+    apiKey: "AIzaSyC5EgS298a0tP-RS6-3xFf9TJMuEDbspSk",
+    authDomain: "war-77bc4.firebaseapp.com",
+    databaseURL: "https://war-77bc4.firebaseio.com",
+    projectId: "war-77bc4",
+    storageBucket: "war-77bc4.appspot.com",
+    messagingSenderId: "891027548677",
+    appId: "1:891027548677:web:4553ee924d68363adeca6c",
+
   },
 };
-
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
