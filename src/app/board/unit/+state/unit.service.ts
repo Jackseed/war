@@ -228,20 +228,19 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   public get dyingUnit$(): Observable<any> {
-    return this.query
-      .selectEntityAction(EntityActions.Update)
-      .pipe(
-        map((updatedUnitIds) =>
-          updatedUnitIds
-            .map((id) => this.query.getEntity(id))
-            .map((unit) =>
-              unit.tileId === null
-                ? this.messageService.openSnackBar(
-                    `You lost your ${unit.type} battalion.`
-                  )
-                : false
-            )
-        )
-      );
+    return this.query.selectEntityAction(EntityActions.Update).pipe(
+      map((updatedUnitIds) =>
+        updatedUnitIds
+          .map((id) => this.query.getEntity(id))
+          .map((unit) => {
+            if (unit.tileId === null) {
+              this.messageService.openSnackBar(
+                `You lost your ${unit.type} battalion.`
+              );
+              window.navigator.vibrate(200);
+            }
+          })
+      )
+    );
   }
 }
