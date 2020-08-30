@@ -29,7 +29,7 @@ jobs:
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v1.5.0
         with:
-          args: use pord
+          args: use prod
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
