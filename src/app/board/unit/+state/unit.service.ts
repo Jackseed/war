@@ -165,12 +165,13 @@ export class UnitService extends CollectionService<UnitState> {
         .includes(attackingUnit.tileId);
 
       const resultingOpponentUnit = this.fight(attackingUnit, opponentUnit);
+      console.log(opponentUnit.quantity - resultingOpponentUnit.quantity);
       this.messageService.addMessage(
-        "attack",
         attackingUnit,
         opponentUnit,
         true,
         true,
+        false,
         opponentUnit.quantity - resultingOpponentUnit.quantity
       );
       this.messageService.openSnackBar(
@@ -183,6 +184,15 @@ export class UnitService extends CollectionService<UnitState> {
         resultingAttackingUnit = this.fight(
           resultingOpponentUnit,
           attackingUnit
+        );
+        console.log(attackingUnit.quantity - resultingAttackingUnit.quantity);
+        this.messageService.addMessage(
+          opponentUnit,
+          attackingUnit,
+          true,
+          true,
+          true,
+          attackingUnit.quantity - resultingAttackingUnit.quantity
         );
       } else if (
         (resultingOpponentUnit.quantity === 0 &&

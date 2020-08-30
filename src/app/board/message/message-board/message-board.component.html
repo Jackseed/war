@@ -5,7 +5,7 @@
       [ngClass]="{ active: message.isActive, passive: !message.isActive }"
     >
       <span id="date">[{{ message.date.toDate() | date: "HH:mm" }}] </span>
-      <span> {{ message.title }} {{ message.subtitle }}</span>
+      <span> {{ message.content }}</span>
     </p>
   </mat-card-content>
 </mat-card>

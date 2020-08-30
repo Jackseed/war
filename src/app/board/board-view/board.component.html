@@ -16,7 +16,7 @@
     <div
       *ngIf="
         mediaObserver.isActive('xs') &&
-        !(isOpen$ | async) &&
+        (isOpen$ | async) &&
         (gameStatus$ | async) !== 'finished'
       "
     >

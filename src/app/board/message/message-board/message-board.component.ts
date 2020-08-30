@@ -15,8 +15,7 @@ import { MediaObserver } from "@angular/flex-layout";
 export class MessageBoardComponent implements OnInit {
   public messages$: Observable<
     {
-      title: string;
-      subtitle: string;
+      content: string;
       isActive: boolean;
       date: firestore.Timestamp;
     }[]
