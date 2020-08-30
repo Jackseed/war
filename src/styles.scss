@@ -1,5 +1,6 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-html, body {
+html,
+body {
   height: 100%;
 }
 html {
@@ -10,37 +11,37 @@ body {
 }
 h1 {
   margin: 0;
-  font-family: 'Viaoda Libre', cursive;
+  font-family: "Viaoda Libre", cursive;
   font-size: calc(2rem + 6vmin);
   font-weight: normal;
 }
 h2 {
   margin: 0;
-  font-family: 'Viaoda Libre', cursive;
+  font-family: "Viaoda Libre", cursive;
   font-size: calc(1.5rem + 3.5vmin);
   font-weight: normal;
 }
 h3 {
   margin: 0;
-  font-family: 'Viaoda Libre', cursive;
+  font-family: "Viaoda Libre", cursive;
   font-size: calc(1rem + 2.5vmin);
   font-weight: normal;
 }
 h4 {
   margin: 0;
-  font-family: 'Viaoda Libre', cursive;
+  font-family: "Viaoda Libre", cursive;
   font-size: calc(1.1rem + 0.5vmin);
   font-weight: normal;
 }
 p {
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: calc(1.1rem + 0.5vmin);
   font-weight: normal;
 }
 span {
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: calc(1.1rem + 0.5vmin);
 }
 
@@ -51,3 +52,11 @@ span {
   font-weight: normal;
 }
 
+.snackbar {
+  background-color: white;
+  color: black;
+}
+
+.mat-simple-snackbar {
+  justify-content: center !important;
+}

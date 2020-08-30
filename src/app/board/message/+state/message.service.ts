@@ -9,11 +9,16 @@ import { GameQuery } from "src/app/games/+state";
 import { Unit } from "../../unit/+state";
 import { createMessage } from "./message.model";
 import { firestore } from "firebase/app";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games/:gameId/messages" })
 export class MessageService extends CollectionService<MessageState> {
-  constructor(store: MessageStore, private gameQuery: GameQuery) {
+  constructor(
+    store: MessageStore,
+    private gameQuery: GameQuery,
+    private snackBar: MatSnackBar
+  ) {
     super(store);
   }
 
@@ -29,7 +34,7 @@ export class MessageService extends CollectionService<MessageState> {
     defensiveUnit: Unit,
     isAttackerVisible: boolean,
     isDefenserVisible: boolean,
-    casualties?: number,
+    casualties?: number
   ) {
     const collection = this.db.collection(this.currentPath);
     const createdAt = firestore.Timestamp.fromDate(new Date());
@@ -43,5 +48,12 @@ export class MessageService extends CollectionService<MessageState> {
       casualties,
     });
     collection.add(message);
+  }
+
+  public openSnackBar(message: string) {
+    this.snackBar.open(message, "", {
+      duration: 2000,
+      panelClass: "snackbar",
+    });
   }
 }

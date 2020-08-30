@@ -26,6 +26,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
+import { MessageService } from "../message/+state";
 
 @Component({
   selector: "app-board",
@@ -39,6 +40,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
   private isActiveSub: Subscription;
+  private dyingUnitsSub: Subscription;
   public boardSize = boardCols;
   public player: Player;
   public opponentPlayer: Player;
@@ -75,6 +77,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitStore: OpponentUnitStore,
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
+    private messageService: MessageService,
     private snackBar: MatSnackBar,
     public sanitizer: DomSanitizer,
     public mediaObserver: MediaObserver
@@ -211,6 +214,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    this.dyingUnitsSub = this.unitService.dyingUnit$.subscribe();
   }
 
   play(i: number) {
@@ -283,23 +288,25 @@ export class BoardComponent implements OnInit, OnDestroy {
               this.tileService.removeReachable();
               this.tileService.removeSelected();
               this.tileService.removeInRangeTiles();
-              this.openSnackBar("This battalion needs to rest first.");
+              this.messageService.openSnackBar(
+                "This battalion needs to rest first."
+              );
             } else {
               this.tileService.removeReachable();
               this.tileService.removeSelected();
               this.tileService.removeInRangeTiles();
-              this.openSnackBar("You cannot reach this place.");
+              this.messageService.openSnackBar("You cannot reach this place.");
             }
           }
         }
       } else {
-        this.openSnackBar("It's not your turn.");
+        this.messageService.openSnackBar("It's not your turn.");
       }
     }
 
     // Check if the game is ongoing
     if (game.status === "finished") {
-      this.openSnackBar("game is over");
+      this.messageService.openSnackBar("game is over");
     }
   }
 
@@ -345,12 +352,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     return url;
   }
 
-  private openSnackBar(message: string) {
-    this.snackBar.open(message, "close", {
-      duration: 2000,
-    });
-  }
-
   private playAudio() {
     const audio = new Audio();
     audio.src = "../../../assets/audio/change_turn.wav";
@@ -373,5 +374,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.isActiveSub.unsubscribe();
     this.authService.updateIsOpen(true);
     this.watcher.unsubscribe();
+    this.dyingUnitsSub.unsubscribe();
   }
 }
