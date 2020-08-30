@@ -171,20 +171,24 @@
         </h3>
       </div>
     </div>
-    <div *ngIf="(gameStatus$ | async) === ('battle' || 'finished')">
-      <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="center start">
-        <mat-divider
-          fxFlexOffset="35"
-          fxFlex="30"
-          class="divider-board"
-          fxFlexOffset.xs="30"
-          fxFlex.xs="40"
-        ></mat-divider>
-        <h3 style="margin-top: 20px">
-          <mat-icon svgIcon="cross" id="big-cross"></mat-icon>
-          {{ getTotalDeathCount$ | async }}
-        </h3>
-      </div>
+    <div
+      *ngIf="(gameStatus$ | async) === ('battle' || 'finished')"
+      fxFlex="20"
+      fxFlexFill
+      fxLayout="row"
+      fxLayoutAlign="center start"
+    >
+      <mat-divider
+        fxFlexOffset="35"
+        fxFlex="30"
+        class="divider-board"
+        fxFlexOffset.xs="30"
+        fxFlex.xs="40"
+      ></mat-divider>
+      <h3 style="margin-top: 20px">
+        <mat-icon svgIcon="cross" id="big-cross"></mat-icon>
+        {{ getTotalDeathCount$ | async }}
+      </h3>
     </div>
   </div>
 </div>
