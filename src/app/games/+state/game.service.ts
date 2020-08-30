@@ -7,6 +7,7 @@ import { GameQuery } from "./game.query";
 import { createGame } from "./game.model";
 import { createPlayer } from "src/app/board/player/+state/player.model";
 import { firestore } from "firebase/app";
+import { MessageService } from "src/app/board/message/+state";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games" })
@@ -15,7 +16,8 @@ export class GameService extends CollectionService<GameState> {
     store: GameStore,
     private query: GameQuery,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {
     super(store);
   }
@@ -75,7 +77,7 @@ export class GameService extends CollectionService<GameState> {
       this.addPlayer(game.id, user.uid, "black", false);
       this.router.navigate([`/games/${game.id}`]);
     } else {
-      console.log("game is full");
+      this.messageService.openSnackBar("game is full");
     }
   }
 

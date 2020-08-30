@@ -170,6 +170,11 @@ export class UnitService extends CollectionService<UnitState> {
         true,
         opponentUnit.quantity - resultingOpponentUnit.quantity
       );
+      this.messageService.openSnackBar(
+        `You killed ${opponentUnit.quantity - resultingOpponentUnit.quantity} ${
+          opponentUnit.type
+        }s.`
+      );
       // if attacked unit survived and within range, counter attack
       if (resultingOpponentUnit.quantity > 0 && oppWithinCounterAttackRange) {
         resultingAttackingUnit = this.fight(
@@ -189,7 +194,7 @@ export class UnitService extends CollectionService<UnitState> {
       this.updateUnit(resultingAttackingUnit);
       this.opponentUnitService.updateUnit(resultingOpponentUnit);
     } else {
-      console.log("you missed your shot");
+      this.messageService.openSnackBar("You missed your shot.");
     }
   }
 
