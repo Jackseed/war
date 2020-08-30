@@ -6,9 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ production ]
+    branches: [production]
   pull_request:
-    branches: [ production ]
+    branches: [production]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,11 +23,12 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: '10.x'
+          node-version: "10.x"
       - run: npm install
       - run: npm run build:prod
-      - uses: w9jds/firebase-action@master
+      - name: GitHub Action for Firebase
+        uses: w9jds/firebase-action@v1.5.0
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting[prod]
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
