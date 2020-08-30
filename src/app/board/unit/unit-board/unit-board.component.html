@@ -153,7 +153,7 @@
       fxFlexFill
       fxLayout="row"
       fxLayoutAlign="start start"
-      *ngIf="(gameStatus$ | async) === 'unit creation'; else deathCount"
+      *ngIf="(gameStatus$ | async) === 'unit creation'"
     >
       <div
         fxFlex="65"
@@ -171,7 +171,7 @@
         </h3>
       </div>
     </div>
-    <ng-template #deathCount>
+    <div *ngIf="(gameStatus$ | async) === ('battle' || 'finished')">
       <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="center start">
         <mat-divider
           fxFlexOffset="35"
@@ -185,6 +185,6 @@
           {{ getTotalDeathCount$ | async }}
         </h3>
       </div>
-    </ng-template>
+    </div>
   </div>
 </div>
