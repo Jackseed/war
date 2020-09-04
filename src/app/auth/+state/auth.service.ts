@@ -71,7 +71,7 @@ export class AuthService extends CollectionService<AuthState> {
           email: newUser.email,
           name: oldUser.name,
           gamePlayed: oldUser.gamePlayed,
-          totalMatchWon: oldUser.totalMatchWon,
+          gameWon: oldUser.gameWon,
           oldId: oldUser.id,
         };
 

@@ -37,6 +37,13 @@ export class GameQuery extends QueryEntity<GameState> {
     );
   }
 
+  get isPlayerRematch(): Observable<boolean> {
+    const user = this.afAuth.auth.currentUser;
+    return this.selectActive().pipe(
+      map((game) => game.playersRematch.includes(user.uid))
+    );
+  }
+
   get gameStatus$(): Observable<
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   > {

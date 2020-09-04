@@ -110,4 +110,12 @@ export class GameService extends CollectionService<GameState> {
       playersReady: firestore.FieldValue.arrayRemove(playerId),
     });
   }
+
+  public isRematching(playerId: string) {
+    const game = this.query.getActive();
+    const playersRematch: string[] = game.playersRematch.concat([playerId]);
+    const doc = this.db.collection("games").doc(game.id);
+
+    doc.update({ playersRematch });
+  }
 }

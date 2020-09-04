@@ -1,11 +1,8 @@
 export interface User {
   id: string;
   name?: string;
-  gamePlayed?: {
-    gameId: string;
-    matchWon: number;
-  }[];
-  totalMatchWon?: number;
+  gamePlayed?: string[];
+  gameWon?: number;
   rank?: number;
   email?: string;
   oldId?: string;
@@ -16,6 +13,6 @@ export function createUser(params: Partial<User>) {
     id: params.id,
     name: "Vagabond",
     gamePlayed: [],
-    totalMatchWon: 0,
+    gameWon: 0,
   };
 }

@@ -34,10 +34,13 @@ export class PlayerService extends CollectionService<PlayerState> {
     const batch = this.db.firestore.batch();
     const increment = firestore.FieldValue.increment(1);
 
-    batch.update(collection.doc(winner.id), { isVictorious: true });
+    batch.update(collection.doc(winner.id), {
+      isVictorious: true,
+      wins: increment,
+    });
     batch.update(this.db.firestore.collection("users").doc(winner.id), {
       gamePlayed: firestore.FieldValue.arrayUnion(this.gameQuery.getActiveId()),
-      totalMatchWon: increment,
+      gameWon: increment,
     });
 
     batch.update(collection.doc(loser.id), { isVictorious: false });
@@ -95,6 +98,4 @@ export class PlayerService extends CollectionService<PlayerState> {
 
     batch.commit();
   }
-
-
 }
