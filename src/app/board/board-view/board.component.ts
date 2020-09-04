@@ -62,6 +62,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public isOpen$: Observable<boolean>;
   private watcher: Subscription;
   private activeMediaQuery: string;
+  public actionsPerTurn = actionsPerTurn;
 
   constructor(
     private authQuery: AuthQuery,

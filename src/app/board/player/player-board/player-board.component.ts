@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { Player } from "../+state";
-import { actionsPerTurn, GameQuery } from "src/app/games/+state";
 import { AuthQuery, User } from "src/app/auth/+state";
 import { map } from "rxjs/operators";
 
@@ -13,17 +12,12 @@ import { map } from "rxjs/operators";
 export class PlayerBoardComponent implements OnInit {
   @Input() player$: Observable<Player>;
   @Input() isOpponent: boolean;
-  public actionsPerTurn = actionsPerTurn;
   public user$: Observable<User>;
   public playerName: string;
-  public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
-  >;
 
-  constructor(private gameQuery: GameQuery, private authQuery: AuthQuery) {}
+  constructor(private authQuery: AuthQuery) {}
 
   ngOnInit(): void {
-    this.gameStatus$ = this.gameQuery.gameStatus$;
     if (!this.isOpponent) {
       this.playerName = "You";
     } else {

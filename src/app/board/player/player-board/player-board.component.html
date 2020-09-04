@@ -1,25 +1,6 @@
 <mat-card class="card-container" fxLayout="column">
   <div fxFlex="20" class="title-container">
     <h3 class="title">{{ (user$ | async).name }}</h3>
-
-    <div class="subtitle" *ngIf="(gameStatus$ | async) === 'battle'">
-      <div *ngIf="(player$ | async).isActive; else waiting">
-        <p [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
-          <ng-template ngPluralCase="=1"
-            >{{ actionsPerTurn - (player$ | async).actionCount }} action
-            left</ng-template
-          >
-          <ng-template ngPluralCase="other"
-            >{{ actionsPerTurn - (player$ | async).actionCount }} actions
-            left</ng-template
-          >
-        </p>
-      </div>
-
-      <ng-template #waiting>
-        <p>Waiting</p>
-      </ng-template>
-    </div>
   </div>
   <mat-card-content fxFlex="80" fxLayout="row" fxLayoutAlign="center center">
     <div fxFlex class="container">

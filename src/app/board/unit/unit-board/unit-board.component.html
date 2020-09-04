@@ -172,7 +172,10 @@
       </div>
     </div>
     <div
-      *ngIf="(gameStatus$ | async) === ('battle' || 'finished')"
+      *ngIf="
+        (gameStatus$ | async) !== 'unit creation' &&
+        (gameStatus$ | async) !== 'placement'
+      "
       fxFlex="20"
       fxFlexFill
       fxLayout="row"
