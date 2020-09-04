@@ -16,7 +16,9 @@ export class GameViewComponent implements OnInit, OnDestroy {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   private playersReadyCountSub$: Subscription;
+  private playersRematchCountSub$: Subscription;
   private playersCountSub$: Subscription;
+
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
 
@@ -34,7 +36,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.gameStatus$ = this.gameQuery.gameStatus$;
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
-
     this.isOpponentReady$ = this.playerQuery
       .selectCount()
       .pipe(
@@ -66,6 +67,25 @@ export class GameViewComponent implements OnInit, OnDestroy {
         tap(([count, gameStatus]) => {
           if (count === 2 && gameStatus === "unit creation") {
             this.gameService.switchStatus("placement");
+          } else if (count === 2 && gameStatus === "placement") {
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+            this.gameService.switchStatus("battle");
+          }
+        })
+      )
+      .subscribe();
+
+    this.playersRematchCountSub$ = combineLatest([
+      this.gameQuery.playersRematchCount,
+      this.gameStatus$,
+    ])
+      .pipe(
+        tap(([count, gameStatus]) => {
+          if (count === 2 && gameStatus === "finished") {
+            this.gameService.switchStatus("creation");
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
           } else if (count === 2 && gameStatus === "placement") {
             this.tileService.removeReachable();
             this.tileService.removeSelected();
