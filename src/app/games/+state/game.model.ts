@@ -37,7 +37,7 @@ export function Castle(color: "white" | "black"): Castle {
     get tileId(): number {
       return this.x + this.y * boardCols;
     },
-    vision: 2,
+    vision: 1,
   };
 }
 
