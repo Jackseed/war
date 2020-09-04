@@ -1,7 +1,7 @@
-<mat-card [ngClass]="{ mobile: mediaObserver.isActive('xs') }">
+<mat-card>
   <mat-card-content>
     <div *ngIf="(messages$ | async).length === 0">
-      <h3>Battle history</h3>
+      <p class="active">Battle history</p>
       <span>There has been no battle yet.</span>
     </div>
     <p

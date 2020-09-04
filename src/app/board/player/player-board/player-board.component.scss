@@ -1,5 +1,6 @@
 .title {
   text-transform: uppercase;
+  padding-bottom: 10px;
 }
 
 .card-container {
@@ -18,15 +19,7 @@ mat-card-content {
   height: 100%;
 }
 
-.buttons {
-  align-content: flex-end;
-}
-
 .title-container {
   padding-top: 15px;
   text-align: center;
-}
-
-.subtitle {
-  color: #666666;
 }

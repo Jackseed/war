@@ -1,10 +1,46 @@
 .messages {
+  height: 60px;
   max-height: 60px;
   min-width: 100%;
 }
+
+.menu-button {
+  z-index: 2;
+  right: 15px;
+  bottom: 15px;
+  position: absolute;
+}
+
 .text-centered {
   text-align: center;
 }
+
+mat-card {
+  box-shadow: none !important;
+}
+
+.mat-card-content {
+  margin: 0;
+}
+
+.no-padding {
+  padding: 0;
+  padding-top: 10px;
+}
+
+.padding-bottom {
+  padding-bottom: 10px;
+}
+
+.paddingTop {
+  padding-top: 20px;
+}
+
+.player-board {
+  height: 60%;
+  margin-bottom: 50px;
+}
+
 mat-grid-tile {
   background-image: url("/assets/img/grass.jpg");
   background-size: cover;
@@ -87,15 +123,3 @@ mat-grid-tile {
 .finished {
   filter: brightness(70%);
 }
-
-.menu-button {
-  z-index: 2;
-  right: 15px;
-  bottom: 15px;
-  position: absolute;
-}
-@import "~@angular/material/theming";
-.isActive {
-  @include mat-elevation(20, #e91e1ebd);
-}
-
