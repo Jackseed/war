@@ -3,7 +3,9 @@ mat-card {
 }
 mat-card-content {
   height: 100%;
-  overflow-y: scroll;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .active {
   font-weight: bold;
@@ -20,7 +22,7 @@ p {
 }
 
 .mobile {
-  height: 60px;
+  height: 40px;
   padding-bottom: 5px;
   padding-top: 5px;
 }

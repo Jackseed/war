@@ -47,7 +47,6 @@ export class MessageService extends CollectionService<MessageState> {
       isFightBack,
       casualties,
     });
-    console.log(message);
     collection.add(message);
   }
 
