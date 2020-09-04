@@ -18,8 +18,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
   public get messages$() {
     const messages$ = this.selectAll();
 
-    let title: string;
-    let subtitle: string;
+    let content: string;
     let isActive: boolean;
     let date: firestore.Timestamp;
 
@@ -27,15 +26,13 @@ export class MessageQuery extends QueryEntity<MessageState> {
       map((messages) =>
         messages.map((message) => {
           const player = this.playerQuery.getActive();
-          if (message.type === "attack") {
+          if (!message.isFightBack) {
             // active player killed them all
             if (
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity === message.casualties
             ) {
-              title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They killed them all.`;
+              content = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} battalion killed ${message.defensiveUnit.quantity} ${message.defensiveUnit.type}s.`;
               isActive = true;
               date = message.createdAt;
               // active player killed some of them
@@ -43,9 +40,8 @@ export class MessageQuery extends QueryEntity<MessageState> {
               message.attackingUnit.playerId === player.id &&
               message.defensiveUnit.quantity !== message.casualties
             ) {
-              title = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              opponent's ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They made ${message.casualties} casualties.`;
+              content = `Your ${message.attackingUnit.quantity} ${message.attackingUnit.type} battalion killed
+              ${message.casualties} ${message.defensiveUnit.type}s.`;
               isActive = true;
               date = message.createdAt;
               // passive player killed them all
@@ -53,9 +49,7 @@ export class MessageQuery extends QueryEntity<MessageState> {
               message.attackingUnit.playerId !== player.id &&
               message.defensiveUnit.quantity === message.casualties
             ) {
-              title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They killed them all.`;
+              content = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} battalion killed ${message.defensiveUnit.quantity} ${message.defensiveUnit.type}s.`;
               isActive = false;
               date = message.createdAt;
               // passive player killed some of them
@@ -63,14 +57,47 @@ export class MessageQuery extends QueryEntity<MessageState> {
               message.attackingUnit.playerId !== player.id &&
               message.defensiveUnit.quantity !== message.casualties
             ) {
-              title = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} batalion attacked
-              your ${message.defensiveUnit.quantity} ${message.defensiveUnit.type} batalion.`;
-              subtitle = `They made ${message.casualties} casualties.`;
+              content = `Opponent's ${message.attackingUnit.quantity} ${message.attackingUnit.type} battalion killed ${message.casualties} ${message.defensiveUnit.type}s.`;
+              isActive = false;
+              date = message.createdAt;
+            }
+          } else {
+            // active player killed them all
+            if (
+              message.attackingUnit.playerId === player.id &&
+              message.defensiveUnit.quantity === message.casualties
+            ) {
+              content = `Your surviving ${message.attackingUnit.type}s fought back and killed opponent's ${message.defensiveUnit.type}s.`;
+              isActive = true;
+              date = message.createdAt;
+              // active player killed some of them
+            } else if (
+              message.attackingUnit.playerId === player.id &&
+              message.defensiveUnit.quantity !== message.casualties
+            ) {
+              content = `Your surviving ${message.attackingUnit.type}s fought back and killed
+              ${message.defensiveUnit.quantity} ${message.defensiveUnit.type}s.`;
+              isActive = true;
+              date = message.createdAt;
+              // passive player killed them all
+            } else if (
+              message.attackingUnit.playerId !== player.id &&
+              message.defensiveUnit.quantity === message.casualties
+            ) {
+              content = `Opponent's surviving ${message.attackingUnit.type}s fought back and killed your ${message.defensiveUnit.type}s.`;
+              isActive = false;
+              date = message.createdAt;
+              // passive player killed some of them
+            } else if (
+              message.attackingUnit.playerId !== player.id &&
+              message.defensiveUnit.quantity !== message.casualties
+            ) {
+              content = `Opponent's surviving ${message.attackingUnit.type}s fought back and killed ${message.casualties} ${message.defensiveUnit.type}s.`;
               isActive = false;
               date = message.createdAt;
             }
           }
-          return { title, subtitle, isActive, date };
+          return { content, isActive, date };
         })
       )
     );

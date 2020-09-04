@@ -166,11 +166,11 @@ export class UnitService extends CollectionService<UnitState> {
 
       const resultingOpponentUnit = this.fight(attackingUnit, opponentUnit);
       this.messageService.addMessage(
-        "attack",
         attackingUnit,
         opponentUnit,
         true,
         true,
+        false,
         opponentUnit.quantity - resultingOpponentUnit.quantity
       );
       this.messageService.openSnackBar(
@@ -183,6 +183,14 @@ export class UnitService extends CollectionService<UnitState> {
         resultingAttackingUnit = this.fight(
           resultingOpponentUnit,
           attackingUnit
+        );
+        this.messageService.addMessage(
+          opponentUnit,
+          attackingUnit,
+          true,
+          true,
+          true,
+          attackingUnit.quantity - resultingAttackingUnit.quantity
         );
       } else if (
         (resultingOpponentUnit.quantity === 0 &&

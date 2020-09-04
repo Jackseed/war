@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { MessageQuery } from "../+state";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { Player, PlayerQuery } from "../../player/+state";
 import { firestore } from "firebase/app";
 import { map } from "rxjs/operators";
@@ -10,19 +10,16 @@ import { MediaObserver } from "@angular/flex-layout";
   selector: "app-message-board",
   templateUrl: "./message-board.component.html",
   styleUrls: ["./message-board.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageBoardComponent implements OnInit {
   public messages$: Observable<
     {
-      title: string;
-      subtitle: string;
+      content: string;
       isActive: boolean;
       date: firestore.Timestamp;
     }[]
   >;
   public player: Player;
-  private messageSub: Subscription;
 
   constructor(
     private query: MessageQuery,
@@ -32,13 +29,14 @@ export class MessageBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.messages$ = this.query.messages$.pipe(
-      map((messages) => messages.sort())
+      map((messages) =>
+        messages.sort(
+          (a, b) =>
+            new Date(b.date.toDate()).getTime() -
+            new Date(a.date.toDate()).getTime()
+        )
+      )
     );
     this.player = this.playerQuery.getActive();
-    this.messageSub = this.messages$.subscribe();
-  }
-
-  ngOndestroy(): void {
-    this.messageSub.unsubscribe();
   }
 }
