@@ -126,7 +126,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       map(([status, visibleTiles, player]) => {
         if (status === "placement") {
           if (player.color === "black") {
-            return this.tileQuery.getTileColumnsByNumber(boardCols - 1, 5, true);
+            return this.tileQuery.getTileColumnsByNumber(
+              boardCols - 1,
+              5,
+              true
+            );
           } else {
             return this.tileQuery.getTileColumnsByNumber(0, 5, false);
           }
@@ -328,7 +332,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
-    if (event.key === "Escape") {
+    const game = this.gameQuery.getActive();
+    if (event.key === "Escape" && game.status === "battle") {
       this.tileService.removeReachable();
       this.tileService.removeSelected();
       this.tileService.removeInRangeTiles();

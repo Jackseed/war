@@ -93,12 +93,12 @@ mat-grid-tile {
 }
 
 .selected {
-  filter: brightness(125%);
+  filter: brightness(200%);
   animation: blinker 1.5s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.8;
+    opacity: 0.5;
   }
 }
 
