@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { GameQuery, GameService } from "../+state";
+import { GameQuery, GameService, GameStore } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
+import { UnitStore } from "src/app/board/unit/+state";
 
 @Component({
   selector: "app-game-view",
@@ -25,6 +26,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
   constructor(
     private gameQuery: GameQuery,
     private gameService: GameService,
+    private unitStore: UnitStore,
     private playerQuery: PlayerQuery,
     private tileService: TileService,
     public router: Router,
@@ -71,6 +73,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.gameService.switchStatus("battle");
+            this.gameService.resetReady();
           }
         })
       )
@@ -83,13 +86,11 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .pipe(
         tap(([count, gameStatus]) => {
           if (count === 2 && gameStatus === "finished") {
-            this.gameService.switchStatus("creation");
+            this.gameService.switchStatus("unit creation");
+            this.unitStore.set([]);
             this.tileService.removeReachable();
             this.tileService.removeSelected();
-          } else if (count === 2 && gameStatus === "placement") {
-            this.tileService.removeReachable();
-            this.tileService.removeSelected();
-            this.gameService.switchStatus("battle");
+            this.gameService.resetRematch();
           }
         })
       )
@@ -99,5 +100,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
+    this.playersRematchCountSub$.unsubscribe();
   }
 }

@@ -111,6 +111,24 @@ export class GameService extends CollectionService<GameState> {
     });
   }
 
+  resetReady() {
+    const game = this.query.getActive();
+    const doc = this.db.collection("games").doc(game.id);
+
+    doc.update({
+      playersReady: [],
+    });
+  }
+
+  resetRematch() {
+    const game = this.query.getActive();
+    const doc = this.db.collection("games").doc(game.id);
+    console.log("là");
+    doc.update({
+      playersRematch: [],
+    });
+  }
+
   public isRematching(playerId: string) {
     const game = this.query.getActive();
     const playersRematch: string[] = game.playersRematch.concat([playerId]);
