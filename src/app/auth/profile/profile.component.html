@@ -13,7 +13,7 @@
   <ng-template #editing>
     <form (ngSubmit)="onSubmit()">
       <div fxLayout="row">
-        <h2 fxFlex="80" style="font-size: 3.5px;">
+        <h2 fxFlex="80" style="font-size: 3.5px">
           <mat-form-field appearance="legacy" color="warn">
             <h2><input matInput type="text" [formControl]="name" /></h2>
           </mat-form-field>
@@ -23,7 +23,6 @@
           type="submit"
           mat-icon-button
           matTooltip="Save"
-          color="warn"
           (click)="updateName(name.value); switchEditing()"
         >
           <mat-icon>save</mat-icon>
