@@ -3,6 +3,7 @@
     <!--------------------------SUBTITLES------------------------------------->
     <div *ngIf="(gameStatus$ | async) === 'placement'" class="text-centered">
       <h2>Position your army</h2>
+      <p>You can use any blue tile</p>
     </div>
     <div *ngIf="(gameStatus$ | async) === 'finished'" class="text-centered">
       <ng-container *ngIf="(player$ | async).isVictorious; else defeat">

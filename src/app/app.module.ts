@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFirestoreModule, FirestoreSettingsToken, SETTINGS } from "@angular/fire/firestore";
 import { AngularFireModule } from "@angular/fire";
 import {
   NoopAnimationsModule,
@@ -29,7 +29,6 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { MatDialogRef } from "@angular/material/dialog";
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -64,6 +63,15 @@ import { MatDialogRef } from "@angular/material/dialog";
     {
       provide: MatDialogRef,
       useValue: {},
+    },
+    {
+      provide: SETTINGS,
+      useValue: environment.production
+        ? undefined
+        : {
+            host: "localhost:8080",
+            ssl: false,
+          },
     },
   ],
   bootstrap: [AppComponent],

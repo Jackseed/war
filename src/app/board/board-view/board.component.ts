@@ -121,10 +121,15 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
       this.tileQuery.visibleTileIds$,
+      this.player$,
     ]).pipe(
-      map(([status, visibleTiles]) => {
+      map(([status, visibleTiles, player]) => {
         if (status === "placement") {
-          return [];
+          if (player.color === "black") {
+            return this.tileQuery.getTileColumnsByNumber(boardCols - 1, 5, true);
+          } else {
+            return this.tileQuery.getTileColumnsByNumber(0, 5, false);
+          }
         } else {
           return visibleTiles;
         }
