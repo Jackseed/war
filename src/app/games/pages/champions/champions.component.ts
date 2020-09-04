@@ -19,7 +19,7 @@ export class ChampionsComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) {
     const users = this.authQuery.getAll();
-    users.sort((a, b) => b.gameWon - a.gameWon);
+    users.sort((a, b) => b.totalMatchWon - a.totalMatchWon);
     for (let i = 0; i < users.length; i++) {
       users[i] = {
         ...users[i],

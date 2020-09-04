@@ -32,7 +32,7 @@
   </ng-template>
   <mat-card-content>
     <p>Game played: {{ (user$ | async).gamePlayed.length }}</p>
-    <p>Game won: {{ (user$ | async).gameWon }}</p>
+    <p>Game won: {{ (user$ | async).totalMatchWon }}</p>
     <button matTooltip="Account" mat-icon-button (click)="openDialog()">
       <mat-icon>assignment_ind</mat-icon>
     </button>

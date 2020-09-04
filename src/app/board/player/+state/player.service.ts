@@ -37,7 +37,7 @@ export class PlayerService extends CollectionService<PlayerState> {
     batch.update(collection.doc(winner.id), { isVictorious: true });
     batch.update(this.db.firestore.collection("users").doc(winner.id), {
       gamePlayed: firestore.FieldValue.arrayUnion(this.gameQuery.getActiveId()),
-      gameWon: increment,
+      totalMatchWon: increment,
     });
 
     batch.update(collection.doc(loser.id), { isVictorious: false });

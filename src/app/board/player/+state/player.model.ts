@@ -4,6 +4,7 @@ export interface Player {
   isActive?: boolean;
   actionCount?: number;
   isVictorious?: boolean;
+  wins?: number;
 }
 
 /** A factory function that creates Player */
