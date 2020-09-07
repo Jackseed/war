@@ -120,12 +120,15 @@ export class GameService extends CollectionService<GameState> {
     });
   }
 
-  resetRematch() {
+  rematch() {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
-    console.log("là");
+    const increment = firestore.FieldValue.increment(1);
+
+    this.switchStatus("unit creation");
     doc.update({
       playersRematch: [],
+      matchs: increment,
     });
   }
 

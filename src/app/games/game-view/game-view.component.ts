@@ -86,11 +86,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .pipe(
         tap(([count, gameStatus]) => {
           if (count === 2 && gameStatus === "finished") {
-            this.gameService.switchStatus("unit creation");
             this.unitStore.set([]);
             this.tileService.removeReachable();
             this.tileService.removeSelected();
-            this.gameService.resetRematch();
+            this.gameService.rematch();
           }
         })
       )
