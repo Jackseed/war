@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { GameQuery, GameService, GameStore } from "../+state";
+import { GameQuery, GameService } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
-import { UnitStore } from "src/app/board/unit/+state";
+import { UnitService } from "src/app/board/unit/+state";
+import { OpponentUnitService } from "src/app/board/unit/opponent/+state";
 
 @Component({
   selector: "app-game-view",
@@ -26,7 +27,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
   constructor(
     private gameQuery: GameQuery,
     private gameService: GameService,
-    private unitStore: UnitStore,
+    private unitService: UnitService,
+    private opponentUnitService: OpponentUnitService,
     private playerQuery: PlayerQuery,
     private tileService: TileService,
     public router: Router,
@@ -86,7 +88,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .pipe(
         tap(([count, gameStatus]) => {
           if (count === 2 && gameStatus === "finished") {
-            this.unitStore.set([]);
+            this.unitService.deleteAll();
+            this.opponentUnitService.deleteAll();
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.gameService.rematch();

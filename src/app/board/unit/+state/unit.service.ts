@@ -52,6 +52,19 @@ export class UnitService extends CollectionService<UnitState> {
     return pathWithParams(this.constructor[path], { gameId, playerId });
   }
 
+  public deleteAll() {
+    const units = this.query.getAll();
+    const collection = this.db.firestore.collection(this.currentPath);
+    const batch = this.db.firestore.batch();
+
+    for (const unit of units) {
+      const ref = collection.doc(unit.id);
+      batch.delete(ref);
+    }
+
+    batch.commit();
+  }
+
   public setUnits() {
     const units = this.defaultPositionUnits;
     const collection = this.db.firestore.collection(this.currentPath);
