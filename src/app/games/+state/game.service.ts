@@ -125,11 +125,13 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
     const increment = firestore.FieldValue.increment(1);
 
-    this.switchStatus("unit creation");
-    doc.update({
-      playersRematch: [],
-      matchs: increment,
-    });
+    if (game.status === "finished") {
+      this.switchStatus("unit creation");
+      doc.update({
+        playersRematch: [],
+        matchs: increment,
+      });
+    }
   }
 
   public isRematching(playerId: string) {

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GameQuery, GameService } from "../+state";
-import { tap, switchMap } from "rxjs/operators";
+import { tap, switchMap, throttleTime } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
@@ -20,7 +20,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersReadyCountSub$: Subscription;
   private playersRematchCountSub$: Subscription;
   private playersCountSub$: Subscription;
-
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
 
@@ -81,13 +80,11 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.playersRematchCountSub$ = combineLatest([
-      this.gameQuery.playersRematchCount,
-      this.gameStatus$,
-    ])
+    this.playersRematchCountSub$ = this.gameQuery.playersRematchCount
       .pipe(
-        tap(([count, gameStatus]) => {
-          if (count === 2 && gameStatus === "finished") {
+        throttleTime(1000),
+        tap((count) => {
+          if (count === 2) {
             this.unitService.deleteAll();
             this.opponentUnitService.deleteAll();
             this.tileService.removeReachable();

@@ -319,7 +319,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // Check if the game is ongoing
     if (game.status === "finished") {
-      this.messageService.openSnackBar("game is over");
+      this.messageService.openSnackBar("Game is over.");
     }
   }
 

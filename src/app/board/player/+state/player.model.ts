@@ -14,6 +14,7 @@ export function createPlayer(params: Partial<Player> = {}): Player {
     color: params.color,
     isActive: params.isActive,
     actionCount: 0,
+    wins: 0,
     ...params,
   };
 }
