@@ -15,14 +15,32 @@
       </ng-template>
     </div>
   </div>
+  <!-----------------------------MATCH BOARD----------------------------------------->
+  <div fxFlex="nogrow" *ngIf="isOpen$ | async">
+    <mat-card class="no-padding text-centered">
+      <mat-card-title> <h3>Battle 1</h3></mat-card-title>
+      <mat-card-content> <p>0 - 0</p></mat-card-content>
+    </mat-card>
+  </div>
+
   <div fxFlex fxFlexFill>
-    <div fxFlexFill fxFlex fxLayout="row" fxLayoutAlign="center center">
+    <div
+      fxFlexFill
+      fxFlex
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutAlign.lt-lg="center start"
+    >
       <!--------------------------WHITE PLAYER BOARD------------------------------------->
       <div
         fxFlex="15"
         fxFlex.xs="40"
         fxFlex.lt-md="25"
         class="player-board"
+        [ngClass]="{
+          marginTop: mediaObserver.isActive('lt-lg'),
+          marginBottom: !mediaObserver.isActive('lt-lg')
+        }"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
@@ -44,7 +62,10 @@
       >
         <div
           class="padding-bottom messages"
-          *ngIf="(gameStatus$ | async) === 'battle'"
+          *ngIf="
+            (gameStatus$ | async) === 'battle' &&
+            mediaObserver.isActive('lt-lg')
+          "
         >
           <app-message-board></app-message-board>
         </div>
@@ -138,6 +159,10 @@
         fxFlex.lt-md="25"
         fxFlexOffset="5"
         class="player-board"
+        [ngClass]="{
+          marginTop: mediaObserver.isActive('lt-lg'),
+          marginBottom: !mediaObserver.isActive('lt-lg')
+        }"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
