@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GameQuery, GameService } from "../+state";
-import { tap, switchMap, throttleTime } from "rxjs/operators";
-import { PlayerQuery } from "src/app/board/player/+state";
+import { tap, switchMap } from "rxjs/operators";
+import { PlayerQuery, Player } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -11,7 +11,7 @@ import { OpponentUnitService } from "src/app/board/unit/opponent/+state";
 @Component({
   selector: "app-game-view",
   templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.scss"],
+  styleUrls: ["./game-view.component.scss"]
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<
@@ -22,6 +22,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersCountSub$: Subscription;
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
+  private player$: Observable<Player>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -37,12 +38,13 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
+    this.player$ = this.playerQuery.selectActive();
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.isOpponentReady$ = this.playerQuery
       .selectCount()
       .pipe(
-        switchMap((count) =>
+        switchMap(count =>
           count === 2
             ? (this.isOpponentReady$ = this.playerQuery.isOpponentReady)
             : of(false)
@@ -51,7 +53,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         tap(([count, gameStatus]) =>
@@ -64,7 +66,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     this.playersReadyCountSub$ = combineLatest([
       this.gameQuery.playersReadyCount,
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         tap(([count, gameStatus]) => {
@@ -80,16 +82,21 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.playersRematchCountSub$ = this.gameQuery.playersRematchCount
+    this.playersRematchCountSub$ = combineLatest([
+      this.gameQuery.playersRematchCount,
+      this.player$
+    ])
       .pipe(
-        throttleTime(1000),
-        tap((count) => {
+        tap(([count, player]) => {
           if (count === 2) {
             this.unitService.deleteAll();
             this.opponentUnitService.deleteAll();
             this.tileService.removeReachable();
             this.tileService.removeSelected();
-            this.gameService.rematch();
+            // this is to prevent double match count
+            if (player.color === "black") {
+              this.gameService.rematch();
+            }
           }
         })
       )

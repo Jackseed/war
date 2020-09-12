@@ -47,7 +47,7 @@ export class GameService extends CollectionService<GameState> {
     const player = createPlayer({
       id,
       color,
-      isActive,
+      isActive
     });
     // set the player in the game subcollection
     playerCollection.doc(id).set(player);
@@ -69,7 +69,10 @@ export class GameService extends CollectionService<GameState> {
       const playerIds: string[] = game.playerIds.concat([user.uid]);
 
       // add the player to the game playerIds
-      this.db.collection("games").doc(game.id).update({ playerIds });
+      this.db
+        .collection("games")
+        .doc(game.id)
+        .update({ playerIds });
 
       // add the player to the player collection
       this.addPlayer(game.id, user.uid, "black", false);
@@ -87,7 +90,7 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
     doc.update({
       status,
-      playersReady: [],
+      playersReady: []
     });
   }
 
@@ -107,7 +110,7 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
 
     doc.update({
-      playersReady: firestore.FieldValue.arrayRemove(playerId),
+      playersReady: firestore.FieldValue.arrayRemove(playerId)
     });
   }
 
@@ -116,7 +119,7 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
 
     doc.update({
-      playersReady: [],
+      playersReady: []
     });
   }
 
@@ -126,12 +129,12 @@ export class GameService extends CollectionService<GameState> {
     const increment = firestore.FieldValue.increment(1);
 
     if (game.status === "finished") {
-      this.switchStatus("unit creation");
       doc.update({
         playersRematch: [],
-        matchs: increment,
+        matchs: increment
       });
     }
+    this.switchStatus("unit creation");
   }
 
   public isRematching(playerId: string) {
