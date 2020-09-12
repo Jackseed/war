@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GameQuery, GameService } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
-import { PlayerQuery, Player } from "src/app/board/player/+state";
+import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -22,7 +22,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersCountSub$: Subscription;
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
-  private player$: Observable<Player>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -82,17 +81,16 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.playersRematchCountSub$ = combineLatest([
-      this.gameQuery.playersRematchCount,
-      this.player$
-    ])
+    this.playersRematchCountSub$ = this.gameQuery.playersRematchCount
       .pipe(
-        tap(([count, player]) => {
+        tap(count => {
           if (count === 2) {
+            const player = this.playerQuery.getActive();
             this.unitService.deleteAll();
             this.opponentUnitService.deleteAll();
             this.tileService.removeReachable();
             this.tileService.removeSelected();
+
             // this is to prevent double match count
             if (player.color === "black") {
               this.gameService.rematch();
