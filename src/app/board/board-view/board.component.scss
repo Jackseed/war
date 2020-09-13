@@ -36,9 +36,28 @@ mat-card {
   padding-top: 20px;
 }
 
+.marginTop {
+  margin-top: 40px;
+}
+
+.marginBottom {
+  margin-bottom: 100px;
+}
+
+.lineHeigt {
+  line-height: 40px;
+}
+
+.lineHeigtMobile {
+  line-height: 30px;
+}
+
+.italic {
+  font-style: italic
+}
+
 .player-board {
   height: 60%;
-  margin-bottom: 50px;
 }
 
 mat-grid-tile {

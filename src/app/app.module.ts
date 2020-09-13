@@ -64,7 +64,7 @@ import { MatDialogRef } from "@angular/material/dialog";
       provide: MatDialogRef,
       useValue: {},
     },
-    {
+/*     {
       provide: SETTINGS,
       useValue: environment.production
         ? undefined
@@ -72,7 +72,7 @@ import { MatDialogRef } from "@angular/material/dialog";
             host: "localhost:8080",
             ssl: false,
           },
-    },
+    }, */
   ],
   bootstrap: [AppComponent],
 })

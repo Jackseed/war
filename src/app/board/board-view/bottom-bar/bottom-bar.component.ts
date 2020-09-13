@@ -19,6 +19,7 @@ export class BottomBarComponent implements OnInit {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
+  public isPlayerRematch$: Observable<boolean>;
   public unitCount$: Observable<number>;
 
   constructor(
@@ -57,6 +58,7 @@ export class BottomBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.isPlayerRematch$ = this.gameQuery.isPlayerRematch;
     this.unitCount$ = this.unitQuery.selectCount();
   }
 
@@ -104,5 +106,10 @@ export class BottomBarComponent implements OnInit {
         }
       }
     });
+  }
+
+  public rematch() {
+    const playerId = this.playerQuery.getActiveId();
+    this.gameService.isRematching(playerId);
   }
 }

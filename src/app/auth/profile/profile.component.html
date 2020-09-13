@@ -1,6 +1,6 @@
 <mat-card>
   <div fxLayout="row" *ngIf="!isEditing; else editing">
-    <h2 fxFlex="80" class="word-break">{{ (user$ | async).name }}</h2>
+    <h2 fxFlex="80" class="word-break">{{ (user$ | async)?.name }}</h2>
     <button
       mat-icon-button
       fxFlex="20"
@@ -31,8 +31,8 @@
     </form>
   </ng-template>
   <mat-card-content>
-    <p>Game played: {{ (user$ | async).gamePlayed.length }}</p>
-    <p>Game won: {{ (user$ | async).gameWon }}</p>
+    <p>Match played: {{ (user$ | async)?.matchPlayed }}</p>
+    <p>Match won: {{ (user$ | async)?.matchWon }}</p>
     <button matTooltip="Account" mat-icon-button (click)="openDialog()">
       <mat-icon>assignment_ind</mat-icon>
     </button>

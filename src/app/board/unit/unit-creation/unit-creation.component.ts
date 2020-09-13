@@ -11,21 +11,17 @@ import { filter, map } from "rxjs/operators";
 })
 export class UnitCreationComponent implements OnInit, OnDestroy {
   private watcher: Subscription;
-  private activeMediaQuery = "";
   public cols: number;
   public unitTypes = ["soldier", "musketeer", "knight", "cannon"];
 
   constructor(private query: UnitQuery, private mediaObserver: MediaObserver) {
-    this.watcher = mediaObserver
+    this.watcher = this.mediaObserver
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
         map((changes: MediaChange[]) => changes[0])
       )
       .subscribe((change: MediaChange) => {
-        this.activeMediaQuery = change
-          ? `'${change.mqAlias}' = (${change.mediaQuery})`
-          : "";
         if (change.mqAlias === "xs") {
           this.cols = unitColsXs;
         } else {

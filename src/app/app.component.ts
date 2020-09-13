@@ -5,7 +5,6 @@ import { AuthQuery, User } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable } from "rxjs";
 import { Game, GameQuery } from "./games/+state";
-import { Plugins } from '@capacitor/core';
 
 @Component({
   selector: "app-root",

@@ -35,7 +35,7 @@
         </ng-container>
 
         <!-- #Wins Column -->
-        <ng-container matColumnDef="gameWon">
+        <ng-container matColumnDef="matchWon">
           <th mat-header-cell *matHeaderCellDef>
             <h4>#Wins</h4>
           </th>
@@ -45,7 +45,7 @@
             [ngClass]="{ you: element.id === user.id }"
           >
             <p>
-              {{ element.gameWon }}
+              {{ element.matchWon }}
             </p>
             <p></p>
           </td>
@@ -61,27 +61,26 @@
             *matCellDef="let element"
             [ngClass]="{ you: element.id === user.id }"
           >
-            <p [ngPlural]="element.gamePlayed.length">
+            <p [ngPlural]="element.matchPlayed">
               <ng-template ngPluralCase="=0">0</ng-template>
               <ng-template ngPluralCase="other">
                 {{
-                  element.gameWon / element.gamePlayed.length | percent
+                  element.matchWon / element.matchPlayed | percent
                 }}</ng-template
               >
             </p>
-            <p></p>
           </td>
         </ng-container>
         <tr
           mat-header-row
           *matHeaderRowDef="
-            ['rank', 'name', 'gameWon', 'winrate'];
+            ['rank', 'name', 'matchWon', 'winrate'];
             sticky: true
           "
         ></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: ['rank', 'name', 'gameWon', 'winrate']"
+          *matRowDef="let row; columns: ['rank', 'name', 'matchWon', 'winrate']"
         ></tr>
       </table>
     </div>
