@@ -20,7 +20,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public isEditing = false;
   name = new FormControl(this.user.name);
   private watcher: Subscription;
-  private activeMediaQuery: string;
   public dialogWidth: string;
   private formCtrlSub: Subscription;
 
@@ -30,16 +29,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private mediaObserver: MediaObserver
   ) {
-    this.watcher = mediaObserver
+    this.watcher = this.mediaObserver
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
         map((changes: MediaChange[]) => changes[0])
       )
       .subscribe((change: MediaChange) => {
-        this.activeMediaQuery = change
-          ? `'${change.mqAlias}' = (${change.mediaQuery})`
-          : "";
         if (change.mqAlias === "xs") {
           this.dialogWidth = "80vw";
         } else {

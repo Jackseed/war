@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   HostListener,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
@@ -13,17 +13,16 @@ import {
   Castle,
   actionsPerTurn,
   GameService,
-  GameQuery,
+  GameQuery
 } from "src/app/games/+state";
 import { map, tap, distinctUntilChanged, filter } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
-  OpponentUnitStore,
+  OpponentUnitStore
 } from "../unit/opponent/+state";
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MessageService } from "../message/+state";
@@ -32,7 +31,7 @@ import { MessageService } from "../message/+state";
   selector: "app-board",
   templateUrl: "./board.component.html",
   styleUrls: ["./board.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private oppUnitsync: Subscription;
@@ -61,7 +60,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   public player$: Observable<Player>;
   public isOpen$: Observable<boolean>;
   private watcher: Subscription;
-  private activeMediaQuery: string;
   public actionsPerTurn = actionsPerTurn;
 
   constructor(
@@ -79,7 +77,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
     private messageService: MessageService,
-    private snackBar: MatSnackBar,
     public sanitizer: DomSanitizer,
     public mediaObserver: MediaObserver
   ) {}
@@ -93,9 +90,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         map((changes: MediaChange[]) => changes[0])
       )
       .subscribe((change: MediaChange) => {
-        this.activeMediaQuery = change
-          ? `'${change.mqAlias}' = (${change.mediaQuery})`
-          : "";
         if (
           change.mqAlias === "xs" ||
           change.mqAlias === "sm" ||
@@ -121,7 +115,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
       this.tileQuery.visibleTileIds$,
-      this.player$,
+      this.player$
     ]).pipe(
       map(([status, visibleTiles, player]) => {
         if (status === "placement") {
@@ -145,7 +139,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // get opponent visible unit tile ids
     this.visibleOpponentUnitTileIds$ = this.opponentUnitQuery.visibleUnits$.pipe(
-      map((units) => units.map(({ tileId }) => tileId))
+      map(units => units.map(({ tileId }) => tileId))
     );
 
     // define the player color for player board
@@ -164,8 +158,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     // check if a player unit is on the opponent castle, if so stop the game
     this.castleVictorySub = this.unitTileIds$
       .pipe(
-        map((unitTileIds) =>
-          unitTileIds.map((unitTileId) => {
+        map(unitTileIds =>
+          unitTileIds.map(unitTileId => {
             if (unitTileId === this.opponentCastle.tileId) {
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
@@ -180,9 +174,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // check if a player has no unit anymore
     this.noUnitVictorySub = combineLatest([
-      this.unitQuery.selectCount((unit) => unit.tileId !== null),
+      this.unitQuery.selectCount(unit => unit.tileId !== null),
       this.unitQuery.selectLoading(),
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         map(([unitCount, unitLoading, gameStatus]) => {
@@ -202,7 +196,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // when the game is finished, turn all the tiles & units visible
     this.finishedSub = this.gameStatus$
       .pipe(
-        map((gameStatus) => {
+        map(gameStatus => {
           if (gameStatus === "finished") {
             this.visibleTileIds$ = this.tileQuery.tileIds$;
             this.visibleOpponentUnitTileIds$ = this.opponentUnitQuery.unitTileIds$;
@@ -215,9 +209,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
-        map((player) => player.isActive),
+        map(player => player.isActive),
         distinctUntilChanged(),
-        tap((isActive) => {
+        tap(isActive => {
           if (isActive) {
             this.playAudio();
           }

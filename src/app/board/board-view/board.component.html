@@ -14,10 +14,13 @@
     </mat-card>
   </div>
   <!--------------------------SUBTITLES------------------------------------->
-  <div fxFlex="nogrow" *ngIf="(gameStatus$ | async) !== 'battle'">
-    <div *ngIf="(gameStatus$ | async) === 'placement'" class="text-centered">
-      <h2>Position your army</h2>
-      <p>You can use any blue tile</p>
+  <div
+    fxFlex="nogrow"
+    *ngIf="(gameStatus$ | async) !== 'battle'"
+    class="text-centered italic"
+  >
+    <div *ngIf="(gameStatus$ | async) === 'placement'">
+      <h3>Position your army</h3>
     </div>
     <div
       *ngIf="(gameStatus$ | async) === 'finished'"
