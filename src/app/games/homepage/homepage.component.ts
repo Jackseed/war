@@ -37,6 +37,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
         "../../../assets/img/crown.svg"
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      "sword",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/sword_home.svg"
+      )
+    );
     this.sub = this.gameService.syncCollection().subscribe();
   }
 
