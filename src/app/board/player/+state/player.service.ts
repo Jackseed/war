@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import {
   CollectionService,
   CollectionConfig,
-  pathWithParams,
+  pathWithParams
 } from "akita-ng-fire";
 import { firestore } from "firebase/app";
 import { PlayerStore, PlayerState } from "./player.store";
@@ -36,16 +36,18 @@ export class PlayerService extends CollectionService<PlayerState> {
 
     batch.update(collection.doc(winner.id), {
       isVictorious: true,
-      wins: increment,
+      wins: increment
     });
     batch.update(this.db.firestore.collection("users").doc(winner.id), {
       gamePlayed: firestore.FieldValue.arrayUnion(this.gameQuery.getActiveId()),
-      gameWon: increment,
+      matchPlayed: increment,
+      matchWon: increment
     });
-
+    
     batch.update(collection.doc(loser.id), { isVictorious: false });
     batch.update(this.db.firestore.collection("users").doc(loser.id), {
       gamePlayed: firestore.FieldValue.arrayUnion(this.gameQuery.getActiveId()),
+      matchPlayed: increment
     });
 
     batch.commit();
@@ -81,12 +83,12 @@ export class PlayerService extends CollectionService<PlayerState> {
 
     batch.update(playerDoc, {
       isActive: false,
-      actionCount: 0,
+      actionCount: 0
     });
 
     batch.update(opponentDoc, {
       isActive: true,
-      actionCount: 0,
+      actionCount: 0
     });
 
     batch.update(gameDoc, { turnCount: increment });
