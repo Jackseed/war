@@ -12,6 +12,7 @@ import {
   boardCols,
   Castle,
   actionsPerTurn,
+  Game,
   GameService,
   GameQuery
 } from "src/app/games/+state";
@@ -34,33 +35,41 @@ import { MessageService } from "../message/+state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  // Subscriptions
   private oppUnitsync: Subscription;
   private castleVictorySub: Subscription;
   private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
   private isActiveSub: Subscription;
   private dyingUnitsSub: Subscription;
+  private watcher: Subscription;
+
+  // Fixed variables
   public boardSize = boardCols;
+  public actionsPerTurn = actionsPerTurn;
   public player: Player;
   public opponentPlayer: Player;
   public castle: Castle;
   public opponentCastle: Castle;
   public castleIds: number[];
+  public isWhiteOpponent: boolean;
+  public isBlackOpponent: boolean;
+
+  // Observables
+  public isOpen$: Observable<boolean>;
+  public game$: Observable<Game>;
+  public gameStatus$: Observable<
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+  >;
+
+  public player$: Observable<Player>;
+  public whitePlayer$: Observable<Player>;
+  public blackPlayer$: Observable<Player>;
+
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;
   public visibleTileIds$: Observable<number[]>;
-  public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
-  >;
-  public whitePlayer$: Observable<Player>;
-  public isWhiteOpponent: boolean;
-  public blackPlayer$: Observable<Player>;
-  public isBlackOpponent: boolean;
-  public player$: Observable<Player>;
-  public isOpen$: Observable<boolean>;
-  private watcher: Subscription;
-  public actionsPerTurn = actionsPerTurn;
 
   constructor(
     private authQuery: AuthQuery,
@@ -82,6 +91,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.game$ = this.gameQuery.selectActive();
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.watcher = this.mediaObserver
       .asObservable()

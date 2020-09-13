@@ -1,6 +1,6 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
   <!-----------------------------SCORE----------------------------------------->
-  <div fxFlex="nogrow" *ngIf="isOpen$ | async">
+  <div fxFlex="nogrow" *ngIf="(isOpen$ | async) && (gameStatus$ | async) !== 'placement'">
     <mat-card class="no-padding text-centered">
       <mat-card-content
         [ngClass]="{
@@ -8,8 +8,8 @@
           lineHeigtMobile: mediaObserver.isActive('lt-md')
         }"
       >
-        <h2>Battle 1</h2>
-        <h3>0 - 0</h3>
+        <h2>Battle {{(game$ | async)?.matchs}}</h2>
+        <h3>{{(whitePlayer$ | async)?.wins}} - {{(blackPlayer$ | async)?.wins}}</h3>
       </mat-card-content>
     </mat-card>
   </div>
@@ -17,10 +17,11 @@
   <div
     fxFlex="nogrow"
     *ngIf="(gameStatus$ | async) !== 'battle'"
-    class="text-centered italic"
+    class="text-centered"
   >
     <div *ngIf="(gameStatus$ | async) === 'placement'">
-      <h3>Position your army</h3>
+      <h2>Position your army</h2>
+      <p>You can use any blue tiles.</p>
     </div>
     <div
       *ngIf="(gameStatus$ | async) === 'finished'"
