@@ -7,7 +7,7 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { EmailComponent } from "../login/email/email.component";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
-import { filter, map } from "rxjs/operators";
+import { filter, map, debounceTime } from "rxjs/operators";
 
 @Component({
   selector: "app-profile",
@@ -20,8 +20,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public isEditing = false;
   name = new FormControl(this.user.name);
   private watcher: Subscription;
-  private activeMediaQuery: string;
   public dialogWidth: string;
+  private formCtrlSub: Subscription;
 
   constructor(
     private query: AuthQuery,
@@ -29,16 +29,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private mediaObserver: MediaObserver
   ) {
-    this.watcher = mediaObserver
+    this.watcher = this.mediaObserver
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
         map((changes: MediaChange[]) => changes[0])
       )
       .subscribe((change: MediaChange) => {
-        this.activeMediaQuery = change
-          ? `'${change.mqAlias}' = (${change.mediaQuery})`
-          : "";
         if (change.mqAlias === "xs") {
           this.dialogWidth = "80vw";
         } else {
@@ -50,6 +47,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.query.selectActive();
     this.user = this.query.getActive();
+    this.formCtrlSub = this.name.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((newValue) => this.updateName(newValue));
   }
 
   onSubmit() {}
@@ -71,5 +71,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.watcher.unsubscribe();
+    this.formCtrlSub.unsubscribe();
   }
 }

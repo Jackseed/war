@@ -4,7 +4,9 @@ export interface Game {
   status?: "waiting" | "unit creation" | "placement" | "battle" | "finished";
   playerIds?: string[];
   playersReady?: string[];
+  playersRematch?: string[];
   turnCount: number;
+  matchs?: number;
 }
 
 export interface Castle {
@@ -37,7 +39,7 @@ export function Castle(color: "white" | "black"): Castle {
     get tileId(): number {
       return this.x + this.y * boardCols;
     },
-    vision: 2,
+    vision: 1,
   };
 }
 
@@ -48,8 +50,10 @@ export function createGame(params: Partial<Game> = {}): Game {
     name: params.name,
     status: "waiting",
     playersReady: [],
+    playersRematch: [],
     playerIds: params.playerIds,
     turnCount: 0,
+    matchs: 1,
     ...params,
   };
 }

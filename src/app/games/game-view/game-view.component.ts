@@ -5,17 +5,20 @@ import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
+import { UnitService } from "src/app/board/unit/+state";
+import { OpponentUnitService } from "src/app/board/unit/opponent/+state";
 
 @Component({
   selector: "app-game-view",
   templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.scss"],
+  styleUrls: ["./game-view.component.scss"]
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   private playersReadyCountSub$: Subscription;
+  private playersRematchCountSub$: Subscription;
   private playersCountSub$: Subscription;
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
@@ -23,6 +26,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
   constructor(
     private gameQuery: GameQuery,
     private gameService: GameService,
+    private unitService: UnitService,
+    private opponentUnitService: OpponentUnitService,
     private playerQuery: PlayerQuery,
     private tileService: TileService,
     public router: Router,
@@ -34,11 +39,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.gameStatus$ = this.gameQuery.gameStatus$;
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
-
     this.isOpponentReady$ = this.playerQuery
       .selectCount()
       .pipe(
-        switchMap((count) =>
+        switchMap(count =>
           count === 2
             ? (this.isOpponentReady$ = this.playerQuery.isOpponentReady)
             : of(false)
@@ -47,7 +51,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         tap(([count, gameStatus]) =>
@@ -60,7 +64,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     this.playersReadyCountSub$ = combineLatest([
       this.gameQuery.playersReadyCount,
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         tap(([count, gameStatus]) => {
@@ -70,6 +74,26 @@ export class GameViewComponent implements OnInit, OnDestroy {
             this.tileService.removeReachable();
             this.tileService.removeSelected();
             this.gameService.switchStatus("battle");
+            this.gameService.resetReady();
+          }
+        })
+      )
+      .subscribe();
+
+    this.playersRematchCountSub$ = this.gameQuery.playersRematchCount
+      .pipe(
+        tap(count => {
+          if (count === 2) {
+            const player = this.playerQuery.getActive();
+            this.unitService.deleteAll();
+            this.opponentUnitService.deleteAll();
+            this.tileService.removeReachable();
+            this.tileService.removeSelected();
+
+            // this is to prevent double match count
+            if (player.color === "black") {
+              this.gameService.rematch();
+            }
           }
         })
       )
@@ -79,5 +103,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
+    this.playersRematchCountSub$.unsubscribe();
   }
 }

@@ -46,6 +46,7 @@ export class TileQuery extends QueryEntity<TileState> {
         }
       }
     }
+
     return tileIds;
   }
 
@@ -109,5 +110,27 @@ export class TileQuery extends QueryEntity<TileState> {
       }
     }
     return visibleIds;
+  }
+
+  public getTileColumnsByNumber(
+    startX: number,
+    iteration: number,
+    negative: boolean
+  ): number[] {
+    let tileIds: number[] = [];
+    if (!negative) {
+      for (let i = 0; i < iteration; i++) {
+        for (let j = 0; j < boardCols; j++) {
+          tileIds.push(startX + i + j * boardCols);
+        }
+      }
+    } else {
+      for (let i = 0; i > -iteration; i--) {
+        for (let j = 0; j < boardCols; j++) {
+          tileIds.push(startX + i + j * boardCols);
+        }
+      }
+    }
+    return tileIds;
   }
 }

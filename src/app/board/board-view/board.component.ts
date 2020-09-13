@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   HostListener,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
@@ -12,18 +12,18 @@ import {
   boardCols,
   Castle,
   actionsPerTurn,
+  Game,
   GameService,
-  GameQuery,
+  GameQuery
 } from "src/app/games/+state";
 import { map, tap, distinctUntilChanged, filter } from "rxjs/operators";
 import {
   OpponentUnitService,
   OpponentUnitQuery,
-  OpponentUnitStore,
+  OpponentUnitStore
 } from "../unit/opponent/+state";
 import { Player, PlayerQuery, PlayerService } from "../player/+state";
 import { DomSanitizer } from "@angular/platform-browser";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MessageService } from "../message/+state";
@@ -32,37 +32,44 @@ import { MessageService } from "../message/+state";
   selector: "app-board",
   templateUrl: "./board.component.html",
   styleUrls: ["./board.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  // Subscriptions
   private oppUnitsync: Subscription;
   private castleVictorySub: Subscription;
   private noUnitVictorySub: Subscription;
   private finishedSub: Subscription;
   private isActiveSub: Subscription;
   private dyingUnitsSub: Subscription;
+  private watcher: Subscription;
+
+  // Fixed variables
   public boardSize = boardCols;
+  public actionsPerTurn = actionsPerTurn;
   public player: Player;
   public opponentPlayer: Player;
   public castle: Castle;
   public opponentCastle: Castle;
   public castleIds: number[];
+  public isWhiteOpponent: boolean;
+  public isBlackOpponent: boolean;
+
+  // Observables
+  public isOpen$: Observable<boolean>;
+  public game$: Observable<Game>;
+  public gameStatus$: Observable<
+    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+  >;
+
+  public player$: Observable<Player>;
+  public whitePlayer$: Observable<Player>;
+  public blackPlayer$: Observable<Player>;
+
   public tiles$: Observable<Tile[]>;
   public unitTileIds$: Observable<number[]>;
   public visibleOpponentUnitTileIds$: Observable<number[]>;
   public visibleTileIds$: Observable<number[]>;
-  public gameStatus$: Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
-  >;
-  public whitePlayer$: Observable<Player>;
-  public isWhiteOpponent: boolean;
-  public blackPlayer$: Observable<Player>;
-  public isBlackOpponent: boolean;
-  public player$: Observable<Player>;
-  public isOpen$: Observable<boolean>;
-  private watcher: Subscription;
-  private activeMediaQuery: string;
-  public actionsPerTurn = actionsPerTurn;
 
   constructor(
     private authQuery: AuthQuery,
@@ -79,12 +86,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
     private messageService: MessageService,
-    private snackBar: MatSnackBar,
     public sanitizer: DomSanitizer,
     public mediaObserver: MediaObserver
   ) {}
 
   ngOnInit() {
+    this.game$ = this.gameQuery.selectActive();
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.watcher = this.mediaObserver
       .asObservable()
@@ -93,9 +100,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         map((changes: MediaChange[]) => changes[0])
       )
       .subscribe((change: MediaChange) => {
-        this.activeMediaQuery = change
-          ? `'${change.mqAlias}' = (${change.mediaQuery})`
-          : "";
         if (
           change.mqAlias === "xs" ||
           change.mqAlias === "sm" ||
@@ -121,10 +125,19 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.visibleTileIds$ = combineLatest([
       this.gameStatus$,
       this.tileQuery.visibleTileIds$,
+      this.player$
     ]).pipe(
-      map(([status, visibleTiles]) => {
+      map(([status, visibleTiles, player]) => {
         if (status === "placement") {
-          return [];
+          if (player.color === "black") {
+            return this.tileQuery.getTileColumnsByNumber(
+              boardCols - 1,
+              5,
+              true
+            );
+          } else {
+            return this.tileQuery.getTileColumnsByNumber(0, 5, false);
+          }
         } else {
           return visibleTiles;
         }
@@ -136,7 +149,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // get opponent visible unit tile ids
     this.visibleOpponentUnitTileIds$ = this.opponentUnitQuery.visibleUnits$.pipe(
-      map((units) => units.map(({ tileId }) => tileId))
+      map(units => units.map(({ tileId }) => tileId))
     );
 
     // define the player color for player board
@@ -155,8 +168,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     // check if a player unit is on the opponent castle, if so stop the game
     this.castleVictorySub = this.unitTileIds$
       .pipe(
-        map((unitTileIds) =>
-          unitTileIds.map((unitTileId) => {
+        map(unitTileIds =>
+          unitTileIds.map(unitTileId => {
             if (unitTileId === this.opponentCastle.tileId) {
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
@@ -171,9 +184,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // check if a player has no unit anymore
     this.noUnitVictorySub = combineLatest([
-      this.unitQuery.selectCount((unit) => unit.tileId !== null),
+      this.unitQuery.selectCount(unit => unit.tileId !== null),
       this.unitQuery.selectLoading(),
-      this.gameStatus$,
+      this.gameStatus$
     ])
       .pipe(
         map(([unitCount, unitLoading, gameStatus]) => {
@@ -193,7 +206,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // when the game is finished, turn all the tiles & units visible
     this.finishedSub = this.gameStatus$
       .pipe(
-        map((gameStatus) => {
+        map(gameStatus => {
           if (gameStatus === "finished") {
             this.visibleTileIds$ = this.tileQuery.tileIds$;
             this.visibleOpponentUnitTileIds$ = this.opponentUnitQuery.unitTileIds$;
@@ -206,9 +219,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.isActiveSub = this.playerQuery
       .selectActive()
       .pipe(
-        map((player) => player.isActive),
+        map(player => player.isActive),
         distinctUntilChanged(),
-        tap((isActive) => {
+        tap(isActive => {
           if (isActive) {
             this.playAudio();
           }
@@ -255,7 +268,10 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.tileService.removeInRangeTiles();
 
           this.tileService.markAsSelected(i);
-          this.tileService.markAdjacentTilesReachable(i);
+          // Check if the unit can move
+          if (this.unitQuery.getUnitByTileId(i).stamina > 0) {
+            this.tileService.markAdjacentTilesReachable(i);
+          }
           this.tileService.markWithinRangeTiles(i);
           // Else, if a unit is selected..
         } else if (this.unitQuery.hasActive()) {
@@ -307,7 +323,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // Check if the game is ongoing
     if (game.status === "finished") {
-      this.messageService.openSnackBar("game is over");
+      this.messageService.openSnackBar("Game is over.");
     }
   }
 
@@ -323,7 +339,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
-    if (event.key === "Escape") {
+    const game = this.gameQuery.getActive();
+    if (event.key === "Escape" && game.status === "battle") {
       this.tileService.removeReachable();
       this.tileService.removeSelected();
       this.tileService.removeInRangeTiles();
