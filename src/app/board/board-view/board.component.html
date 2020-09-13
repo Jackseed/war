@@ -1,28 +1,38 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+  <!-----------------------------SCORE----------------------------------------->
+  <div fxFlex="nogrow" *ngIf="isOpen$ | async">
+    <mat-card class="no-padding text-centered">
+      <mat-card-content
+        [ngClass]="{
+          lineHeigt: mediaObserver.isActive('gt-sm'),
+          lineHeigtMobile: mediaObserver.isActive('lt-md')
+        }"
+      >
+        <h2>Battle 1</h2>
+        <h3>0 - 0</h3>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!--------------------------SUBTITLES------------------------------------->
   <div fxFlex="nogrow" *ngIf="(gameStatus$ | async) !== 'battle'">
-    <!--------------------------SUBTITLES------------------------------------->
     <div *ngIf="(gameStatus$ | async) === 'placement'" class="text-centered">
       <h2>Position your army</h2>
       <p>You can use any blue tile</p>
     </div>
-    <div *ngIf="(gameStatus$ | async) === 'finished'" class="text-centered">
+    <div
+      *ngIf="(gameStatus$ | async) === 'finished'"
+      class="text-centered italic"
+    >
       <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
-        <h2>Victory, well done General!</h2>
+        <h3>Victory, well done General!</h3>
       </ng-container>
 
       <ng-template #defeat>
-        <h2>Defeat, try again...</h2>
+        <h3>Defeat, try again...</h3>
       </ng-template>
     </div>
   </div>
-  <!-----------------------------MATCH BOARD----------------------------------------->
-  <div fxFlex="nogrow" *ngIf="isOpen$ | async">
-    <mat-card class="no-padding text-centered">
-      <mat-card-title> <h3>Battle 1</h3></mat-card-title>
-      <mat-card-content> <p>0 - 0</p></mat-card-content>
-    </mat-card>
-  </div>
-
+  <!--------------------------B0ARD------------------------------------->
   <div fxFlex fxFlexFill>
     <div
       fxFlexFill
@@ -120,7 +130,8 @@
           <mat-card
             class="no-padding"
             *ngIf="(gameStatus$ | async) === 'battle'"
-            ><mat-card-content class="text-centered">
+          >
+            <mat-card-content class="text-centered">
               <div *ngIf="(player$ | async).isActive; else waiting">
                 <h4 [ngPlural]="actionsPerTurn - (player$ | async).actionCount">
                   <ng-template ngPluralCase="=1"
@@ -138,9 +149,9 @@
 
               <ng-template #waiting>
                 <h4>Opponent's turn</h4>
-              </ng-template></mat-card-content
-            ></mat-card
-          >
+              </ng-template>
+            </mat-card-content>
+          </mat-card>
         </mat-card-content>
 
         <mat-card-actions>
@@ -149,8 +160,9 @@
             fxLayoutAlign="center center"
             [ngClass]="{ paddingTop: (gameStatus$ | async) !== 'battle' }"
           >
-            <app-bottom-bar></app-bottom-bar></div
-        ></mat-card-actions>
+            <app-bottom-bar></app-bottom-bar>
+          </div>
+        </mat-card-actions>
       </mat-card>
       <!--------------------------BLACK PLAYER BOARD------------------------------------->
       <div

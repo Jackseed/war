@@ -37,7 +37,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
-    this.player$ = this.playerQuery.selectActive();
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.isOpponentReady$ = this.playerQuery
