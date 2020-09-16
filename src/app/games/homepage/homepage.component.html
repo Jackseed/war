@@ -8,13 +8,14 @@
 
   <!------------------ BOTTOM -------------------->
   <div fxFlex="50" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <!------------ PLAY NOW -------------->
     <div fxFlex="20" fxFlexFill fxLayout="row" fxLayoutAlign="center center">
       <button
         fxFlex="15"
         fxFlex.lt-md="35"
         mat-raised-button
         color="warn"
-        [routerLink]="'/games'"
+        (click)="playNow()"
       >
         <span>Play now</span>
         <mat-icon svgIcon="sword" class="margin-left"></mat-icon>

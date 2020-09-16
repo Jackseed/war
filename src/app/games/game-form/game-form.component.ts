@@ -31,7 +31,7 @@ export class GameFormComponent implements OnInit {
 
   public createNewGame() {
     const gameName = this.game.name;
-    const gameId = this.gameService.createNewGame(gameName);
+    const gameId = this.gameService.createNewGame(gameName, false);
     this.router.navigate([`/games/${gameId}`]);
   }
 }

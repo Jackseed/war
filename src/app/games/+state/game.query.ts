@@ -15,42 +15,53 @@ export class GameQuery extends QueryEntity<GameState> {
   get playerGames(): Observable<Game[]> {
     const user = this.afAuth.auth.currentUser;
     return this.selectAll({
-      filterBy: (game) => game.playerIds.includes(user.uid),
+      filterBy: game => game.playerIds.includes(user.uid)
     });
   }
 
   get otherGames(): Observable<Game[]> {
     const user = this.afAuth.auth.currentUser;
     return this.selectAll({
-      filterBy: (game) => !game.playerIds.includes(user.uid),
+      filterBy: game => !game.playerIds.includes(user.uid)
     });
   }
 
   get playersReadyCount(): Observable<number> {
-    return this.selectActive().pipe(map((game) => game.playersReady.length));
+    return this.selectActive().pipe(map(game => game.playersReady.length));
   }
 
   get playersRematchCount(): Observable<number> {
-    return this.selectActive().pipe(map((game) => game.playersRematch.length));
+    return this.selectActive().pipe(map(game => game.playersRematch.length));
   }
 
   get isPlayerReady(): Observable<boolean> {
     const user = this.afAuth.auth.currentUser;
     return this.selectActive().pipe(
-      map((game) => game.playersReady.includes(user.uid))
+      map(game => game.playersReady.includes(user.uid))
     );
   }
 
   get isPlayerRematch(): Observable<boolean> {
     const user = this.afAuth.auth.currentUser;
     return this.selectActive().pipe(
-      map((game) => game.playersRematch.includes(user.uid))
+      map(game => game.playersRematch.includes(user.uid))
     );
   }
 
   get gameStatus$(): Observable<
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   > {
-    return this.selectActive().pipe(map((game) => game.status));
+    return this.selectActive().pipe(map(game => game.status));
+  }
+
+  get instantPlayableGames(): Game[] {
+    const user = this.afAuth.auth.currentUser;
+    const games = this.getAll({
+      filterBy: game =>
+        game.isInstant &&
+        game.playerIds.length === 1 &&
+        !game.playerIds.includes(user.uid)
+    });
+    return games;
   }
 }
