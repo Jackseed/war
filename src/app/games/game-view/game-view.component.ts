@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterStateSnapshot } from "@angular/router";
 import { UnitService } from "src/app/board/unit/+state";
 import { OpponentUnitService } from "src/app/board/unit/opponent/+state";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-game-view",
@@ -31,7 +33,9 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private playerQuery: PlayerQuery,
     private tileService: TileService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>
   ) {}
 
   ngOnInit() {
@@ -101,8 +105,24 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
-    console.log("canDeactivate has fired in the component!");
-    return true;
+    const game = this.gameQuery.getActive();
+
+    if (game.isInstant) {
+      this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        disableClose: false
+      });
+      this.dialogRef.componentInstance.message =
+        "Are you sure you want to leave?";
+
+      this.dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.gameService.markClosed();
+        }
+      });
+    } else {
+      return true;
+    }
+    return this.dialogRef.afterClosed();
   }
 
   ngOnDestroy() {

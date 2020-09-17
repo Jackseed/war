@@ -8,6 +8,7 @@ export interface Game {
   turnCount?: number;
   matchs?: number;
   isInstant?: boolean;
+  isClosed?: boolean,
 }
 
 export interface Castle {
@@ -56,6 +57,7 @@ export function createGame(params: Partial<Game> = {}): Game {
     turnCount: 0,
     matchs: 1,
     isInstant: params.isInstant,
+    isClosed: false,
     ...params,
   };
 }
