@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { GameClosedGuardService } from 'src/app/games/guard/game-closed-guard.service';
 import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -60,6 +61,7 @@ import { MatDialogRef } from "@angular/material/dialog";
     GameGuard,
     ActiveGameGuard,
     MessageGuard,
+    GameClosedGuardService,
     {
       provide: MatDialogRef,
       useValue: {},

@@ -144,4 +144,14 @@ export class GameService extends CollectionService<GameState> {
 
     doc.update({ playersRematch });
   }
+
+  public destroyActiveInstantGame(): void {
+    const game = this.query.getActive();
+    const doc = this.db.collection("games").doc(game.id);
+    console.log("here");
+    if (game.isInstant) {
+      console.log("destroying");
+      doc.delete();
+    }
+  }
 }

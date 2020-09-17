@@ -52,6 +52,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.playerGames$ = this.gameQuery.playerGames;
   }
 
+  // check if there is already a game waiting for a player, if not creates it
   public playNow() {
     const instantGames = this.gameQuery.instantPlayableGames;
     if (instantGames.length > 0) {

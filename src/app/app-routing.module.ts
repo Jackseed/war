@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { GameClosedGuardService } from "src/app/games/guard/game-closed-guard.service";
 import { Routes, RouterModule } from "@angular/router";
 import { GameViewComponent } from "./games/game-view/game-view.component";
 import { GameGuard } from "./games/guard/game.guard";
@@ -10,7 +11,7 @@ import { ActiveAuthGuard } from "./auth/guard/active-auth.guard";
 import {
   AngularFireAuthGuard,
   redirectUnauthorizedTo,
-  redirectLoggedInTo,
+  redirectLoggedInTo
 } from "@angular/fire/auth-guard";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { HomepageComponent } from "./games/homepage/homepage.component";
@@ -28,49 +29,49 @@ export const routes: Routes = [
     path: "welcome",
     component: LoginComponent,
     canActivate: [AngularFireAuthGuard],
-    data: {authGuardPipe: redirectLoggedInToHome }
+    data: { authGuardPipe: redirectLoggedInToHome }
   },
   {
     path: "home",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "homePage" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: HomepageComponent,
+    component: HomepageComponent
   },
   {
     path: "save-account",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: EmailComponent,
+    component: EmailComponent
   },
   {
     path: "create",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isRight" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: CreateComponent,
+    component: CreateComponent
   },
   {
     path: "champions",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: ChampionsComponent,
+    component: ChampionsComponent
   },
   {
     path: "games",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "isLeft" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: JoinComponent,
+    component: JoinComponent
   },
   {
     path: "history",
     canActivate: [AngularFireAuthGuard, GameGuard, ActiveAuthGuard],
     data: { authGuardPipe: redirectUnauthorizedToLogin, animation: "scaleIn" },
     canDeactivate: [GameGuard, ActiveAuthGuard],
-    component: GameHistoryComponent,
+    component: GameHistoryComponent
   },
   {
     path: "games/:id",
@@ -86,27 +87,27 @@ export const routes: Routes = [
           {
             path: "",
             canActivate: [UnitGuard],
-            canDeactivate: [UnitGuard],
-            component: GameViewComponent,
-          },
-        ],
-      },
-    ],
+            canDeactivate: [UnitGuard, GameClosedGuardService],
+            component: GameViewComponent
+          }
+        ]
+      }
+    ]
   },
   {
     path: "",
     redirectTo: "/home",
-    pathMatch: "full",
+    pathMatch: "full"
   },
   {
     path: "**",
     redirectTo: "/home",
-    pathMatch: "full",
-  },
+    pathMatch: "full"
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

@@ -100,6 +100,11 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
+    console.log("canDeactivate has fired in the component!");
+    return true;
+  }
+
   ngOnDestroy() {
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
