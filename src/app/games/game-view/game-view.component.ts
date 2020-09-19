@@ -104,10 +104,15 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  // Ask the user if he really wants to leave
+  // Ask the user if he really wants to leave when instant games
   @HostListener("window:beforeunload")
   canLeavePage() {
-    return false;
+    const game = this.gameQuery.getActive();
+    if (!game.isInstant) {
+      return;
+    } else {
+      return false;
+    }
   }
 
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
