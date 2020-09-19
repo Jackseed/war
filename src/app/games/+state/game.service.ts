@@ -148,7 +148,6 @@ export class GameService extends CollectionService<GameState> {
   public markClosed(): void {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
-    console.log("here");
     doc.update({ isClosed: true });
   }
 }

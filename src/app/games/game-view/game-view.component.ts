@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
-import { Router, ActivatedRoute, RouterStateSnapshot } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { UnitService } from "src/app/board/unit/+state";
 import { OpponentUnitService } from "src/app/board/unit/opponent/+state";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -102,6 +102,12 @@ export class GameViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  // Ask the user if he really wants to leave
+  @HostListener("window:beforeunload")
+  canLeavePage() {
+    return false;
   }
 
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
