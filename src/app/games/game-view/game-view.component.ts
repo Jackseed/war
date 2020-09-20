@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { PresenceService } from 'src/app/auth/presence/presence.service';
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService } from "../+state";
 import { tap, switchMap } from "rxjs/operators";
@@ -13,7 +14,8 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 @Component({
   selector: "app-game-view",
   templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.scss"]
+  styleUrls: ["./game-view.component.scss"],
+  host: { "window:onunload": "closeGame" }
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<
@@ -35,7 +37,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
     public router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private dialogRef: MatDialogRef<ConfirmationDialogComponent>
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+    private presenceSercice: PresenceService,
   ) {}
 
   ngOnInit() {
@@ -102,6 +105,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+
   }
 
   // Ask the user if he really wants to leave when instant games
@@ -124,19 +129,25 @@ export class GameViewComponent implements OnInit, OnDestroy {
       });
       this.dialogRef.componentInstance.message =
         "Are you sure you want to leave?";
-
-      this.dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.gameService.markClosed();
-        }
-      });
     } else {
       return true;
     }
     return this.dialogRef.afterClosed();
   }
 
+  closeGame() {
+    const game = this.gameQuery.getActive();
+    const playerId = this.playerQuery.getActiveId();
+
+    if (game.isInstant && !game.isClosed) {
+      console.log("here");
+      this.gameService.markClosed();
+      this.gameService.removePlayer(playerId);
+    }
+  }
+
   ngOnDestroy() {
+    this.closeGame();
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
     this.playersRematchCountSub$.unsubscribe();

@@ -53,6 +53,20 @@ export class GameService extends CollectionService<GameState> {
     playerCollection.doc(id).set(player);
   }
 
+  removePlayer(playerId: string) {
+    const game = this.query.getActive();
+    const gameDoc = this.db.firestore.collection("games").doc(game.id);
+    const playerDoc = gameDoc.collection("players").doc(playerId);
+    const batch = this.db.firestore.batch();
+
+    batch.delete(playerDoc);
+    batch.update(gameDoc, {
+      playerIds: firestore.FieldValue.arrayRemove(playerId)
+    });
+
+    batch.commit();
+  }
+
   /**
    * Join a player to a game
    */

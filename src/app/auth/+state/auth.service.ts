@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { PresenceService } from 'src/app/auth/presence/presence.service';
 import { AuthStore, AuthState } from "./auth.store";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
@@ -14,7 +15,8 @@ export class AuthService extends CollectionService<AuthState> {
     store: AuthStore,
     private query: AuthQuery,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private presenceService: PresenceService,
   ) {
     super(store);
   }
@@ -29,6 +31,7 @@ export class AuthService extends CollectionService<AuthState> {
   }
 
   async signOut() {
+    await this.presenceService.setPresence('offline');
     await this.afAuth.auth.signOut();
     this.store.reset();
     this.router.navigate(["/welcome"]);

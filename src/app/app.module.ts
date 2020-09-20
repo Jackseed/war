@@ -1,13 +1,18 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { GameClosedGuardService } from 'src/app/games/guard/game-closed-guard.service';
+import { GameClosedGuardService } from "src/app/games/guard/game-closed-guard.service";
 import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { AngularFirestoreModule, FirestoreSettingsToken, SETTINGS } from "@angular/fire/firestore";
+import {
+  AngularFirestoreModule,
+  FirestoreSettingsToken,
+  SETTINGS
+} from "@angular/fire/firestore";
 import { AngularFireModule } from "@angular/fire";
+import { AngularFireDatabaseModule } from "@angular/fire/database";
 import {
   NoopAnimationsModule,
-  BrowserAnimationsModule,
+  BrowserAnimationsModule
 } from "@angular/platform-browser/animations";
 import { GamesModule } from "./games/games.module";
 import { BoardModule } from "./board/board.module";
@@ -38,6 +43,7 @@ import { MatDialogRef } from "@angular/material/dialog";
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
+    AngularFireDatabaseModule,
     AngularFireAuthModule,
     NoopAnimationsModule,
     GamesModule,
@@ -51,7 +57,7 @@ import { MatDialogRef } from "@angular/material/dialog";
     AuthModule,
     FormsModule,
     RouterModule,
-    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
   providers: [
     ActiveAuthGuard,
@@ -64,9 +70,9 @@ import { MatDialogRef } from "@angular/material/dialog";
     GameClosedGuardService,
     {
       provide: MatDialogRef,
-      useValue: {},
-    },
-/*     {
+      useValue: {}
+    }
+    /*     {
       provide: SETTINGS,
       useValue: environment.production
         ? undefined
@@ -76,6 +82,6 @@ import { MatDialogRef } from "@angular/material/dialog";
           },
     }, */
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
