@@ -31,6 +31,11 @@ export class GameService extends CollectionService<GameState> {
     return id;
   }
 
+  deleteGame(gameId: string) {
+    console.log("deleting ", gameId);
+    this.collection.doc(gameId).delete();
+  }
+
   /**
    * Add a player to the game
    */

@@ -158,9 +158,13 @@ export class GameViewComponent implements OnInit, OnDestroy {
     const game = this.gameQuery.getActive();
 
     if (game.isInstant && !game.isClosed) {
-      this.gameService.markClosed();
-      this.gameService.removePlayer(leavingPlayerId);
-      console.log(leavingPlayerId, " has left");
+      if (game.playerIds.length === 1) {
+        this.gameService.deleteGame(game.id);
+      } else {
+        this.gameService.markClosed();
+        this.gameService.removePlayer(leavingPlayerId);
+        console.log(leavingPlayerId, " has left");
+      }
     }
   }
 
