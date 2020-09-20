@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
-import { PresenceService } from 'src/app/auth/presence/presence.service';
+import { PresenceService } from "src/app/auth/presence/presence.service";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService } from "../+state";
-import { tap, switchMap } from "rxjs/operators";
+import { tap, switchMap, debounceTime } from "rxjs/operators";
 import { PlayerQuery } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
@@ -14,8 +14,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 @Component({
   selector: "app-game-view",
   templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.scss"],
-  host: { "window:onunload": "closeGame" }
+  styleUrls: ["./game-view.component.scss"]
 })
 export class GameViewComponent implements OnInit, OnDestroy {
   public gameStatus$: Observable<
@@ -24,8 +23,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersReadyCountSub$: Subscription;
   private playersRematchCountSub$: Subscription;
   private playersCountSub$: Subscription;
+  private gameClosedSub$: Subscription;
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
+  private opponentPresence$: Observable<any>;
 
   constructor(
     private gameQuery: GameQuery,
@@ -38,12 +39,18 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    private presenceSercice: PresenceService,
+    private presenceSercice: PresenceService
   ) {}
 
   ngOnInit() {
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
+
+    this.opponentPresence$ = this.playerQuery.opponent$.pipe(
+      switchMap(opponent =>
+        opponent ? this.presenceSercice.selectPresence(opponent.id) : of("none")
+      )
+    );
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.isOpponentReady$ = this.playerQuery
@@ -106,7 +113,19 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-
+    // Check if the opponent is offline for more than 1 min, if so, close the game
+    this.gameClosedSub$ = this.opponentPresence$
+      .pipe(
+        debounceTime(60000),
+        tap(status => {
+          console.log("game closed sub ", status);
+          if (status.status === "offline") {
+            const opponent = this.playerQuery.opponent;
+            this.closeGame(opponent.id);
+          }
+        })
+      )
+      .subscribe();
   }
 
   // Ask the user if he really wants to leave when instant games
@@ -135,19 +154,20 @@ export class GameViewComponent implements OnInit, OnDestroy {
     return this.dialogRef.afterClosed();
   }
 
-  closeGame() {
+  closeGame(leavingPlayerId: string) {
     const game = this.gameQuery.getActive();
-    const playerId = this.playerQuery.getActiveId();
 
     if (game.isInstant && !game.isClosed) {
-      console.log("here");
       this.gameService.markClosed();
-      this.gameService.removePlayer(playerId);
+      this.gameService.removePlayer(leavingPlayerId);
+      console.log(leavingPlayerId, " has left");
     }
   }
 
   ngOnDestroy() {
-    this.closeGame();
+    const playerId = this.playerQuery.getActiveId();
+    this.closeGame(playerId);
+    this.gameClosedSub$.unsubscribe();
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
     this.playersRematchCountSub$.unsubscribe();

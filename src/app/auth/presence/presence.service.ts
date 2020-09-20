@@ -4,7 +4,7 @@ import { AngularFireDatabase } from "@angular/fire/database";
 import * as firebase from "firebase/app";
 import { tap, map, switchMap, first } from "rxjs/operators";
 
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -14,13 +14,12 @@ export class PresenceService {
     private afAuth: AngularFireAuth,
     private db: AngularFireDatabase
   ) {
-    console.log("let there be presence");
     this.updateOnUser().subscribe();
     this.updateOnDisconnect().subscribe();
     this.updateOnAway();
   }
 
-  getPresence(uid: string) {
+  selectPresence(uid: string): Observable<any> {
     return this.db.object(`status/${uid}`).valueChanges();
   }
 
@@ -54,7 +53,7 @@ export class PresenceService {
     );
   }
 
-// Updates status when logged-out of Firebase
+  // Updates status when logged-out of Firebase
   updateOnDisconnect() {
     return this.afAuth.authState.pipe(
       tap(user => {
@@ -73,7 +72,7 @@ export class PresenceService {
 
   // User navigates to a new tab
   updateOnAway() {
-    document.onvisibilitychange = e => {
+    document.onvisibilitychange = _ => {
       if (document.visibilityState === "hidden") {
         this.setPresence("away");
       } else {
