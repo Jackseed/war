@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { PresenceService } from "src/app/auth/presence/presence.service";
 import { QueryEntity } from "@datorama/akita";
 import { GameStore, GameState } from "./game.store";
 import { Game } from "./game.model";
@@ -8,7 +9,11 @@ import { map } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class GameQuery extends QueryEntity<GameState> {
-  constructor(protected store: GameStore, private afAuth: AngularFireAuth) {
+  constructor(
+    protected store: GameStore,
+    private afAuth: AngularFireAuth,
+    private presenceService: PresenceService
+  ) {
     super(store);
   }
 
@@ -56,12 +61,20 @@ export class GameQuery extends QueryEntity<GameState> {
 
   get instantPlayableGames(): Game[] {
     const user = this.afAuth.auth.currentUser;
+    const playableGames: Game[] = [];
     const games = this.getAll({
       filterBy: game =>
         game.isInstant &&
         game.playerIds.length === 1 &&
         !game.playerIds.includes(user.uid)
     });
-    return games;
+    // verify that the other player is connected
+    for (const game of games) {
+      if (this.presenceService.getPresence(game.playerIds[0])) {
+        playableGames.push(game);
+      };
+    }
+    console.log(playableGames);
+    return playableGames;
   }
 }
