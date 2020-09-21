@@ -5,7 +5,7 @@ import { GameStore, GameState } from "./game.store";
 import { Game } from "./game.model";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class GameQuery extends QueryEntity<GameState> {
@@ -70,9 +70,13 @@ export class GameQuery extends QueryEntity<GameState> {
     });
     // verify that the other player is connected
     for (const game of games) {
-      if (this.presenceService.getPresence(game.playerIds[0])) {
-        playableGames.push(game);
-      };
+      this.presenceService.selectPresence(game.playerIds[0]).pipe(
+        tap(status => {
+          if(status.status === "online") {
+            playableGames.push(game)
+          }
+        })
+      );
     }
     console.log(playableGames);
     return playableGames;

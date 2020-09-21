@@ -19,10 +19,6 @@ export class PresenceService {
     this.updateOnAway();
   }
 
-  getPresence(playerId: string) {
-    return this.db.object(`status/${playerId}`);
-  }
-
   selectPresence(uid: string): Observable<any> {
     return this.db.object(`status/${uid}`).valueChanges();
   }
