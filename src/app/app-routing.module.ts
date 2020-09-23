@@ -10,8 +10,7 @@ import { LoginComponent } from "./auth/login/login.component";
 import { ActiveAuthGuard } from "./auth/guard/active-auth.guard";
 import {
   AngularFireAuthGuard,
-  redirectUnauthorizedTo,
-  redirectLoggedInTo
+  redirectUnauthorizedTo
 } from "@angular/fire/auth-guard";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { HomepageComponent } from "./games/homepage/homepage.component";
@@ -22,14 +21,11 @@ import { EmailComponent } from "./auth/login/email/email.component";
 import { GameHistoryComponent } from "./games/pages/game-history/game-history.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["welcome"]);
-const redirectLoggedInToHome = () => redirectLoggedInTo(["home"]);
 
 export const routes: Routes = [
   {
     path: "welcome",
-    component: LoginComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectLoggedInToHome }
+    component: LoginComponent
   },
   {
     path: "home",

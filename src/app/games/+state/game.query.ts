@@ -72,13 +72,12 @@ export class GameQuery extends QueryEntity<GameState> {
     for (const game of games) {
       this.presenceService.selectPresence(game.playerIds[0]).pipe(
         tap(status => {
-          if(status.status === "online") {
-            playableGames.push(game)
+          if (status.status === "online") {
+            playableGames.push(game);
           }
         })
       );
     }
-    console.log(playableGames);
     return playableGames;
   }
 }
