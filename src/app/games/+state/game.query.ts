@@ -5,7 +5,7 @@ import { GameStore, GameState } from "./game.store";
 import { Game } from "./game.model";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map, tap, first } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class GameQuery extends QueryEntity<GameState> {
@@ -59,25 +59,36 @@ export class GameQuery extends QueryEntity<GameState> {
     return this.selectActive().pipe(map(game => game.status));
   }
 
-  get instantPlayableGames(): Game[] {
+  // get all instant games with 1 online player
+  get instantPlayableGames$(): Observable<Game[]> {
     const user = this.afAuth.auth.currentUser;
-    const playableGames: Game[] = [];
-    const games = this.getAll({
+    let playableGames$: Observable<Game[]>;
+    const instantGames$ = this.selectAll({
       filterBy: game =>
         game.isInstant &&
         game.playerIds.length === 1 &&
         !game.playerIds.includes(user.uid)
     });
-    // verify that the other player is connected
-    for (const game of games) {
-      this.presenceService.selectPresence(game.playerIds[0]).pipe(
-        tap(status => {
-          if (status.status === "online") {
-            playableGames.push(game);
-          }
-        })
-      );
-    }
-    return playableGames;
+
+    playableGames$ = instantGames$.pipe(
+      tap(games =>
+        games.map(game =>
+          this.presenceService.selectPresence(game.playerIds[0]).pipe(
+            map(status => {
+              if (status.status === "online") {
+                return game;
+              } else {
+                return;
+              }
+            })
+          )
+        )
+      )
+    );
+    return playableGames$;
+  }
+
+  get instantPlayableGame(): Promise<Game[]> {
+    return this.instantPlayableGames$.pipe(first()).toPromise();
   }
 }

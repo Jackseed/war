@@ -53,10 +53,11 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   // check if there is already a game waiting for a player, if not creates it
-  public playNow() {
-    const instantGames = this.gameQuery.instantPlayableGames;
-    if (instantGames.length > 0) {
-      this.gameService.joinGame(instantGames[0].id);
+  public async playNow() {
+    const instantGame = await this.gameQuery.instantPlayableGame;
+
+    if (instantGame.length > 0) {
+      this.gameService.joinGame(instantGame[0].id);
     } else {
       const gameId = this.gameService.createNewGame("", true);
       this.router.navigate([`/games/${gameId}`]);
