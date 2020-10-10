@@ -44,6 +44,12 @@
           >
             <p>Waiting for your opponent!</p>
           </div>
+          <div *ngIf="offlineTimer$ | async as timer" class="text-centered">
+            <div *ngIf="timer < decoTimer">
+              <p>Your opponent has left the game.</p>
+              <p>The game will close in {{ decoTimer - timer }} seconds.</p>
+            </div>
+          </div>
         </div>
         <div fxFlex>
           <div

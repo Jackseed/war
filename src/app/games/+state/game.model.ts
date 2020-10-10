@@ -19,6 +19,9 @@ export interface Castle {
   vision: number;
 }
 
+
+export const decoTimer = 30;
+
 /// TODO push to firebase
 export const boardCols = 11;
 export const boardMaxTiles = 1000;

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { PresenceService } from "src/app/auth/presence/presence.service";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
-import { GameQuery, GameService } from "../+state";
-import { tap, switchMap, debounceTime } from "rxjs/operators";
-import { PlayerQuery } from "src/app/board/player/+state";
-import { Observable, Subscription, combineLatest, of } from "rxjs";
+import { GameQuery, GameService, decoTimer } from "../+state";
+import { tap, switchMap, debounceTime, filter } from "rxjs/operators";
+import { PlayerQuery, PlayerService } from "src/app/board/player/+state";
+import { Observable, Subscription, combineLatest, of, timer } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
 import { Router, ActivatedRoute } from "@angular/router";
 import { UnitService } from "src/app/board/unit/+state";
@@ -27,6 +27,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
   private opponentPresence$: Observable<any>;
+  public offlineTimer$: Observable<number>;
+  public decoTimer = decoTimer;
 
   constructor(
     private gameQuery: GameQuery,
@@ -34,6 +36,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private unitService: UnitService,
     private opponentUnitService: OpponentUnitService,
     private playerQuery: PlayerQuery,
+    private playerService: PlayerService,
     private tileService: TileService,
     public router: Router,
     private route: ActivatedRoute,
@@ -51,6 +54,17 @@ export class GameViewComponent implements OnInit, OnDestroy {
         opponent ? this.presenceSercice.selectPresence(opponent.id) : of("none")
       )
     );
+
+    // Check if the opponent is offline for more than 1 min, if so, close the game
+    this.offlineTimer$ = this.opponentPresence$.pipe(
+      switchMap(status =>
+        status.status === "offline" ? timer(1000, 1000) : of(null)
+      )
+    );
+
+    this.gameClosedSub$ = this.offlineTimer$
+      .pipe(tap(timer => (timer === decoTimer ? this.closeGame() : false)))
+      .subscribe(console.log);
 
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.isOpponentReady$ = this.playerQuery
@@ -112,20 +126,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
-
-    // Check if the opponent is offline for more than 1 min, if so, close the game
-    this.gameClosedSub$ = this.opponentPresence$
-      .pipe(
-        debounceTime(60000),
-        tap(status => {
-          console.log("game closed sub ", status);
-          if (status.status === "offline") {
-            const opponent = this.playerQuery.opponent;
-            this.closeGame(opponent.id);
-          }
-        })
-      )
-      .subscribe();
   }
 
   // Ask the user if he really wants to leave when instant games
@@ -154,23 +154,30 @@ export class GameViewComponent implements OnInit, OnDestroy {
     return this.dialogRef.afterClosed();
   }
 
-  closeGame(leavingPlayerId: string) {
+  closeGame() {
+    console.log("closing the game");
     const game = this.gameQuery.getActive();
-
+    // check if the game is instant & open
     if (game.isInstant && !game.isClosed) {
+      // delete it if there is only one player
       if (game.playerIds.length === 1) {
         this.gameService.deleteGame(game.id);
+        // otherwise close it
       } else {
         this.gameService.markClosed();
-        this.gameService.removePlayer(leavingPlayerId);
-        console.log(leavingPlayerId, " has left");
+
+        // if game was started, gives victory to the active player
+        if (game.status === "battle") {
+          const opponent = this.playerQuery.opponent;
+          const player = this.playerQuery.getActive();
+          this.playerService.setVictorious(player, opponent);
+        }
       }
     }
   }
 
   ngOnDestroy() {
-    const playerId = this.playerQuery.getActiveId();
-    this.closeGame(playerId);
+    this.closeGame();
     this.gameClosedSub$.unsubscribe();
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
