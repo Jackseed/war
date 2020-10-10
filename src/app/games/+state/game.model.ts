@@ -5,8 +5,10 @@ export interface Game {
   playerIds?: string[];
   playersReady?: string[];
   playersRematch?: string[];
-  turnCount: number;
+  turnCount?: number;
   matchs?: number;
+  isInstant?: boolean;
+  isClosed?: boolean,
 }
 
 export interface Castle {
@@ -16,6 +18,9 @@ export interface Castle {
   tileId: number;
   vision: number;
 }
+
+
+export const decoTimer = 60;
 
 /// TODO push to firebase
 export const boardCols = 11;
@@ -54,6 +59,8 @@ export function createGame(params: Partial<Game> = {}): Game {
     playerIds: params.playerIds,
     turnCount: 0,
     matchs: 1,
+    isInstant: params.isInstant,
+    isClosed: false,
     ...params,
   };
 }

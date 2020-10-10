@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UnitService, UnitQuery } from "../../unit/+state";
-import { GameService, GameQuery } from "src/app/games/+state";
+import { GameService, GameQuery, Game } from "src/app/games/+state";
 import { PlayerQuery, PlayerService } from "../../player/+state";
 import { Observable } from "rxjs";
 import { TileService } from "../../tile/+state";
@@ -12,7 +12,7 @@ import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-di
 @Component({
   selector: "app-bottom-bar",
   templateUrl: "./bottom-bar.component.html",
-  styleUrls: ["./bottom-bar.component.scss"],
+  styleUrls: ["./bottom-bar.component.scss"]
 })
 export class BottomBarComponent implements OnInit {
   public gameStatus$: Observable<
@@ -21,6 +21,7 @@ export class BottomBarComponent implements OnInit {
   public isPlayerReady$: Observable<boolean>;
   public isPlayerRematch$: Observable<boolean>;
   public unitCount$: Observable<number>;
+  public game$: Observable<Game>;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -57,6 +58,7 @@ export class BottomBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.game$ = this.gameQuery.selectActive();
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
     this.isPlayerRematch$ = this.gameQuery.isPlayerRematch;
     this.unitCount$ = this.unitQuery.selectCount();
@@ -89,12 +91,12 @@ export class BottomBarComponent implements OnInit {
 
   public confirmForfeit(): void {
     this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      disableClose: false,
+      disableClose: false
     });
     this.dialogRef.componentInstance.message =
       "Are you sure you want to forfeit?";
 
-    this.dialogRef.afterClosed().subscribe((result) => {
+    this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const game = this.gameQuery.getActive();
 

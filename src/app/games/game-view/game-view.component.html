@@ -32,6 +32,7 @@
       <div fxLayout="column" fxFlexFill>
         <div fxFlexAlign="center" class="small-margin-bottom">
           <h2>Compose your army</h2>
+          <!--------------------- Ready messages --------------------->
           <div
             *ngIf="(isOpponentReady$ | async) && !(isPlayerReady$ | async)"
             class="text-centered"
@@ -44,8 +45,17 @@
           >
             <p>Waiting for your opponent!</p>
           </div>
+          <!--------------------- Timer message --------------------->
+          <div *ngIf="offlineTimer$ | async as timer" class="text-centered">
+            <div *ngIf="timer < decoTimer">
+              <p>Your opponent has left the game.</p>
+              <p>The game will close in {{ decoTimer - timer }} seconds.</p>
+            </div>
+          </div>
         </div>
+
         <div fxFlex>
+          <!--------------------- Unit board --------------------->
           <div
             fxFlexOffset="20"
             fxFlex="15"
@@ -55,7 +65,7 @@
           >
             <app-unit-board></app-unit-board>
           </div>
-
+          <!--------------------- Units created --------------------->
           <div
             fxFlex="50"
             fxFlex.xs="60"
@@ -76,5 +86,5 @@
 
 <!--------------------- Board --------------------->
 <ng-template #board>
-  <app-board></app-board>
+  <app-board [offlineTimer$]="offlineTimer$"></app-board>
 </ng-template>

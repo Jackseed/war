@@ -20,15 +20,38 @@ export class GameService extends CollectionService<GameState> {
     super(store);
   }
 
-  createNewGame(name: string) {
+  createNewGame(name: string, isInstant: boolean) {
     const id = this.db.createId();
     const user = this.afAuth.auth.currentUser;
     const playerIds = [user.uid];
-    const game = createGame({ id, name, playerIds });
+    const game = createGame({ id, name, playerIds, isInstant });
     // Create the game
     this.collection.doc(id).set(game);
     this.addPlayer(id, user.uid, "white", true);
     return id;
+  }
+
+  async deleteGame(gameId: string) {
+    const game = this.query.getEntity(gameId);
+    if (game) {
+      const gameDoc = this.db.firestore.collection("games").doc(game.id);
+      const batch = this.db.firestore.batch();
+
+      for (const playerId of game.playerIds) {
+        const playerDoc = gameDoc.collection("players").doc(playerId);
+        const snapshotUnits = await playerDoc.collection("units").get();
+        const units = snapshotUnits.docs.map(doc => doc.data());
+
+        for (const unit of units) {
+          const unitDoc = playerDoc.collection("units").doc(unit.id);
+          batch.delete(unitDoc);
+        }
+        batch.delete(playerDoc);
+      }
+      batch.delete(gameDoc);
+
+      batch.commit();
+    }
   }
 
   /**
@@ -51,6 +74,20 @@ export class GameService extends CollectionService<GameState> {
     });
     // set the player in the game subcollection
     playerCollection.doc(id).set(player);
+  }
+
+  removePlayer(playerId: string) {
+    const game = this.query.getActive();
+    const gameDoc = this.db.firestore.collection("games").doc(game.id);
+    const playerDoc = gameDoc.collection("players").doc(playerId);
+    const batch = this.db.firestore.batch();
+
+    batch.delete(playerDoc);
+    batch.update(gameDoc, {
+      playerIds: firestore.FieldValue.arrayRemove(playerId)
+    });
+
+    batch.commit();
   }
 
   /**
@@ -85,10 +122,10 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Switch active game status to 'placement'
    */
-  switchStatus(status: string) {
+  async switchStatus(status: string) {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
-    doc.update({
+    await doc.update({
       status,
       playersReady: []
     });
@@ -143,5 +180,11 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
 
     doc.update({ playersRematch });
+  }
+
+  public async markClosed() {
+    const game = this.query.getActive();
+    const doc = this.db.collection("games").doc(game.id);
+    await doc.update({ isClosed: true });
   }
 }

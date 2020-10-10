@@ -3,15 +3,17 @@ import {
   OnInit,
   OnDestroy,
   HostListener,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Input
 } from "@angular/core";
-import { Observable, Subscription, combineLatest } from "rxjs";
+import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
 import { Unit, UnitQuery, UnitService } from "../unit/+state";
 import {
   boardCols,
   Castle,
   actionsPerTurn,
+  decoTimer,
   Game,
   GameService,
   GameQuery
@@ -35,6 +37,7 @@ import { MessageService } from "../message/+state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  @Input() offlineTimer$: Observable<number>;
   // Subscriptions
   private oppUnitsync: Subscription;
   private castleVictorySub: Subscription;
@@ -54,6 +57,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public castleIds: number[];
   public isWhiteOpponent: boolean;
   public isBlackOpponent: boolean;
+  public decoTimer = decoTimer;
 
   // Observables
   public isOpen$: Observable<boolean>;
@@ -112,7 +116,9 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.tileService.setTiles();
-    this.oppUnitsync = this.opponentUnitService.syncCollection().subscribe();
+    this.oppUnitsync = this.game$
+      ? this.opponentUnitService.syncCollection().subscribe()
+      : of(false).subscribe();
     this.tiles$ = this.tileQuery.selectAll();
     this.player = this.playerQuery.getActive();
     this.player$ = this.playerQuery.selectActive();
@@ -385,13 +391,13 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.opponentUnitStore.reset();
-    this.oppUnitsync.unsubscribe();
-    this.castleVictorySub.unsubscribe();
-    this.noUnitVictorySub.unsubscribe();
-    this.finishedSub.unsubscribe();
-    this.isActiveSub.unsubscribe();
+    this.oppUnitsync ? this.oppUnitsync.unsubscribe() : false;
+    this.castleVictorySub ? this.castleVictorySub.unsubscribe() : false;
+    this.noUnitVictorySub ? this.noUnitVictorySub.unsubscribe() : false;
+    this.finishedSub ? this.finishedSub.unsubscribe() : false;
+    this.isActiveSub ? this.isActiveSub.unsubscribe() : false;
+    this.dyingUnitsSub ? this.dyingUnitsSub.unsubscribe() : false;
     this.authService.updateIsOpen(true);
     this.watcher.unsubscribe();
-    this.dyingUnitsSub.unsubscribe();
   }
 }
