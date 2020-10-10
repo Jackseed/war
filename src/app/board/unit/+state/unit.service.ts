@@ -5,13 +5,13 @@ import {
   GameQuery,
   boardCols,
   unitPlacementMargin,
-  Castle,
+  Castle
 } from "src/app/games/+state";
 import { PlayerQuery } from "../../player/+state";
 import {
   CollectionConfig,
   pathWithParams,
-  CollectionService,
+  CollectionService
 } from "akita-ng-fire";
 import { UnitQuery } from "./unit.query";
 import { OpponentUnitQuery } from "../opponent/+state/opponent-unit.query";
@@ -29,7 +29,7 @@ export class UnitService extends CollectionService<UnitState> {
     "soldier",
     "musketeer",
     "knight",
-    "cannon",
+    "cannon"
   ];
 
   constructor(
@@ -49,7 +49,9 @@ export class UnitService extends CollectionService<UnitState> {
     const path = "path";
     const gameId = this.gameQuery.getActiveId();
     const playerId = this.playerQuery.getActiveId();
-    return pathWithParams(this.constructor[path], { gameId, playerId });
+    if (gameId && playerId) {
+      return pathWithParams(this.constructor[path], { gameId, playerId });
+    }
   }
 
   public deleteAll() {
@@ -91,7 +93,7 @@ export class UnitService extends CollectionService<UnitState> {
     }
     for (const unitType of this.unitTypes) {
       const typedUnits = this.query.getAll({
-        filterBy: (unit) => unit.type === unitType,
+        filterBy: unit => unit.type === unitType
       });
       for (let unit of typedUnits) {
         // avoid the castle
@@ -104,7 +106,7 @@ export class UnitService extends CollectionService<UnitState> {
         // give unit coordinates and push
         unit = {
           ...unit,
-          tileId: x + y * boardCols,
+          tileId: x + y * boardCols
         };
         units.push(unit);
 
@@ -153,7 +155,10 @@ export class UnitService extends CollectionService<UnitState> {
   }
 
   public updateUnit(unit: Unit) {
-    this.db.collection(this.currentPath).doc(unit.id.toString()).update(unit);
+    this.db
+      .collection(this.currentPath)
+      .doc(unit.id.toString())
+      .update(unit);
   }
 
   public swapUnitPositions(tileId: number) {
@@ -212,7 +217,7 @@ export class UnitService extends CollectionService<UnitState> {
       ) {
         resultingAttackingUnit = {
           ...resultingAttackingUnit,
-          tileId,
+          tileId
         };
       }
       this.updateUnit(resultingAttackingUnit);
@@ -236,12 +241,12 @@ export class UnitService extends CollectionService<UnitState> {
         ...defensiveUnit,
         tileId: null,
         quantity: 0,
-        hp: 0,
+        hp: 0
       };
     } else {
       resultingDefensiveUnit = {
         ...defensiveUnit,
-        quantity: resultingDefensiveQuantity,
+        quantity: resultingDefensiveQuantity
       };
     }
 
@@ -250,10 +255,10 @@ export class UnitService extends CollectionService<UnitState> {
 
   public get dyingUnit$(): Observable<any> {
     return this.query.selectEntityAction(EntityActions.Update).pipe(
-      map((updatedUnitIds) =>
+      map(updatedUnitIds =>
         updatedUnitIds
-          .map((id) => this.query.getEntity(id))
-          .map((unit) => {
+          .map(id => this.query.getEntity(id))
+          .map(unit => {
             if (unit.tileId === null) {
               this.messageService.openSnackBar(
                 `You lost your ${unit.type} battalion.`

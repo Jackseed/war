@@ -31,18 +31,27 @@ export class GameService extends CollectionService<GameState> {
     return id;
   }
 
-  deleteGame(gameId: string) {
+  async deleteGame(gameId: string) {
     const game = this.query.getEntity(gameId);
-    const gameDoc = this.db.firestore.collection("games").doc(game.id);
-    const batch = this.db.firestore.batch();
+    if (game) {
+      const gameDoc = this.db.firestore.collection("games").doc(game.id);
+      const batch = this.db.firestore.batch();
 
-    for (const playerId of game.playerIds) {
-      const playerDoc = gameDoc.collection("players").doc(playerId);
-      batch.delete(playerDoc);
+      for (const playerId of game.playerIds) {
+        const playerDoc = gameDoc.collection("players").doc(playerId);
+        const snapshotUnits = await playerDoc.collection("units").get();
+        const units = snapshotUnits.docs.map(doc => doc.data());
+
+        for (const unit of units) {
+          const unitDoc = playerDoc.collection("units").doc(unit.id);
+          batch.delete(unitDoc);
+        }
+        batch.delete(playerDoc);
+      }
+      batch.delete(gameDoc);
+
+      batch.commit();
     }
-    batch.delete(gameDoc);
-
-    batch.commit();
   }
 
   /**
@@ -113,10 +122,10 @@ export class GameService extends CollectionService<GameState> {
   /**
    * Switch active game status to 'placement'
    */
-  switchStatus(status: string) {
+  async switchStatus(status: string) {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
-    doc.update({
+    await doc.update({
       status,
       playersReady: []
     });

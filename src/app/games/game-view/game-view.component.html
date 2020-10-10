@@ -48,7 +48,7 @@
           <!--------------------- Timer message --------------------->
           <div *ngIf="offlineTimer$ | async as timer" class="text-centered">
             <div *ngIf="timer < decoTimer">
-              <h2>Your opponent has left the game.</h2>
+              <p>Your opponent has left the game.</p>
               <p>The game will close in {{ decoTimer - timer }} seconds.</p>
             </div>
           </div>

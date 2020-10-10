@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { MessageService } from "src/app/board/message/+state/message.service";
 import { PresenceService } from "src/app/auth/presence/presence.service";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
-import { GameQuery, GameService, decoTimer } from "../+state";
-import { tap, switchMap } from "rxjs/operators";
+import { GameQuery, GameService, decoTimer, Game } from "../+state";
+import { tap, switchMap, map, filter, debounceTime } from "rxjs/operators";
 import { PlayerQuery, PlayerService } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of, timer } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
@@ -24,7 +24,9 @@ export class GameViewComponent implements OnInit, OnDestroy {
   private playersReadyCountSub$: Subscription;
   private playersRematchCountSub$: Subscription;
   private playersCountSub$: Subscription;
-  private gameClosedSub$: Subscription;
+  private closeGameOnTimerSub$: Subscription;
+  private gameIsClosedSub$: Subscription;
+  private game$: Observable<Game>;
   public isOpponentReady$: Observable<boolean>;
   public isPlayerReady$: Observable<boolean>;
   private opponentPresence$: Observable<any>;
@@ -48,6 +50,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.game$ = this.gameQuery.selectActive();
     this.gameService.joinGame(this.route.snapshot.paramMap.get("id"));
     this.gameStatus$ = this.gameQuery.gameStatus$;
 
@@ -64,21 +67,28 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
     );
 
-    this.gameClosedSub$ = this.offlineTimer$
-      .pipe(tap(timer => (timer === decoTimer ? this.closeGame() : false)))
-      .subscribe(console.log);
-
-    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
-    this.isOpponentReady$ = this.playerQuery
-      .selectCount()
+    // Close the game if the opponent is offline more than decoTimer time
+    this.closeGameOnTimerSub$ = this.offlineTimer$
       .pipe(
-        switchMap(count =>
-          count === 2
-            ? (this.isOpponentReady$ = this.playerQuery.isOpponentReady)
-            : of(false)
+        tap(timer =>
+          timer === decoTimer ? this.gameService.markClosed() : false
         )
-      );
+      )
+      .subscribe();
 
+    // Consider opponent has left if game is closed
+    this.gameIsClosedSub$ = this.game$
+      .pipe(
+        filter(game =>
+          game ? game.status !== "finished" && game.isClosed : false
+        ),
+        map(game => (game ? game.isClosed : false)),
+        debounceTime(1000),
+        tap(isClosed => (isClosed ? this.oppHasLeft() : false))
+      )
+      .subscribe();
+
+    // Check if there are 2 players to start the game
     this.playersCountSub$ = combineLatest([
       this.playerQuery.selectCount(),
       this.gameStatus$
@@ -92,6 +102,18 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.isOpponentReady$ = this.playerQuery
+      .selectCount()
+      .pipe(
+        switchMap(count =>
+          count === 2
+            ? (this.isOpponentReady$ = this.playerQuery.isOpponentReady)
+            : of(false)
+        )
+      );
+
+    // Check if players are ready and update game status accordingly
     this.playersReadyCountSub$ = combineLatest([
       this.gameQuery.playersReadyCount,
       this.gameStatus$
@@ -110,6 +132,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    // Check if players want to rematch and update game status accordingly
     this.playersRematchCountSub$ = this.gameQuery.playersRematchCount
       .pipe(
         tap(count => {
@@ -130,7 +153,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  // Ask the user if he really wants to leave when instant games
+  // Ask if the user really wants to leave when instant games
   @HostListener("window:beforeunload")
   canLeavePage() {
     const game = this.gameQuery.getActive();
@@ -140,10 +163,9 @@ export class GameViewComponent implements OnInit, OnDestroy {
       return false;
     }
   }
-
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
     const game = this.gameQuery.getActive();
-    console.log(game);
+
     if (game.isInstant && !game.isClosed) {
       this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         disableClose: false
@@ -156,36 +178,49 @@ export class GameViewComponent implements OnInit, OnDestroy {
     return this.dialogRef.afterClosed();
   }
 
-  async closeGame() {
-    console.log("closing the game");
+  // Close the game or delete it when player leaves
+  async playerLeft() {
     const game = this.gameQuery.getActive();
-    // check if the game is instant & open
-    if (game.isInstant && !game.isClosed) {
-      // delete it if there is only one player
-      if (game.playerIds.length === 1) {
-        this.gameService.deleteGame(game.id);
-        // otherwise close it
-      } else {
-        await this.gameService.markClosed();
-
-        // if game was started, gives victory to the active player
-        if (game.status === "battle") {
-          const opponent = this.playerQuery.opponent;
-          const player = this.playerQuery.getActive();
-          this.gameService.switchStatus("finished");
-          this.playerService.setVictorious(player, opponent);
-        } else {
-          this.messageService.openSnackBar("Game closed.");
-          this.router.navigate(["/home"]);
+    if (game) {
+      // check if the game is instant & open
+      if (game.isInstant && !game.isClosed) {
+        // delete it if there is only one player
+        if (game.playerIds.length === 1) {
           this.gameService.deleteGame(game.id);
+          // otherwise close it
+        } else {
+          await this.gameService.markClosed();
+          this.messageService.openSnackBar("Game closed.");
         }
       }
     }
   }
 
+  // Give victory or delete the game when opponent leaves
+  private async oppHasLeft() {
+    const game = this.gameQuery.getActive();
+
+    if (game.status !== "finished") {
+      // if game was started, gives victory to the active player
+      if (game.status === "battle") {
+        this.messageService.openSnackBar("Your opponent has left the game.");
+        const opponent = this.playerQuery.opponent;
+        const player = this.playerQuery.getActive();
+        await this.gameService.switchStatus("finished");
+        this.playerService.setVictorious(player, opponent);
+        // else delete the game
+      } else {
+        await this.router.navigate(["/home"]);
+        this.messageService.openSnackBar("Your opponent has left the game.");
+        await this.gameService.deleteGame(game.id);
+      }
+    }
+  }
+
   ngOnDestroy() {
-    this.closeGame();
-    this.gameClosedSub$.unsubscribe();
+    this.playerLeft();
+    this.closeGameOnTimerSub$.unsubscribe();
+    this.gameIsClosedSub$.unsubscribe();
     this.playersCountSub$.unsubscribe();
     this.playersReadyCountSub$.unsubscribe();
     this.playersRematchCountSub$.unsubscribe();

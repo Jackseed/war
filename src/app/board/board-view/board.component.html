@@ -112,21 +112,21 @@
                 fxFlexFill
                 style="--img: url({{ getUnitImgUrl(i) }});"
                 [ngClass]="{
-                  invisible: !(visibleTileIds$ | async).includes(i),
-                  reachable: tile.isReachable,
-                  selected: tile.isSelected,
-                  withinRange: tile.withinRange,
+                  invisible: !(visibleTileIds$ | async)?.includes(i),
+                  reachable: tile?.isReachable,
+                  selected: tile?.isSelected,
+                  withinRange: tile?.withinRange,
                   unit:
-                    castleIds.includes(i) ||
-                    (unitTileIds$ | async).includes(i) ||
-                    (visibleOpponentUnitTileIds$ | async).includes(i),
-                  playerUnit: (unitTileIds$ | async).includes(i)
+                    castleIds?.includes(i) ||
+                    (unitTileIds$ | async)?.includes(i) ||
+                    (visibleOpponentUnitTileIds$ | async)?.includes(i),
+                  playerUnit: (unitTileIds$ | async)?.includes(i)
                 }"
               >
                 <div
                   *ngIf="
-                    (unitTileIds$ | async).includes(i) ||
-                    (visibleOpponentUnitTileIds$ | async).includes(i)
+                    (unitTileIds$ | async)?.includes(i) ||
+                    (visibleOpponentUnitTileIds$ | async)?.includes(i)
                   "
                 >
                   <span

@@ -33,7 +33,6 @@ export class AuthService extends CollectionService<AuthState> {
   async signOut() {
     await this.router.navigate(["/welcome"]);
 
-    console.log(this.router.url);
     if (this.router.url.includes("welcome")) {
       await this.afAuth.auth.signOut();
       this.store.reset();

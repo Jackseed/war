@@ -32,17 +32,21 @@ export class GameQuery extends QueryEntity<GameState> {
   }
 
   get playersReadyCount(): Observable<number> {
-    return this.selectActive().pipe(map(game => game.playersReady.length));
+    return this.selectActive().pipe(
+      map(game => (game ? game.playersReady.length : null))
+    );
   }
 
   get playersRematchCount(): Observable<number> {
-    return this.selectActive().pipe(map(game => game.playersRematch.length));
+    return this.selectActive().pipe(
+      map(game => (game ? game.playersRematch.length : null))
+    );
   }
 
   get isPlayerReady(): Observable<boolean> {
     const user = this.afAuth.auth.currentUser;
     return this.selectActive().pipe(
-      map(game => game.playersReady.includes(user.uid))
+      map(game => game ? game.playersReady.includes(user.uid) : false)
     );
   }
 
@@ -54,9 +58,16 @@ export class GameQuery extends QueryEntity<GameState> {
   }
 
   get gameStatus$(): Observable<
-    "waiting" | "unit creation" | "placement" | "battle" | "finished"
+    | "waiting"
+    | "unit creation"
+    | "placement"
+    | "battle"
+    | "finished"
+    | undefined
   > {
-    return this.selectActive().pipe(map(game => game.status));
+    return this.selectActive().pipe(
+      map(game => (game ? game.status : undefined))
+    );
   }
 
   // get all instant games with 1 online player

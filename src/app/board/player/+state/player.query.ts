@@ -15,7 +15,7 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
   public get opponent(): Player {
     const activePlayerId = this.getActiveId();
     const players = this.getAll();
-    return players.filter((player) => player.id !== activePlayerId)[0];
+    return players.filter(player => player.id !== activePlayerId)[0];
   }
 
   public get opponent$(): Observable<Player> {
@@ -23,9 +23,7 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     const players$ = this.selectAll();
 
     return players$.pipe(
-      map(
-        (players) => players.filter((player) => player.id !== activePlayerId)[0]
-      )
+      map(players => players.filter(player => player.id !== activePlayerId)[0])
     );
   }
 
@@ -33,6 +31,8 @@ export class PlayerQuery extends QueryEntity<PlayerState> {
     const player = this.opponent;
     return this.gameQuery
       .selectActive()
-      .pipe(map((game) => game.playersReady.includes(player.id)));
+      .pipe(
+        map(game => (game ? game.playersReady.includes(player.id) : false))
+      );
   }
 }
