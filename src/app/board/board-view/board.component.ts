@@ -3,7 +3,8 @@ import {
   OnInit,
   OnDestroy,
   HostListener,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Input
 } from "@angular/core";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { Tile, TileQuery, TileService } from "../tile/+state";
@@ -12,6 +13,7 @@ import {
   boardCols,
   Castle,
   actionsPerTurn,
+  decoTimer,
   Game,
   GameService,
   GameQuery
@@ -35,6 +37,7 @@ import { MessageService } from "../message/+state";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  @Input() offlineTimer$: Observable<number>;
   // Subscriptions
   private oppUnitsync: Subscription;
   private castleVictorySub: Subscription;
@@ -54,6 +57,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public castleIds: number[];
   public isWhiteOpponent: boolean;
   public isBlackOpponent: boolean;
+  public decoTimer = decoTimer;
 
   // Observables
   public isOpen$: Observable<boolean>;

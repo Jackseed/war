@@ -3,7 +3,7 @@ import { MessageService } from "src/app/board/message/+state/message.service";
 import { PresenceService } from "src/app/auth/presence/presence.service";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService, decoTimer } from "../+state";
-import { tap, switchMap, debounceTime, filter } from "rxjs/operators";
+import { tap, switchMap } from "rxjs/operators";
 import { PlayerQuery, PlayerService } from "src/app/board/player/+state";
 import { Observable, Subscription, combineLatest, of, timer } from "rxjs";
 import { TileService } from "src/app/board/tile/+state";
@@ -57,7 +57,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
       )
     );
 
-    // Check if the opponent is offline for more than 1 min, if so, close the game
+    // Create a timer when the opponent is offline
     this.offlineTimer$ = this.opponentPresence$.pipe(
       switchMap(status =>
         status.status === "offline" ? timer(1000, 1000) : of(null)
@@ -172,6 +172,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
         if (game.status === "battle") {
           const opponent = this.playerQuery.opponent;
           const player = this.playerQuery.getActive();
+          this.gameService.switchStatus("finished");
           this.playerService.setVictorious(player, opponent);
         } else {
           this.messageService.openSnackBar("Game closed.");
