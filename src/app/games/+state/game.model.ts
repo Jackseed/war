@@ -20,7 +20,7 @@ export interface Castle {
 }
 
 
-export const decoTimer = 30;
+export const decoTimer = 5;
 
 /// TODO push to firebase
 export const boardCols = 11;

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { MessageService } from "src/app/board/message/+state/message.service";
 import { PresenceService } from "src/app/auth/presence/presence.service";
 import { ConfirmationDialogComponent } from "src/app/games/pages/confirmation-dialog/confirmation-dialog.component";
 import { GameQuery, GameService, decoTimer } from "../+state";
@@ -42,7 +43,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    private presenceSercice: PresenceService
+    private presenceSercice: PresenceService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -141,8 +143,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
     const game = this.gameQuery.getActive();
-
-    if (game.isInstant) {
+    console.log(game);
+    if (game.isInstant && !game.isClosed) {
       this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         disableClose: false
       });
@@ -154,7 +156,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     return this.dialogRef.afterClosed();
   }
 
-  closeGame() {
+  async closeGame() {
     console.log("closing the game");
     const game = this.gameQuery.getActive();
     // check if the game is instant & open
@@ -164,13 +166,17 @@ export class GameViewComponent implements OnInit, OnDestroy {
         this.gameService.deleteGame(game.id);
         // otherwise close it
       } else {
-        this.gameService.markClosed();
+        await this.gameService.markClosed();
 
         // if game was started, gives victory to the active player
         if (game.status === "battle") {
           const opponent = this.playerQuery.opponent;
           const player = this.playerQuery.getActive();
           this.playerService.setVictorious(player, opponent);
+        } else {
+          this.messageService.openSnackBar("Game closed.");
+          this.router.navigate(["/home"]);
+          this.gameService.deleteGame(game.id);
         }
       }
     }

@@ -32,8 +32,17 @@ export class GameService extends CollectionService<GameState> {
   }
 
   deleteGame(gameId: string) {
-    console.log("deleting ", gameId);
-    this.collection.doc(gameId).delete();
+    const game = this.query.getEntity(gameId);
+    const gameDoc = this.db.firestore.collection("games").doc(game.id);
+    const batch = this.db.firestore.batch();
+
+    for (const playerId of game.playerIds) {
+      const playerDoc = gameDoc.collection("players").doc(playerId);
+      batch.delete(playerDoc);
+    }
+    batch.delete(gameDoc);
+
+    batch.commit();
   }
 
   /**
@@ -164,9 +173,9 @@ export class GameService extends CollectionService<GameState> {
     doc.update({ playersRematch });
   }
 
-  public markClosed(): void {
+  public async markClosed() {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
-    doc.update({ isClosed: true });
+    await doc.update({ isClosed: true });
   }
 }
