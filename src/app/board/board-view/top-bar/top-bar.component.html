@@ -23,8 +23,8 @@
       <div fxFlexFill fxFlexOffset="5" fxFlex="30">
         <app-message-board fxFlexFill></app-message-board>
       </div>
-      <div fxFlexOffset="9.5" fxFlex="nogrow" >
-        <h1><a href="/home">WAR</a></h1>
+      <div fxFlexOffset="9.5" fxFlex="nogrow">
+        <h1><a routerLink="/home">WAR</a></h1>
       </div>
       <div *ngIf="!mediaObserver.isActive('xs')" fxFlex="50"></div>
     </div>
@@ -46,7 +46,7 @@
       </button>
     </div>
     <div fxFlex="80" fxLayout="row" fxLayoutAlign="center end" fxFlexFill>
-      <h1 class="war"><a href="/home">WAR</a></h1>
+      <h1 class="war"><a routerLink="/home">WAR</a></h1>
     </div>
   </div>
 </ng-template>

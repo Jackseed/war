@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { PresenceService } from "src/app/auth/presence/presence.service";
 import { AuthStore, AuthState } from "./auth.store";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
@@ -14,7 +15,8 @@ export class AuthService extends CollectionService<AuthState> {
     store: AuthStore,
     private query: AuthQuery,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private presenceService: PresenceService
   ) {
     super(store);
   }
@@ -29,24 +31,37 @@ export class AuthService extends CollectionService<AuthState> {
   }
 
   async signOut() {
-    await this.afAuth.auth.signOut();
-    this.store.reset();
-    this.router.navigate(["/welcome"]);
+    await this.router.navigate(["/welcome"]);
+
+    if (this.router.url.includes("welcome")) {
+      await this.afAuth.auth.signOut();
+      this.store.reset();
+      await this.presenceService.setPresence("offline");
+    }
   }
 
   private setUser(id: string) {
     const user = createUser({ id });
-    this.db.collection(this.currentPath).doc(id).set(user);
+    this.db
+      .collection(this.currentPath)
+      .doc(id)
+      .set(user);
   }
 
   public updateName(name: string) {
     const id = this.query.getActiveId();
-    this.db.collection(this.currentPath).doc(id).update({ name });
+    this.db
+      .collection(this.currentPath)
+      .doc(id)
+      .update({ name });
   }
 
   public updateEmail(email: string) {
     const id = this.query.getActiveId();
-    this.db.collection(this.currentPath).doc(id).update({ email });
+    this.db
+      .collection(this.currentPath)
+      .doc(id)
+      .update({ email });
   }
 
   public async emailSignup(email: string, password: string): Promise<string> {
@@ -73,7 +88,7 @@ export class AuthService extends CollectionService<AuthState> {
           gamePlayed: oldUser.gamePlayed,
           matchPlayed: oldUser.matchPlayed,
           matchWon: oldUser.matchWon,
-          oldId: oldUser.id,
+          oldId: oldUser.id
         };
 
         batch.set(newUserDoc, user);
@@ -115,8 +130,8 @@ export class AuthService extends CollectionService<AuthState> {
   public updateIsOpen(isOpen: boolean) {
     this.store.update({
       ui: {
-        isOpen,
-      },
+        isOpen
+      }
     });
   }
 }

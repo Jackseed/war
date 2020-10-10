@@ -3,7 +3,7 @@ import { OpponentUnitStore, OpponentUnitState } from "./opponent-unit.store";
 import {
   CollectionConfig,
   CollectionService,
-  pathWithParams,
+  pathWithParams
 } from "akita-ng-fire";
 import { GameQuery } from "src/app/games/+state";
 import { PlayerQuery } from "src/app/board/player/+state";
@@ -22,9 +22,13 @@ export class OpponentUnitService extends CollectionService<OpponentUnitState> {
 
   get path(): string {
     const gameId = this.gameQuery.getActiveId();
-    const opponentId = this.query.opponent.id;
-    const path = "path";
-    return pathWithParams(this.constructor[path], { gameId, opponentId });
+    if (gameId) {
+      const opponentId = this.query.opponent.id;
+      const path = "path";
+      if (opponentId) {
+        return pathWithParams(this.constructor[path], { gameId, opponentId });
+      }
+    }
   }
 
   public deleteAll() {
@@ -41,6 +45,9 @@ export class OpponentUnitService extends CollectionService<OpponentUnitState> {
   }
 
   public updateUnit(unit: Unit) {
-    this.db.collection(this.currentPath).doc(unit.id.toString()).update(unit);
+    this.db
+      .collection(this.currentPath)
+      .doc(unit.id.toString())
+      .update(unit);
   }
 }

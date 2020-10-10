@@ -26,7 +26,9 @@ export class PlayerService extends CollectionService<PlayerState> {
   get path(): string {
     const path = "path";
     const gameId = this.gameQuery.getActiveId();
-    return pathWithParams(this.constructor[path], { gameId });
+    if (gameId) {
+      return pathWithParams(this.constructor[path], { gameId });
+    }
   }
 
   public setVictorious(winner: Player, loser: Player) {
@@ -43,7 +45,7 @@ export class PlayerService extends CollectionService<PlayerState> {
       matchPlayed: increment,
       matchWon: increment
     });
-    
+
     batch.update(collection.doc(loser.id), { isVictorious: false });
     batch.update(this.db.firestore.collection("users").doc(loser.id), {
       gamePlayed: firestore.FieldValue.arrayUnion(this.gameQuery.getActiveId()),
