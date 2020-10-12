@@ -35,6 +35,7 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { MatDialogRef } from "@angular/material/dialog";
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,7 +58,8 @@ import { MatDialogRef } from "@angular/material/dialog";
     AuthModule,
     FormsModule,
     RouterModule,
-    environment.production ? [] : AkitaNgDevtools.forRoot()
+    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     ActiveAuthGuard,
