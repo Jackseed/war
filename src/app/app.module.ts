@@ -10,6 +10,7 @@ import {
 } from "@angular/fire/firestore";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import {
   NoopAnimationsModule,
   BrowserAnimationsModule
@@ -35,7 +36,7 @@ import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { MessageModule } from "./board/message/message.module";
 import { MessageGuard } from "./board/message/guard/message.guard";
 import { MatDialogRef } from "@angular/material/dialog";
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { ServiceWorkerModule } from "@angular/service-worker";
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,6 +47,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFireMessagingModule,
     NoopAnimationsModule,
     GamesModule,
     BoardModule,
@@ -59,7 +61,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FormsModule,
     RouterModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   providers: [
     ActiveAuthGuard,
