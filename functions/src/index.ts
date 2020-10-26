@@ -41,3 +41,43 @@ exports.onUserStatusChanged = functions.database
       console.log("Error ", error);
     }
   });
+
+
+exports.notifyUser = functions.firestore
+.document('messages/{messageId}')
+.onCreate(event => {
+
+const message = event.data();
+const userId = message.recipientId;
+
+// Message details for end user
+const payload = {
+    notification: {
+        title: 'New message!',
+        body: `${message.senderId} sent you a new message`,
+        icon: 'https://goo.gl/Fz9nrQ'
+      }
+};
+
+// ref to the parent document
+const userRef = db.collection('users').doc(userId);
+
+
+// get users tokens and send notifications
+return userRef.get()
+    .then(snapshot => snapshot.data() )
+    .then(user => {
+      if(user) {
+
+        const tokens = user.fcmTokens ? Object.keys(user.fcmTokens) : [];
+
+        if (!tokens.length) {
+           throw new Error('User does not have any tokens!');
+        }
+
+        return admin.messaging().sendToDevice(tokens, payload);
+    } else {
+      return null;
+    }})
+    .catch(err => console.log(err) )
+});
