@@ -22,7 +22,8 @@
               "firebase/app",
               "@firebase/auth",
               "@firebase/firestore",
-              "@firebase/database"
+              "@firebase/database",
+              "@firebase/component"
             ],
             "outputPath": "dist/War",
             "index": "src/index.html",

@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { MessagingService } from "./auth/messaging/messaging.service";
 import { RouterOutlet } from "@angular/router";
@@ -18,7 +18,7 @@ import { AngularFireMessaging } from "@angular/fire/messaging";
   animations: [slider],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = "War";
@@ -27,12 +27,13 @@ export class AppComponent implements OnInit, OnDestroy {
   public isOpen$: Observable<boolean>;
   public user$: Observable<User>;
   public game$: Observable<Game>;
+  public message;
 
   constructor(
     public authQuery: AuthQuery,
     public gameQuery: GameQuery,
     public mediaObserver: MediaObserver,
-    public msg: MessagingService,
+    public messagingService: MessagingService,
     private afMessaging: AngularFireMessaging
   ) {}
 
@@ -40,15 +41,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.user$ = this.authQuery.selectActive();
     this.game$ = this.gameQuery.selectActive();
-    this.permissionSub = this.user$.subscribe((user) => {
+    this.permissionSub = this.user$.subscribe(user => {
       if (user) {
-        this.msg.getPermission(user);
+        this.messagingService.getPermission(user);
       }
     });
-
-    this.messageSub = this.afMessaging.messages.subscribe((message) => {
-      console.log(message);
-    });
+    this.messagingService.receiveMessage();
+    this.message = this.messagingService.currentMessage;
   }
 
   public prepareRoute(outlet: RouterOutlet) {
