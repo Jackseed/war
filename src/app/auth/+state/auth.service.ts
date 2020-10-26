@@ -88,7 +88,8 @@ export class AuthService extends CollectionService<AuthState> {
           gamePlayed: oldUser.gamePlayed,
           matchPlayed: oldUser.matchPlayed,
           matchWon: oldUser.matchWon,
-          oldId: oldUser.id
+          oldId: oldUser.id,
+          fcmTokens: oldUser.fcmTokens,
         };
 
         batch.set(newUserDoc, user);

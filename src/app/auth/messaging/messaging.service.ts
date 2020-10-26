@@ -3,6 +3,8 @@ import { User } from "../+state/auth.model";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AngularFireMessaging } from "@angular/fire/messaging";
 import { BehaviorSubject } from "rxjs";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { first } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +14,8 @@ export class MessagingService {
 
   constructor(
     private db: AngularFirestore,
-    private afMessaging: AngularFireMessaging
+    private afMessaging: AngularFireMessaging,
+    private afAuth: AngularFireAuth
   ) {}
 
   // get permission to send messages
@@ -38,6 +41,15 @@ export class MessagingService {
       const tokens = { ...currentTokens, [token]: true };
       userRef.update({ fcmTokens: tokens });
     }
+  }
+
+  public async saveActiveUserToken(token: string) {
+    if (!token) return;
+    const user = await this.afAuth.authState.pipe(first()).toPromise();
+
+    const userRef = this.db.collection("users").doc(user.uid);
+    const tokens = { [token]: true };
+    return userRef.update({ fcmTokens: tokens });
   }
 
   receiveMessage() {
