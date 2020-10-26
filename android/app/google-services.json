@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "891027548677",
+    "firebase_url": "https://war-77bc4.firebaseio.com",
+    "project_id": "war-77bc4",
+    "storage_bucket": "war-77bc4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891027548677:android:7c55e3a2c2a68492deca6c",
+        "android_client_info": {
+          "package_name": "com.war.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891027548677-thmqq0hosgdkqvo8nna7qj0oljlel8q7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcL7cqLIYl67uPkBt33-LcJr1n3u6fc3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891027548677-thmqq0hosgdkqvo8nna7qj0oljlel8q7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
