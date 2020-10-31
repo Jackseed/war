@@ -23,7 +23,8 @@
               "@firebase/auth",
               "@firebase/firestore",
               "@firebase/database",
-              "@firebase/component"
+              "@firebase/component",
+              "@firebase/util"
             ],
             "outputPath": "dist/War",
             "index": "src/index.html",
