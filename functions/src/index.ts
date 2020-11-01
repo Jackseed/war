@@ -42,42 +42,44 @@ exports.onUserStatusChanged = functions.database
     }
   });
 
-
 exports.notifyUser = functions.firestore
-.document('messages/{messageId}')
-.onCreate(event => {
+  .document("games/{gameId}/players/{playerId}")
+  .onUpdate(change => {
+    const player = change.after.data();
 
-const message = event.data();
-const userId = message.recipientId;
+    if (!player.isActive) {
+      throw new Error("Not player's turn");
+    }
 
-// Message details for end user
-const payload = {
-    notification: {
-        title: 'New message!',
-        body: `${message.senderId} sent you a new message`,
-        icon: 'https://goo.gl/Fz9nrQ'
+    // Message details for end user
+    const payload = {
+      notification: {
+        title: "WAR",
+        body: `It's your turn!`,
+        icon:
+          "https://firebasestorage.googleapis.com/v0/b/war-prod.appspot.com/o/icon.png?alt=media&token=6671ddf6-568e-4fbc-8f55-27a562bbc8b5"
       }
-};
+    };
 
-// ref to the parent document
-const userRef = db.collection('users').doc(userId);
+    // ref to the parent document
+    const userRef = db.collection("users").doc(player.id);
 
+    // get users tokens and send notifications
+    return userRef
+      .get()
+      .then(snapshot => snapshot.data())
+      .then(user => {
+        if (user) {
+          const tokens = user.fcmTokens ? Object.keys(user.fcmTokens) : [];
 
-// get users tokens and send notifications
-return userRef.get()
-    .then(snapshot => snapshot.data() )
-    .then(user => {
-      if(user) {
+          if (!tokens.length) {
+            throw new Error("User does not have any tokens!");
+          }
 
-        const tokens = user.fcmTokens ? Object.keys(user.fcmTokens) : [];
-
-        if (!tokens.length) {
-           throw new Error('User does not have any tokens!');
+          return admin.messaging().sendToDevice(tokens, payload);
+        } else {
+          return null;
         }
-
-        return admin.messaging().sendToDevice(tokens, payload);
-    } else {
-      return null;
-    }})
-    .catch(err => console.log(err) )
-});
+      })
+      .catch(err => console.log(err));
+  });
