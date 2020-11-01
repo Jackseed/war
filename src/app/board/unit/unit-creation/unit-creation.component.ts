@@ -37,6 +37,6 @@ export class UnitCreationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.watcher.unsubscribe();
+    this.watcher ? this.watcher.unsubscribe(): false;
   }
 }

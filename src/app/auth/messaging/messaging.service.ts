@@ -1,29 +1,75 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
+import { Router } from "@angular/router";
 import { User } from "../+state/auth.model";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AngularFireMessaging } from "@angular/fire/messaging";
-import { BehaviorSubject } from "rxjs";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { first } from "rxjs/operators";
+import {
+  Plugins,
+  PushNotificationToken,
+  PushNotificationActionPerformed
+} from "@capacitor/core";
+
+const { PushNotifications } = Plugins;
 
 @Injectable({
   providedIn: "root"
 })
 export class MessagingService {
-  currentMessage = new BehaviorSubject(null);
-
   constructor(
     private db: AngularFirestore,
-    private afMessaging: AngularFireMessaging
+    private afMessaging: AngularFireMessaging,
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private zone: NgZone
   ) {}
 
   // get permission to send messages
   getPermission(user: User) {
     this.afMessaging.requestToken.subscribe(
       token => {
-        console.log("Permission granted! Save to the server!", token);
         this.saveToken(user, token);
       },
       error => {
         console.error(error);
+      }
+    );
+  }
+
+  public registerMobilePush() {
+    // Request permission to use push notifications
+    // iOS will prompt user and return if they granted permission or not
+    // Android will just grant without prompting
+    PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {
+        // Show some error
+      }
+    });
+
+    PushNotifications.addListener(
+      "registration",
+      (token: PushNotificationToken) => {
+        this.saveActiveUserToken(token.value);
+      }
+    );
+
+    PushNotifications.addListener("registrationError", (error: any) => {
+      alert("Error: " + JSON.stringify(error));
+    });
+    // link to the game when click on notification
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      async (notification: PushNotificationActionPerformed) => {
+        this.zone.run(() => {
+          const data = notification.notification.data;
+          if (data.gameId) {
+            this.router.navigate([`/games/${data.gameId}`]);
+          }
+        });
       }
     );
   }
@@ -40,10 +86,12 @@ export class MessagingService {
     }
   }
 
-  receiveMessage() {
-    this.afMessaging.messages.subscribe(payload => {
-      console.log("new message received. ", payload);
-      this.currentMessage.next(payload);
-    });
+  public async saveActiveUserToken(token: string) {
+    if (!token) return;
+    const user = await this.afAuth.authState.pipe(first()).toPromise();
+
+    const userRef = this.db.collection("users").doc(user.uid);
+    const tokens = { [token]: true };
+    return userRef.update({ fcmTokens: tokens });
   }
 }

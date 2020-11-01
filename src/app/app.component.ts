@@ -1,17 +1,11 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy
-} from "@angular/core";
-import { MessagingService } from "./auth/messaging/messaging.service";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { MessagingService } from 'src/app/auth/messaging/messaging.service';
 import { RouterOutlet } from "@angular/router";
 import { slider } from "./animations/animations";
 import { AuthQuery, User } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
-import { Observable, Subscription } from "rxjs";
-import { Game, GameQuery } from "./games/+state";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { Observable } from "rxjs";
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: "app-root",
@@ -20,34 +14,25 @@ import { AngularFireMessaging } from "@angular/fire/messaging";
   styleUrls: ["./app.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   title = "War";
-  private messageSub: Subscription;
-  private permissionSub: Subscription;
+
   public isOpen$: Observable<boolean>;
   public user$: Observable<User>;
-  public game$: Observable<Game>;
-  public message;
 
   constructor(
     public authQuery: AuthQuery,
-    public gameQuery: GameQuery,
-    public mediaObserver: MediaObserver,
-    public messagingService: MessagingService,
-    private afMessaging: AngularFireMessaging
+    private messagingService: MessagingService,
+    public mediaObserver: MediaObserver
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.user$ = this.authQuery.selectActive();
-    this.game$ = this.gameQuery.selectActive();
-    this.permissionSub = this.user$.subscribe(user => {
-      if (user) {
-        this.messagingService.getPermission(user);
-      }
-    });
-    this.messagingService.receiveMessage();
-    this.message = this.messagingService.currentMessage;
+    // Prepare push notifications
+    if (Capacitor.platform !== "web") {
+      this.messagingService.registerMobilePush();
+    }
   }
 
   public prepareRoute(outlet: RouterOutlet) {
@@ -56,10 +41,5 @@ export class AppComponent implements OnInit, OnDestroy {
       outlet.activatedRouteData &&
       outlet.activatedRouteData["animation"]
     );
-  }
-
-  ngOnDestroy() {
-    this.permissionSub.unsubscribe();
-    this.messageSub.unsubscribe();
   }
 }
