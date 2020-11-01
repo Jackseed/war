@@ -65,6 +65,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.gameSub.unsubscribe();
+    this.gameSub ? this.gameSub.unsubscribe(): false;
   }
 }

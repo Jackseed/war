@@ -409,6 +409,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.authService.updateIsOpen(true);
     this.opponentUnitStore.reset();
     this.oppUnitsync ? this.oppUnitsync.unsubscribe() : false;
     this.castleVictorySub ? this.castleVictorySub.unsubscribe() : false;
@@ -416,8 +417,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.finishedSub ? this.finishedSub.unsubscribe() : false;
     this.isActiveSub ? this.isActiveSub.unsubscribe() : false;
     this.dyingUnitsSub ? this.dyingUnitsSub.unsubscribe() : false;
-    this.authService.updateIsOpen(true);
-    this.watcher.unsubscribe();
-    this.permissionSub.unsubscribe();
+    this.watcher ? this.watcher.unsubscribe(): false;
+    this.permissionSub ? this.permissionSub.unsubscribe(): false;
   }
 }

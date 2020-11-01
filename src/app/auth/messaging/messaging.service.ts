@@ -65,10 +65,11 @@ export class MessagingService {
       async (notification: PushNotificationActionPerformed) => {
         const data = notification.notification.data;
         if (data.gameId) {
-          this.router.navigateByUrl(`/games/${data.gameId}`);
+          console.log("Action performed: " + JSON.stringify(data.gameId));
+          return this.router.navigate([`/games/${data.gameId}`]);
         }
       }
-    );  
+    );
   }
 
   // save the permission token in firestore

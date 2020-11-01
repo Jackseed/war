@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { MessagingService } from 'src/app/auth/messaging/messaging.service';
 import { RouterOutlet } from "@angular/router";
 import { slider } from "./animations/animations";
 import { AuthQuery, User } from "./auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable } from "rxjs";
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: "app-root",
@@ -20,12 +22,17 @@ export class AppComponent implements OnInit {
 
   constructor(
     public authQuery: AuthQuery,
+    private messagingService: MessagingService,
     public mediaObserver: MediaObserver
   ) {}
 
   async ngOnInit() {
     this.isOpen$ = this.authQuery.selectIsOpen();
     this.user$ = this.authQuery.selectActive();
+    // Prepare push notifications
+    if (Capacitor.platform !== "web") {
+      this.messagingService.registerMobilePush();
+    }
   }
 
   public prepareRoute(outlet: RouterOutlet) {

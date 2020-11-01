@@ -219,10 +219,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.playerLeft();
-    this.closeGameOnTimerSub$.unsubscribe();
-    this.gameIsClosedSub$.unsubscribe();
-    this.playersCountSub$.unsubscribe();
-    this.playersReadyCountSub$.unsubscribe();
-    this.playersRematchCountSub$.unsubscribe();
+    this.closeGameOnTimerSub$ ? this.closeGameOnTimerSub$.unsubscribe() : false;
+    this.gameIsClosedSub$ ? this.gameIsClosedSub$.unsubscribe() : false;
+    this.playersCountSub$ ? this.playersCountSub$.unsubscribe() : false;
+    this.playersReadyCountSub$ ? this.playersReadyCountSub$.unsubscribe() : false;
+    this.playersRematchCountSub$ ? this.playersRematchCountSub$.unsubscribe() : false;
   }
 }

@@ -57,7 +57,8 @@ exports.notifyUser = functions.firestore
         title: "WAR",
         body: `It's your turn!`,
         icon:
-          "https://firebasestorage.googleapis.com/v0/b/war-prod.appspot.com/o/icon.png?alt=media&token=6671ddf6-568e-4fbc-8f55-27a562bbc8b5"
+          "https://firebasestorage.googleapis.com/v0/b/war-prod.appspot.com/o/icon.png?alt=media&token=6671ddf6-568e-4fbc-8f55-27a562bbc8b5",
+        sound: "change_turn.wav"
       },
       data: {
         gameId: context.params.gameId

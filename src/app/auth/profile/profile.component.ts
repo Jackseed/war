@@ -70,7 +70,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.watcher.unsubscribe();
-    this.formCtrlSub.unsubscribe();
+    this.watcher ? this.watcher.unsubscribe() : false;
+    this.formCtrlSub ? this.formCtrlSub.unsubscribe() : false;
   }
 }
