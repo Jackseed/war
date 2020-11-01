@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { User } from "../+state/auth.model";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AngularFireMessaging } from "@angular/fire/messaging";
@@ -19,7 +20,8 @@ export class MessagingService {
   constructor(
     private db: AngularFirestore,
     private afMessaging: AngularFireMessaging,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private router: Router
   ) {}
 
   // get permission to send messages
@@ -60,10 +62,13 @@ export class MessagingService {
 
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
-      (notification: PushNotificationActionPerformed) => {
-        alert("Push action performed: " + JSON.stringify(notification));
+      async (notification: PushNotificationActionPerformed) => {
+        const data = notification.notification.data;
+        if (data.gameId) {
+          this.router.navigateByUrl(`/games/${data.gameId}`);
+        }
       }
-    );
+    );  
   }
 
   // save the permission token in firestore

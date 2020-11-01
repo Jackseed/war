@@ -44,7 +44,7 @@ exports.onUserStatusChanged = functions.database
 
 exports.notifyUser = functions.firestore
   .document("games/{gameId}/players/{playerId}")
-  .onUpdate(change => {
+  .onUpdate(async (change, context) => {
     const player = change.after.data();
 
     if (!player.isActive) {
@@ -58,6 +58,9 @@ exports.notifyUser = functions.firestore
         body: `It's your turn!`,
         icon:
           "https://firebasestorage.googleapis.com/v0/b/war-prod.appspot.com/o/icon.png?alt=media&token=6671ddf6-568e-4fbc-8f55-27a562bbc8b5"
+      },
+      data: {
+        gameId: context.params.gameId
       }
     };
 
