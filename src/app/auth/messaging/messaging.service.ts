@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../+state/auth.model";
 import { AngularFirestore } from "@angular/fire/firestore";
@@ -21,7 +21,8 @@ export class MessagingService {
     private db: AngularFirestore,
     private afMessaging: AngularFireMessaging,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private zone: NgZone
   ) {}
 
   // get permission to send messages
@@ -59,15 +60,16 @@ export class MessagingService {
     PushNotifications.addListener("registrationError", (error: any) => {
       alert("Error: " + JSON.stringify(error));
     });
-
+    // link to the game when click on notification
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
       async (notification: PushNotificationActionPerformed) => {
-        const data = notification.notification.data;
-        if (data.gameId) {
-          console.log("Action performed: " + JSON.stringify(data.gameId));
-          return this.router.navigate([`/games/${data.gameId}`]);
-        }
+        this.zone.run(() => {
+          const data = notification.notification.data;
+          if (data.gameId) {
+            this.router.navigate([`/games/${data.gameId}`]);
+          }
+        });
       }
     );
   }
