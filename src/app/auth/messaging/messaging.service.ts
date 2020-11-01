@@ -2,12 +2,10 @@ import { Injectable } from "@angular/core";
 import { User } from "../+state/auth.model";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AngularFireMessaging } from "@angular/fire/messaging";
-import { BehaviorSubject } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { first } from "rxjs/operators";
 import {
   Plugins,
-  PushNotification,
   PushNotificationToken,
   PushNotificationActionPerformed
 } from "@capacitor/core";
@@ -18,8 +16,6 @@ const { PushNotifications } = Plugins;
   providedIn: "root"
 })
 export class MessagingService {
-  currentMessage = new BehaviorSubject(null);
-
   constructor(
     private db: AngularFirestore,
     private afMessaging: AngularFireMessaging,
@@ -30,7 +26,6 @@ export class MessagingService {
   getPermission(user: User) {
     this.afMessaging.requestToken.subscribe(
       token => {
-        console.log("Permission granted! Save to the server!", token);
         this.saveToken(user, token);
       },
       error => {
@@ -55,7 +50,6 @@ export class MessagingService {
     PushNotifications.addListener(
       "registration",
       (token: PushNotificationToken) => {
-        alert("Push registration success, token: " + token.value);
         this.saveActiveUserToken(token.value);
       }
     );
@@ -63,13 +57,6 @@ export class MessagingService {
     PushNotifications.addListener("registrationError", (error: any) => {
       alert("Error: " + JSON.stringify(error));
     });
-
-    PushNotifications.addListener(
-      "pushNotificationReceived",
-      async (notification: PushNotification) => {
-        alert("Push received: " + JSON.stringify(notification));
-      }
-    );
 
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
@@ -98,12 +85,5 @@ export class MessagingService {
     const userRef = this.db.collection("users").doc(user.uid);
     const tokens = { [token]: true };
     return userRef.update({ fcmTokens: tokens });
-  }
-
-  receiveMessage() {
-    this.afMessaging.messages.subscribe(payload => {
-      console.log("new message received. ", payload);
-      this.currentMessage.next(payload);
-    });
   }
 }
