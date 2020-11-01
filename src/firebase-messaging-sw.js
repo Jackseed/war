@@ -17,15 +17,11 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  // Customize notification here
-  const notificationTitle = "Background Message Title";
+  const notificationTitle = payload.title;
   const notificationOptions = {
-    body: "Background Message body.",
-    icon: "/firebase-logo.png"
+    body: payload.body,
+    icon:
+      "https://firebasestorage.googleapis.com/v0/b/war-prod.appspot.com/o/icon.png?alt=media&token=6671ddf6-568e-4fbc-8f55-27a562bbc8b5"
   };
 
   return self.registration.showNotification(
