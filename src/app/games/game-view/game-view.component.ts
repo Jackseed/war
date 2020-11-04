@@ -66,8 +66,12 @@ export class GameViewComponent implements OnInit, OnDestroy {
       this.game$
     ]).pipe(
       switchMap(([status, game]) => {
-        if (game.isInstant) {
-          status.status === "offline" ? timer(1000, 1000) : of(null);
+        if (game && status) {
+          if (game.isInstant) {
+            return status.status === "offline" ? timer(1000, 1000) : of(null);
+          } else {
+            return of(null);
+          }
         } else {
           return of(null);
         }
