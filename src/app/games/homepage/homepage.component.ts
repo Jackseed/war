@@ -4,6 +4,7 @@ import { Subscription, Observable } from "rxjs";
 import { GameService, GameQuery, Game } from "../+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-homepage",
@@ -19,7 +20,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private domSanitizer: DomSanitizer,
     private router: Router,
     private gameQuery: GameQuery,
-    private gameService: GameService
+    private gameService: GameService,
+    private analytics: AngularFireAnalytics
   ) {
     this.matIconRegistry.addSvgIcon(
       "castle",
@@ -61,10 +63,11 @@ export class HomepageComponent implements OnInit, OnDestroy {
     } else {
       const gameId = this.gameService.createNewGame("", true);
       this.router.navigate([`/games/${gameId}`]);
+      this.analytics.logEvent("play_now");
     }
   }
 
   ngOnDestroy() {
-    this.gameSub ? this.gameSub.unsubscribe(): false;
+    this.gameSub ? this.gameSub.unsubscribe() : false;
   }
 }

@@ -12,6 +12,11 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import {
+  AngularFireAnalyticsModule,
+  ScreenTrackingService,
+  UserTrackingService,
+} from "@angular/fire/analytics";
+import {
   NoopAnimationsModule,
   BrowserAnimationsModule
 } from "@angular/platform-browser/animations";
@@ -48,6 +53,7 @@ import { ServiceWorkerModule } from "@angular/service-worker";
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
+    AngularFireAnalyticsModule,
     NoopAnimationsModule,
     GamesModule,
     BoardModule,
@@ -68,6 +74,8 @@ import { ServiceWorkerModule } from "@angular/service-worker";
   providers: [
     ActiveAuthGuard,
     AngularFireAuthGuard,
+    ScreenTrackingService,
+    UserTrackingService,
     UnitGuard,
     PlayerGuard,
     GameGuard,

@@ -16,6 +16,7 @@ export function createUser(params: Partial<User>) {
     name: "Vagabond",
     gamePlayed: [],
     matchPlayed: 0,
-    matchWon: 0
+    matchWon: 0,
+    fcmTokens: {}
   };
 }

@@ -77,6 +77,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     // Close the game if the opponent is offline more than decoTimer time
     this.closeGameOnTimerSub$ = this.offlineTimer$
       .pipe(
+        filter(timer => !!timer),
         tap(timer =>
           timer === decoTimer ? this.gameService.markClosed() : false
         )

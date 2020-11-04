@@ -7,6 +7,7 @@ import { GameQuery } from "./game.query";
 import { createGame } from "./game.model";
 import { createPlayer } from "src/app/board/player/+state/player.model";
 import { firestore } from "firebase/app";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "games" })
@@ -15,7 +16,8 @@ export class GameService extends CollectionService<GameState> {
     store: GameStore,
     private query: GameQuery,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private analytics: AngularFireAnalytics
   ) {
     super(store);
   }
@@ -180,11 +182,13 @@ export class GameService extends CollectionService<GameState> {
     const doc = this.db.collection("games").doc(game.id);
 
     doc.update({ playersRematch });
+    this.analytics.logEvent("click_rematch");
   }
 
   public async markClosed() {
     const game = this.query.getActive();
     const doc = this.db.collection("games").doc(game.id);
+    this.analytics.logEvent("game_closed");
     await doc.update({ isClosed: true });
   }
 }

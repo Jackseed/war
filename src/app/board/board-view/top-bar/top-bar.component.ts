@@ -5,11 +5,12 @@ import { Observable } from "rxjs";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MediaObserver } from "@angular/flex-layout";
 import { MatDialog } from "@angular/material/dialog";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-top-bar",
   templateUrl: "./top-bar.component.html",
-  styleUrls: ["./top-bar.component.scss"],
+  styleUrls: ["./top-bar.component.scss"]
 })
 export class TopBarComponent implements OnInit {
   public game$: Observable<Game>;
@@ -20,7 +21,8 @@ export class TopBarComponent implements OnInit {
     public authService: AuthService,
     private gameQuery: GameQuery,
     public mediaObserver: MediaObserver,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private analytics: AngularFireAnalytics
   ) {}
 
   ngOnInit() {
@@ -30,6 +32,6 @@ export class TopBarComponent implements OnInit {
 
   public openDialog() {
     this.dialog.open(RulesComponent);
+    this.analytics.logEvent("open_rules");
   }
 }
-

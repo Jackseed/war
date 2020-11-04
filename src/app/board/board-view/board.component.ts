@@ -32,6 +32,7 @@ import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MessageService } from "../message/+state";
 import { Capacitor } from "@capacitor/core";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-board",
@@ -97,7 +98,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private messagingService: MessagingService,
     public sanitizer: DomSanitizer,
-    public mediaObserver: MediaObserver
+    public mediaObserver: MediaObserver,
+    private analytics: AngularFireAnalytics
   ) {}
 
   ngOnInit() {
@@ -196,6 +198,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         map(unitTileIds =>
           unitTileIds.map(unitTileId => {
             if (unitTileId === this.opponentCastle.tileId) {
+              this.analytics.logEvent("win_castle");
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
                 this.player,
@@ -217,6 +220,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         map(([unitCount, unitLoading, gameStatus]) => {
           if (gameStatus === "battle" && !unitLoading) {
             if (unitCount === 0) {
+              this.analytics.logEvent("win_units");
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
                 this.opponentPlayer,
@@ -417,7 +421,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.finishedSub ? this.finishedSub.unsubscribe() : false;
     this.isActiveSub ? this.isActiveSub.unsubscribe() : false;
     this.dyingUnitsSub ? this.dyingUnitsSub.unsubscribe() : false;
-    this.watcher ? this.watcher.unsubscribe(): false;
-    this.permissionSub ? this.permissionSub.unsubscribe(): false;
+    this.watcher ? this.watcher.unsubscribe() : false;
+    this.permissionSub ? this.permissionSub.unsubscribe() : false;
   }
 }
