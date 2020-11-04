@@ -61,10 +61,17 @@ export class GameViewComponent implements OnInit, OnDestroy {
     );
 
     // Create a timer when the opponent is offline
-    this.offlineTimer$ = this.opponentPresence$.pipe(
-      switchMap(status =>
-        status.status === "offline" ? timer(1000, 1000) : of(null)
-      )
+    this.offlineTimer$ = combineLatest([
+      this.opponentPresence$,
+      this.game$
+    ]).pipe(
+      switchMap(([status, game]) => {
+        if (game.isInstant) {
+          status.status === "offline" ? timer(1000, 1000) : of(null);
+        } else {
+          return of(null);
+        }
+      })
     );
 
     // Close the game if the opponent is offline more than decoTimer time
@@ -222,7 +229,11 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.closeGameOnTimerSub$ ? this.closeGameOnTimerSub$.unsubscribe() : false;
     this.gameIsClosedSub$ ? this.gameIsClosedSub$.unsubscribe() : false;
     this.playersCountSub$ ? this.playersCountSub$.unsubscribe() : false;
-    this.playersReadyCountSub$ ? this.playersReadyCountSub$.unsubscribe() : false;
-    this.playersRematchCountSub$ ? this.playersRematchCountSub$.unsubscribe() : false;
+    this.playersReadyCountSub$
+      ? this.playersReadyCountSub$.unsubscribe()
+      : false;
+    this.playersRematchCountSub$
+      ? this.playersRematchCountSub$.unsubscribe()
+      : false;
   }
 }
