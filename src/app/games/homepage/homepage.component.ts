@@ -20,6 +20,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   public playerGames$: Observable<Game[]>;
   private watcher: Subscription;
   public dialogWidth: string;
+  public dialogHeight: string;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -64,8 +65,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
       .subscribe((change: MediaChange) => {
         if (change.mqAlias === "xs") {
           this.dialogWidth = "80vw";
+          this.dialogHeight = "70vh";
         } else {
           this.dialogWidth = "35vw";
+          this.dialogHeight = "55vh";
         }
       });
     this.gameSub = this.gameService.syncCollection().subscribe();
@@ -91,7 +94,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
   public openTuto() {
     this.dialog.open(TutoComponent, {
       width: this.dialogWidth,
-      maxWidth: this.dialogWidth
+      maxWidth: this.dialogWidth,
+      height: this.dialogHeight,
+      maxHeight: this.dialogHeight,
     });
   }
 
