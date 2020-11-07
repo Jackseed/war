@@ -25,6 +25,7 @@ import { GameHistoryComponent } from "./pages/game-history/game-history.componen
 import { RulesComponent } from "./pages/rules/rules.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmationDialogComponent } from "./pages/confirmation-dialog/confirmation-dialog.component";
+import { TutoComponent } from './pages/tuto/tuto.component';
 @NgModule({
   declarations: [
     GameViewComponent,
@@ -37,6 +38,7 @@ import { ConfirmationDialogComponent } from "./pages/confirmation-dialog/confirm
     GameHistoryComponent,
     RulesComponent,
     ConfirmationDialogComponent,
+    TutoComponent,
   ],
   imports: [
     CommonModule,

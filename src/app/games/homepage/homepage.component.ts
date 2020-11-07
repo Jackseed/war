@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { TutoComponent } from "src/app/games/pages/tuto/tuto.component";
 import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 import { Subscription, Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
 import { GameService, GameQuery, Game } from "../+state";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { AngularFireAnalytics } from "@angular/fire/analytics";
+import { MediaObserver, MediaChange } from "@angular/flex-layout";
 
 @Component({
   selector: "app-homepage",
@@ -14,6 +18,8 @@ import { AngularFireAnalytics } from "@angular/fire/analytics";
 export class HomepageComponent implements OnInit, OnDestroy {
   private gameSub: Subscription;
   public playerGames$: Observable<Game[]>;
+  private watcher: Subscription;
+  public dialogWidth: string;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -21,7 +27,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private router: Router,
     private gameQuery: GameQuery,
     private gameService: GameService,
-    private analytics: AngularFireAnalytics
+    private analytics: AngularFireAnalytics,
+    public dialog: MatDialog,
+    private mediaObserver: MediaObserver
   ) {
     this.matIconRegistry.addSvgIcon(
       "castle",
@@ -47,6 +55,19 @@ export class HomepageComponent implements OnInit, OnDestroy {
         "../../../assets/img/sword_home.svg"
       )
     );
+    this.watcher = this.mediaObserver
+      .asObservable()
+      .pipe(
+        filter((changes: MediaChange[]) => changes.length > 0),
+        map((changes: MediaChange[]) => changes[0])
+      )
+      .subscribe((change: MediaChange) => {
+        if (change.mqAlias === "xs") {
+          this.dialogWidth = "80vw";
+        } else {
+          this.dialogWidth = "35vw";
+        }
+      });
     this.gameSub = this.gameService.syncCollection().subscribe();
   }
 
@@ -67,7 +88,15 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
   }
 
+  public openTuto() {
+    this.dialog.open(TutoComponent, {
+      width: this.dialogWidth,
+      maxWidth: this.dialogWidth
+    });
+  }
+
   ngOnDestroy() {
+    this.watcher ? this.watcher.unsubscribe() : false;
     this.gameSub ? this.gameSub.unsubscribe() : false;
   }
 }
