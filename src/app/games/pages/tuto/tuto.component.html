@@ -10,13 +10,13 @@
       You can skip it and open it later through the "Rules" button.
     </p>
 
-    <button mat-button (click)="switchStep('win')" class="bottom-right">
+    <button mat-button (click)="switchStep('castle-victory')" class="bottom-right">
       Next
     </button>
   </div>
 
-  <!------------------ WIN -------------------->
-  <div *ngSwitchCase="'win'" class="container" fxLayout="column">
+  <!------------------ VICTORY - CASTLE -------------------->
+  <div *ngSwitchCase="'castle-victory'" class="container" fxLayout="column">
     <div class="text-centered" fxFlex="5">
       <h3>Victory</h3>
     </div>
@@ -34,6 +34,32 @@
     <div fxFlex="65" fxFlexFill class="caste-win-gif"></div>
     <div fxFlex="10">
       <button mat-button (click)="switchStep('welcome')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('unit-victory')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ VICTORY - UNITS -------------------->
+  <div *ngSwitchCase="'unit-victory'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Victory</h3>
+    </div>
+    <div fxFlex="20">
+      <p class="padding-top text-centered">
+        To win, you have 2 possibilities:
+      </p>
+      <div class="padding-top">
+        <mat-divider></mat-divider>
+      </div>
+      <p class="padding-top text-centered">
+        2. Kill all the opponent's units
+      </p>
+    </div>
+    <div fxFlex="65" fxFlexFill class="unit-win-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('castle-victory')" class="bottom-left">
         Back
       </button>
       <button mat-button (click)="switchStep('welcome')" class="bottom-right">

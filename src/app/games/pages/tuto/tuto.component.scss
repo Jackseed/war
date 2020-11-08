@@ -21,7 +21,14 @@
 }
 
 .caste-win-gif {
-  background-image: url("/assets/gif/castle_win.gif");
+  background-image: url("/assets/gif/castle_win_slow.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.unit-win-gif {
+  background-image: url("/assets/gif/unit_win_slow.gif");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
