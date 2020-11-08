@@ -67,8 +67,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
           this.dialogWidth = "80vw";
           this.dialogHeight = "70vh";
         } else {
-          this.dialogWidth = "35vw";
-          this.dialogHeight = "55vh";
+          this.dialogWidth = "50vw";
+          this.dialogHeight = "65vh";
         }
       });
     this.gameSub = this.gameService.syncCollection().subscribe();
