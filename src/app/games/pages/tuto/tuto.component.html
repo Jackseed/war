@@ -16,21 +16,29 @@
   </div>
 
   <!------------------ WIN -------------------->
-  <div *ngSwitchCase="'win'" class="container">
-    <div class="text-centered">
-      <h3>Win</h3>
+  <div *ngSwitchCase="'win'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Victory</h3>
     </div>
-
-    <p class="padding-top">
-      War is a simple strategic game. This tutorial will explain you the rules.
-      You can skip it and open it later through the "Rules" button.
-    </p>
-
-    <button mat-button (click)="switchStep('welcome')" class="bottom-left">
-      Back
-    </button>
-    <button mat-button (click)="switchStep('welcome')" class="bottom-right">
-      Next
-    </button>
+    <div fxFlex="20">
+      <p class="padding-top text-centered">
+        To win, you have 2 possibilities:
+      </p>
+      <div class="padding-top">
+        <mat-divider></mat-divider>
+      </div>
+      <p class="padding-top text-centered">
+        1. Conquer the opponent castle
+      </p>
+    </div>
+    <div fxFlex="65" class="caste-win-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('welcome')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('welcome')" class="bottom-right">
+        Next
+      </button>
+    </div>
   </div>
 </div>

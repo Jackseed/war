@@ -25,7 +25,9 @@ import { GameHistoryComponent } from "./pages/game-history/game-history.componen
 import { RulesComponent } from "./pages/rules/rules.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmationDialogComponent } from "./pages/confirmation-dialog/confirmation-dialog.component";
-import { TutoComponent } from './pages/tuto/tuto.component';
+import { TutoComponent } from "./pages/tuto/tuto.component";
+import { MatDividerModule } from "@angular/material/divider";
+
 @NgModule({
   declarations: [
     GameViewComponent,
@@ -38,7 +40,7 @@ import { TutoComponent } from './pages/tuto/tuto.component';
     GameHistoryComponent,
     RulesComponent,
     ConfirmationDialogComponent,
-    TutoComponent,
+    TutoComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +59,8 @@ import { TutoComponent } from './pages/tuto/tuto.component';
     MatTooltipModule,
     ClipboardModule,
     MatDialogModule,
+    MatDividerModule,
   ],
-  exports: [ConfirmationDialogComponent],
+  exports: [ConfirmationDialogComponent]
 })
 export class GamesModule {}
