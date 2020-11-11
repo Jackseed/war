@@ -30,12 +30,12 @@ export class UnitBoardComponent implements OnInit {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
-  public hp = "hp";
   public stats = [
     ["hp", "vision"],
     ["power", "range"],
     ["move", "stamina"]
   ];
+  public enableMobileStats: boolean;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -102,6 +102,7 @@ export class UnitBoardComponent implements OnInit {
     this.unitsValue$ = this.query.selectCount();
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.isPlayerReady$ = this.gameQuery.isPlayerReady;
+    this.enableMobileStats = false;
   }
 
   selectUnitType(
@@ -158,5 +159,9 @@ export class UnitBoardComponent implements OnInit {
     }
 
     return deathCount$;
+  }
+
+  public enableStats() {
+    this.enableMobileStats = !this.enableMobileStats;
   }
 }

@@ -8,7 +8,7 @@
     fxHide.gt-xs="true"
     fxLayoutAlign="center center"
   >
-    <button mat-icon-button class="small">
+    <button mat-icon-button class="small" (click)="enableStats()">
       <mat-icon svgIcon="stats"></mat-icon>
     </button>
   </div>
@@ -29,6 +29,7 @@
           fxFlexAlign="center"
           fxFlexFill
           [fxFlex.xs]="(gameStatus$ | async) === 'unit creation' ? 100 : 50"
+          *ngIf="!this.enableMobileStats"
         >
           <div fxFlexFill fxFlexLayout="row" fxLayoutAlign="center center">
             <div
@@ -59,6 +60,55 @@
               >
                 <mat-icon>add</mat-icon>
               </button>
+            </div>
+          </div>
+        </div>
+        <!--------------------- Mobile unit stats --------------------->
+        <div
+          fxFlex="100"
+          fxLayout="column"
+          fxLayoutAlign="end center"
+          fxFlexAlign="center"
+          fxFlexFill
+          *ngIf="this.enableMobileStats"
+        >
+          <div fxFlexFill fxFlexLayout="row" fxLayoutAlign="center center">
+            <div
+              fxFlex="50"
+              class="unit-img"
+              style="--img: url(assets/img/black_{{ unitType }}.png);"
+            ></div>
+            <!--------------------- Stats aside --------------------->
+            <div fxFlex="50">
+              <div fxLayout="column" fxLayoutAlign="center space-evenly" fxFill>
+                <div
+                  *ngFor="let stat of stats"
+                  fxFlex="33"
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxFlexFill
+                >
+                  <div class="stats" fxFlex="nogrow">
+                    <p>{{ createUnit(unitType)[stat[0]] }}</p>
+                  </div>
+                  <div fxFlex="15">
+                    <mat-icon
+                      svgIcon="{{ stat[0] }}"
+                      class="stats-icon"
+                    ></mat-icon>
+                  </div>
+
+                  <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
+                    <p>{{ createUnit(unitType)[stat[1]] }}</p>
+                  </div>
+                  <div fxFlex="15">
+                    <mat-icon
+                      svgIcon="{{ stat[1] }}"
+                      class="stats-icon"
+                    ></mat-icon>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
