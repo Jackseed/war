@@ -33,17 +33,19 @@
         <div fxFlexAlign="center" class="small-margin-bottom">
           <h2>Compose your army</h2>
           <!--------------------- Ready messages --------------------->
-          <div
-            *ngIf="(isOpponentReady$ | async) && !(isPlayerReady$ | async)"
-            class="text-centered"
-          >
-            <p>Your opponent is ready!</p>
-          </div>
-          <div
-            *ngIf="(isPlayerReady$ | async) && !(isOpponentReady$ | async)"
-            class="text-centered"
-          >
-            <p>Waiting for your opponent!</p>
+          <div class="ready-messages">
+            <div
+              *ngIf="(isOpponentReady$ | async) && !(isPlayerReady$ | async)"
+              class="text-centered"
+            >
+              <p>Your opponent is ready!</p>
+            </div>
+            <div
+              *ngIf="(isPlayerReady$ | async) && !(isOpponentReady$ | async)"
+              class="text-centered"
+            >
+              <p>Waiting for your opponent!</p>
+            </div>
           </div>
           <!--------------------- Timer message --------------------->
           <div *ngIf="offlineTimer$ | async as timer" class="text-centered">
