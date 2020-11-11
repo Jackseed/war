@@ -1,5 +1,8 @@
-<div fxFlexFill>
-  <div fxLayout="column" fxLayoutAlign="space-evenly center" fxFlexFill>
+<div fxFlexFill fxLayout.xs="column">
+  <div fxFlex="10" fxFlexFill fxHide.gt-xs="true">
+    <button>Stats</button>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" fxFlex fxFlexFill>
     <div
       *ngFor="let unitType of unitTypes; let i = index"
       fxFlex="20"
