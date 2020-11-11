@@ -4,20 +4,20 @@ import {
   Unit,
   UnitService,
   maxTotalUnitValue,
-  createUnit,
+  createUnit
 } from "../+state";
 import { Observable } from "rxjs";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { GameQuery } from "src/app/games/+state";
-import { Player, PlayerQuery } from "../../player/+state";
+import { Player } from "../../player/+state";
 import { OpponentUnitQuery } from "../opponent/+state";
 import { MediaObserver } from "@angular/flex-layout";
 
 @Component({
   selector: "app-unit-board",
   templateUrl: "./unit-board.component.html",
-  styleUrls: ["./unit-board.component.scss"],
+  styleUrls: ["./unit-board.component.scss"]
 })
 export class UnitBoardComponent implements OnInit {
   @Input() player$: Observable<Player>;
@@ -37,7 +37,6 @@ export class UnitBoardComponent implements OnInit {
     private query: UnitQuery,
     private service: UnitService,
     private gameQuery: GameQuery,
-    private playerQuery: PlayerQuery,
     private opponentUnitQuery: OpponentUnitQuery,
     public mediaObserver: MediaObserver
   ) {
@@ -83,6 +82,13 @@ export class UnitBoardComponent implements OnInit {
         "../../../assets/img/cross.svg"
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      "stats",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../../../assets/img/stats.svg"
+      )
+    );
+
     this.mouseOvers = [false, false, false, false];
   }
 
@@ -96,14 +102,14 @@ export class UnitBoardComponent implements OnInit {
     unitType: "soldier" | "musketeer" | "knight" | "cannon"
   ): Observable<Unit[]> {
     return this.query.selectAll({
-      filterBy: (unit) => unit.type === unitType,
+      filterBy: unit => unit.type === unitType
     });
   }
 
   addUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon") {
     const totalUnitQuantity: number = this.query.getCount();
     if (totalUnitQuantity < maxTotalUnitValue) {
-      const tileId = this.query.getCount((unit) => unit.type === unitType);
+      const tileId = this.query.getCount(unit => unit.type === unitType);
       this.service.addUnit(unitType, tileId);
     }
   }
@@ -111,7 +117,7 @@ export class UnitBoardComponent implements OnInit {
   // Remove the last unit created from the selected type
   removeUnit(unitType: "soldier" | "musketeer" | "knight" | "cannon") {
     const units: Unit[] = this.query.getAll({
-      filterBy: (unit) => unit.type === unitType,
+      filterBy: unit => unit.type === unitType
     });
     if (units.length > 0) {
       this.service.removeUnit(units[units.length - 1]);
