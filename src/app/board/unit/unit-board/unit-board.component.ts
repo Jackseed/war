@@ -30,6 +30,12 @@ export class UnitBoardComponent implements OnInit {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
   public isPlayerReady$: Observable<boolean>;
+  public hp = "hp";
+  public stats = [
+    ["hp", "vision"],
+    ["power", "range"],
+    ["move", "stamina"]
+  ];
 
   constructor(
     private matIconRegistry: MatIconRegistry,

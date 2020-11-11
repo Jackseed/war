@@ -1,5 +1,13 @@
 <div fxFlexFill fxLayout.xs="column">
-  <div fxFlex="10" fxFlexFill fxHide.gt-xs="true" fxLayoutAlign="center center">
+  <div
+    fxFlex="10"
+    *ngIf="
+      mediaObserver.isActive('xs') && (gameStatus$ | async) === 'unit creation'
+    "
+    fxFlexFill
+    fxHide.gt-xs="true"
+    fxLayoutAlign="center center"
+  >
     <button mat-icon-button class="small">
       <mat-icon svgIcon="stats"></mat-icon>
     </button>
@@ -72,68 +80,28 @@
             fxFill
           >
             <div
+              *ngFor="let stat of stats"
               fxFlex="33"
               fxLayout="row"
               fxLayoutAlign="start center"
               fxFlexFill
             >
               <div class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).hp }}</p>
+                <p>{{ createUnit(unitType)[stat[0]] }}</p>
               </div>
               <div fxFlex="15">
-                <mat-icon svgIcon="hp" class="stats-icon"></mat-icon>
+                <mat-icon svgIcon="{{ stat[0] }}" class="stats-icon"></mat-icon>
               </div>
 
               <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).vision }}</p>
+                <p>{{ createUnit(unitType)[stat[1]] }}</p>
               </div>
               <div fxFlex="15">
-                <mat-icon svgIcon="vision" class="stats-icon"></mat-icon>
-              </div>
-            </div>
-
-            <div
-              fxFlex="33"
-              fxLayout="row"
-              fxLayoutAlign="start center"
-              fxFlexFill
-            >
-              <div class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).power }}</p>
-              </div>
-              <div fxFlex="15">
-                <mat-icon svgIcon="power" class="stats-icon"></mat-icon>
-              </div>
-
-              <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).range }}</p>
-              </div>
-              <div fxFlex="15">
-                <mat-icon svgIcon="range" class="stats-icon"></mat-icon>
-              </div>
-            </div>
-
-            <div
-              fxFlex="33"
-              fxLayout="row"
-              fxLayoutAlign="start center"
-              fxFlexFill
-            >
-              <div class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).move }}</p>
-              </div>
-              <div fxFlex="15">
-                <mat-icon svgIcon="move" class="stats-icon"></mat-icon>
-              </div>
-
-              <div fxFlexOffset="15" class="stats" fxFlex="nogrow">
-                <p>{{ createUnit(unitType).stamina }}</p>
-              </div>
-              <div fxFlex="15">
-                <mat-icon svgIcon="stamina" class="stats-icon"></mat-icon>
+                <mat-icon svgIcon="{{ stat[1] }}" class="stats-icon"></mat-icon>
               </div>
             </div>
           </div>
+
           <!--------------------- Death count --------------------->
           <div
             fxLayout="column"
@@ -153,6 +121,7 @@
         </div>
       </div>
     </div>
+    <!--------------------- Total --------------------->
     <div
       fxFlex="20"
       fxFlexFill
