@@ -1,4 +1,4 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start center">
   <!-----------------------------SCORE----------------------------------------->
   <div
     fxFlex="nogrow"
@@ -57,7 +57,7 @@
       fxFlexFill
       fxFlex
       fxLayout="row"
-      fxLayoutAlign="center center"
+      fxLayoutAlign="center start"
       fxLayoutAlign.lt-lg="center start"
     >
       <!--------------------------WHITE PLAYER BOARD------------------------------------->
@@ -65,11 +65,7 @@
         fxFlex="15"
         fxFlex.xs="40"
         fxFlex.lt-md="25"
-        class="player-board"
-        [ngClass]="{
-          marginTop: mediaObserver.isActive('lt-lg'),
-          marginBottom: !mediaObserver.isActive('lt-lg')
-        }"
+        class="player-board marginTop"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
@@ -193,11 +189,7 @@
         fxFlex.xs="40"
         fxFlex.lt-md="25"
         fxFlexOffset="5"
-        class="player-board"
-        [ngClass]="{
-          marginTop: mediaObserver.isActive('lt-lg'),
-          marginBottom: !mediaObserver.isActive('lt-lg')
-        }"
+        class="player-board marginTop"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
