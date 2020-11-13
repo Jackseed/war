@@ -1,11 +1,20 @@
-import { RulesComponent } from "./../../../games/pages/rules/rules.component";
+// ANGULAR
 import { Component, OnInit } from "@angular/core";
-import { GameQuery, Game } from "src/app/games/+state";
-import { Observable } from "rxjs";
-import { AuthService, AuthQuery } from "src/app/auth/+state";
-import { MediaObserver } from "@angular/flex-layout";
+import { ActivatedRoute } from "@angular/router";
+// MATERIAL
 import { MatDialog } from "@angular/material/dialog";
+// FIRE
 import { AngularFireAnalytics } from "@angular/fire/analytics";
+// RXJS
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+// FLEX 
+import { MediaObserver } from "@angular/flex-layout";
+// STATES
+import { GameQuery, Game } from "src/app/games/+state";
+import { AuthService, AuthQuery } from "src/app/auth/+state";
+// COMPONENTS
+import { RulesComponent } from "./../../../games/pages/rules/rules.component";
 
 @Component({
   selector: "app-top-bar",
@@ -14,6 +23,7 @@ import { AngularFireAnalytics } from "@angular/fire/analytics";
 })
 export class TopBarComponent implements OnInit {
   public game$: Observable<Game>;
+  public url$: Observable<string>;
   public isOpen: boolean;
 
   constructor(
@@ -22,12 +32,14 @@ export class TopBarComponent implements OnInit {
     private gameQuery: GameQuery,
     public mediaObserver: MediaObserver,
     public dialog: MatDialog,
-    private analytics: AngularFireAnalytics
+    private analytics: AngularFireAnalytics,
+    public route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.game$ = this.gameQuery.selectActive();
     this.isOpen = this.authQuery.getIsOpen();
+    this.url$ = this.route.url.pipe(map(segments => segments.join("")));
   }
 
   public openDialog() {
