@@ -170,7 +170,8 @@ export class GameService extends CollectionService<GameState> {
     if (game.status === "finished") {
       doc.update({
         playersRematch: [],
-        matchs: increment
+        matchs: increment,
+        turnCount: 0,
       });
     }
     this.switchStatus("unit creation");
