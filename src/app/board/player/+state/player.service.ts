@@ -102,4 +102,27 @@ export class PlayerService extends CollectionService<PlayerState> {
 
     batch.commit();
   }
+
+  public resetActionCounts() {
+    const player = this.query.getActive();
+    const opponent = this.query.opponent;
+    const playerDoc = this.db.firestore
+      .collection(this.currentPath)
+      .doc(player.id);
+    const opponentDoc = this.db.firestore
+      .collection(this.currentPath)
+      .doc(opponent.id);
+
+    const batch = this.db.firestore.batch();
+
+    batch.update(playerDoc, {
+      actionCount: 0
+    });
+
+    batch.update(opponentDoc, {
+      actionCount: 0
+    });
+
+    batch.commit();
+  }
 }

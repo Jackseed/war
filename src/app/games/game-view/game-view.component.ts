@@ -158,6 +158,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
             // this is to prevent double match count
             if (player.color === "black") {
               this.gameService.rematch();
+              this.playerService.resetActionCounts();
             }
           }
         })

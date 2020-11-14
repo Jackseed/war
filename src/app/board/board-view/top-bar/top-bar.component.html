@@ -2,7 +2,8 @@
   fxFlexFill
   *ngIf="
     (game$ | async)?.status === ('battle' || 'finished') &&
-      !mediaObserver.isActive('lt-lg');
+      !mediaObserver.isActive('lt-lg') &&
+      (url$ | async).includes('games/');
     else classicTopBar
   "
 >

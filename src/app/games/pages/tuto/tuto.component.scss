@@ -1,0 +1,96 @@
+.padding-top {
+  padding-top: 14px;
+}
+
+.bottom-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.blue {
+  color: #354b93;
+}
+
+.red {
+  color: #834134;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.welcome-gif {
+  background-image: url("https://media.giphy.com/media/26tPghhb310muUkEw/giphy.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.caste-win-gif {
+  background-image: url("/assets/gif/win_castle_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.unit-win-gif {
+  background-image: url("/assets/gif/win_unit_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.actions-per-turn-gif {
+  background-image: url("/assets/gif/actions_per_turn_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.move-per-turn-gif {
+  background-image: url("/assets/gif/move_per_turn_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.range-gif {
+  background-image: url("/assets/gif/range_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sight-gif {
+  background-image: url("/assets/gif/sight_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.army-gif {
+  background-image: url("/assets/gif/army_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.end-gif {
+  background-image: url("https://media.giphy.com/media/3R9LDINpbGX2o/giphy.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
