@@ -10,7 +10,11 @@
       You can skip it and open it later through the "Rules" button.
     </p>
 
-    <button mat-button (click)="switchStep('castle-victory')" class="bottom-right">
+    <button
+      mat-button
+      (click)="switchStep('castle-victory')"
+      class="bottom-right"
+    >
       Next
     </button>
   </div>
@@ -36,7 +40,11 @@
       <button mat-button (click)="switchStep('welcome')" class="bottom-left">
         Back
       </button>
-      <button mat-button (click)="switchStep('unit-victory')" class="bottom-right">
+      <button
+        mat-button
+        (click)="switchStep('unit-victory')"
+        class="bottom-right"
+      >
         Next
       </button>
     </div>
@@ -59,7 +67,110 @@
     </div>
     <div fxFlex="65" fxFlexFill class="unit-win-gif"></div>
     <div fxFlex="10">
-      <button mat-button (click)="switchStep('castle-victory')" class="bottom-left">
+      <button
+        mat-button
+        (click)="switchStep('castle-victory')"
+        class="bottom-left"
+      >
+        Back
+      </button>
+      <button mat-button (click)="switchStep('actions')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ ACTIONS PER TURN -------------------->
+  <div *ngSwitchCase="'actions'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Actions</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        You have 3 actions per turn.
+      </p>
+      <p class="text-centered">
+        Action is either a
+        <font class="blue bold">move</font> or an
+        <font class="red bold">attack</font>.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="actions-per-turn-gif"></div>
+    <div fxFlex="10">
+      <button
+        mat-button
+        (click)="switchStep('unit-victory')"
+        class="bottom-left"
+      >
+        Back
+      </button>
+      <button mat-button (click)="switchStep('move')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ MOVE PER TURN -------------------->
+  <div *ngSwitchCase="'move'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Moves</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        Units can move <font class="bold">once per turn</font>.
+      </p>
+      <p class="text-centered">
+        Though Knights can move 2 tiles at once.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="move-per-turn-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('actions')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('range')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ RANGE -------------------->
+  <div *ngSwitchCase="'range'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Range</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        Units can attack <font class="bold">within their range</font>.
+      </p>
+      <p class="text-centered">
+        Canons and archers attack 2 to 3 tiles away.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="range-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('move')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('sight')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ SIGHT -------------------->
+  <div *ngSwitchCase="'sight'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Sight</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        It's important to
+        <font class="bold">know the board</font>.
+      </p>
+      <p class="text-centered">
+        Archers and knights have good vision.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="sight-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('range')" class="bottom-left">
         Back
       </button>
       <button mat-button (click)="switchStep('welcome')" class="bottom-right">

@@ -20,6 +20,18 @@
   position: relative;
 }
 
+.blue {
+  color: #354b93;
+}
+
+.red {
+  color: #834134;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .caste-win-gif {
   background-image: url("/assets/gif/win_castle_optimized.gif");
   background-size: contain;
@@ -29,6 +41,34 @@
 
 .unit-win-gif {
   background-image: url("/assets/gif/win_unit_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.actions-per-turn-gif {
+  background-image: url("/assets/gif/actions_per_turn_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.move-per-turn-gif {
+  background-image: url("/assets/gif/move_per_turn_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.range-gif {
+  background-image: url("/assets/gif/range_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sight-gif {
+  background-image: url("/assets/gif/sight_optimized.gif");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
