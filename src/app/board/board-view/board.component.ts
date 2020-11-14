@@ -7,6 +7,8 @@ import {
   Input
 } from "@angular/core";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
+import { User } from "../../auth/+state";
+import { MessagingService } from "src/app/auth/messaging/messaging.service";
 import { Tile, TileQuery, TileService } from "../tile/+state";
 import { Unit, UnitQuery, UnitService } from "../unit/+state";
 import {
@@ -29,6 +31,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { AuthService, AuthQuery } from "src/app/auth/+state";
 import { MessageService } from "../message/+state";
+import { Capacitor } from "@capacitor/core";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-board",
@@ -46,6 +50,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   private isActiveSub: Subscription;
   private dyingUnitsSub: Subscription;
   private watcher: Subscription;
+  private permissionSub: Subscription;
 
   // Fixed variables
   public boardSize = boardCols;
@@ -66,6 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     "waiting" | "unit creation" | "placement" | "battle" | "finished"
   >;
 
+  public user$: Observable<User>;
   public player$: Observable<Player>;
   public whitePlayer$: Observable<Player>;
   public blackPlayer$: Observable<Player>;
@@ -90,12 +96,27 @@ export class BoardComponent implements OnInit, OnDestroy {
     private opponentUnitService: OpponentUnitService,
     private opponentUnitQuery: OpponentUnitQuery,
     private messageService: MessageService,
+    private messagingService: MessagingService,
     public sanitizer: DomSanitizer,
-    public mediaObserver: MediaObserver
+    public mediaObserver: MediaObserver,
+    private analytics: AngularFireAnalytics
   ) {}
 
   ngOnInit() {
+    this.user$ = this.authQuery.selectActive();
     this.game$ = this.gameQuery.selectActive();
+
+    // Prepare push notifications
+    if (Capacitor.platform === "web") {
+      this.permissionSub = this.user$.subscribe(user => {
+        if (user) {
+          this.messagingService.getPermission(user);
+        }
+      });
+    } else {
+      this.messagingService.registerMobilePush();
+    }
+
     this.gameStatus$ = this.gameQuery.gameStatus$;
     this.watcher = this.mediaObserver
       .asObservable()
@@ -177,6 +198,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         map(unitTileIds =>
           unitTileIds.map(unitTileId => {
             if (unitTileId === this.opponentCastle.tileId) {
+              this.analytics.logEvent("win_castle");
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
                 this.player,
@@ -198,6 +220,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         map(([unitCount, unitLoading, gameStatus]) => {
           if (gameStatus === "battle" && !unitLoading) {
             if (unitCount === 0) {
+              this.analytics.logEvent("win_units");
               this.gameService.switchStatus("finished");
               this.playerService.setVictorious(
                 this.opponentPlayer,
@@ -390,6 +413,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.authService.updateIsOpen(true);
     this.opponentUnitStore.reset();
     this.oppUnitsync ? this.oppUnitsync.unsubscribe() : false;
     this.castleVictorySub ? this.castleVictorySub.unsubscribe() : false;
@@ -397,7 +421,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.finishedSub ? this.finishedSub.unsubscribe() : false;
     this.isActiveSub ? this.isActiveSub.unsubscribe() : false;
     this.dyingUnitsSub ? this.dyingUnitsSub.unsubscribe() : false;
-    this.authService.updateIsOpen(true);
-    this.watcher.unsubscribe();
+    this.watcher ? this.watcher.unsubscribe() : false;
+    this.permissionSub ? this.permissionSub.unsubscribe() : false;
   }
 }

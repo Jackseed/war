@@ -1,13 +1,15 @@
 import { Component, OnInit } from "@angular/core";
+import { MessageService } from "src/app/board/message/+state/message.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AuthService, AuthQuery, User } from "../../+state";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialogRef } from "@angular/material/dialog";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-email",
   templateUrl: "./email.component.html",
-  styleUrls: ["./email.component.scss"],
+  styleUrls: ["./email.component.scss"]
 })
 export class EmailComponent implements OnInit {
   form: FormGroup;
@@ -21,7 +23,9 @@ export class EmailComponent implements OnInit {
     private service: AuthService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<EmailComponent>
+    private dialogRef: MatDialogRef<EmailComponent>,
+    private analytics: AngularFireAnalytics,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +33,7 @@ export class EmailComponent implements OnInit {
     this.form = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.minLength(6), Validators.required]],
-      passwordConfirm: ["", []],
+      passwordConfirm: ["", []]
     });
   }
 
@@ -41,17 +45,20 @@ export class EmailComponent implements OnInit {
 
     if (this.isSignup) {
       this.serverMessage = await this.service.emailSignup(email, password);
+      this.analytics.logEvent("email_saved");
       snackBarMessage = "Account saved";
     } else if (this.isLogin) {
       this.serverMessage = await this.service.emailLogin(email, password);
+      this.analytics.logEvent("email_login");
       snackBarMessage = "Successfully connected";
     } else if (this.isPasswordReset) {
       this.serverMessage = await this.service.resetPassword(email);
+      this.analytics.logEvent("password_reset");
       snackBarMessage = "Email sent";
     }
 
     if (!this.serverMessage) {
-      this.openSnackBar(snackBarMessage);
+      this.messageService.openSnackBar(snackBarMessage);
       this.form.reset();
       this.dialogRef.close();
     }
@@ -91,15 +98,9 @@ export class EmailComponent implements OnInit {
 
     if (!isMatching) {
       this.passwordConfirm.setErrors({
-        notMatching: true,
+        notMatching: true
       });
     }
     return isMatching;
-  }
-
-  private openSnackBar(message: string) {
-    this.snackBar.open(message, "close", {
-      duration: 2000,
-    });
   }
 }

@@ -22,7 +22,7 @@ export class PresenceService {
   selectPresence(uid: string): Observable<any> {
     return this.db.object(`status/${uid}`).valueChanges();
   }
-
+  
   getUser() {
     return this.afAuth.authState.pipe(first()).toPromise();
   }

@@ -8,11 +8,12 @@ import { MatDialog } from "@angular/material/dialog";
 import { EmailComponent } from "../login/email/email.component";
 import { MediaObserver, MediaChange } from "@angular/flex-layout";
 import { filter, map, debounceTime } from "rxjs/operators";
+import { AngularFireAnalytics } from "@angular/fire/analytics";
 
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"],
+  styleUrls: ["./profile.component.scss"]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   public user$: Observable<User>;
@@ -27,7 +28,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private query: AuthQuery,
     private service: AuthService,
     public dialog: MatDialog,
-    private mediaObserver: MediaObserver
+    private mediaObserver: MediaObserver,
+    private analytics: AngularFireAnalytics
   ) {
     this.watcher = this.mediaObserver
       .asObservable()
@@ -49,13 +51,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.user = this.query.getActive();
     this.formCtrlSub = this.name.valueChanges
       .pipe(debounceTime(1000))
-      .subscribe((newValue) => this.updateName(newValue));
+      .subscribe(newValue => this.updateName(newValue));
   }
 
   onSubmit() {}
 
   public updateName(name: string) {
     this.service.updateName(name);
+    this.analytics.logEvent("update_name");
   }
 
   public switchEditing() {
@@ -65,12 +68,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public openDialog() {
     this.dialog.open(EmailComponent, {
       width: this.dialogWidth,
-      maxWidth: this.dialogWidth,
+      maxWidth: this.dialogWidth
     });
+    this.analytics.logEvent("open_email_comp");
   }
 
   ngOnDestroy() {
-    this.watcher.unsubscribe();
-    this.formCtrlSub.unsubscribe();
+    this.watcher ? this.watcher.unsubscribe() : false;
+    this.formCtrlSub ? this.formCtrlSub.unsubscribe() : false;
   }
 }

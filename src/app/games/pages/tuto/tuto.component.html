@@ -1,0 +1,229 @@
+<div [ngSwitch]="step" fxFlexFill>
+  <!------------------ WELCOME -------------------->
+  <div *ngSwitchCase="'welcome'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Welcome to War!</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        War is a simple <font class="bold">strategic game</font>.
+      </p>
+      <p class="text-centered">
+        This tutorial will explain you the rules.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="welcome-gif"></div>
+    <div fxFlex="10">
+      <button
+        mat-button
+        (click)="switchStep('castle-victory')"
+        class="bottom-right"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+  <!------------------ VICTORY - CASTLE -------------------->
+  <div *ngSwitchCase="'castle-victory'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Victory</h3>
+    </div>
+    <div fxFlex="20">
+      <p class="padding-top text-centered">
+        To win, you have 2 possibilities:
+      </p>
+      <div class="padding-top">
+        <mat-divider></mat-divider>
+      </div>
+      <p class="padding-top text-centered">
+        1. Conquer the opponent castle
+      </p>
+    </div>
+    <div fxFlex="65" fxFlexFill class="caste-win-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('welcome')" class="bottom-left">
+        Back
+      </button>
+      <button
+        mat-button
+        (click)="switchStep('unit-victory')"
+        class="bottom-right"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ VICTORY - UNITS -------------------->
+  <div *ngSwitchCase="'unit-victory'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Victory</h3>
+    </div>
+    <div fxFlex="20">
+      <p class="padding-top text-centered">
+        To win, you have 2 possibilities:
+      </p>
+      <div class="padding-top">
+        <mat-divider></mat-divider>
+      </div>
+      <p class="padding-top text-centered">
+        2. Kill all the opponent's units
+      </p>
+    </div>
+    <div fxFlex="65" fxFlexFill class="unit-win-gif"></div>
+    <div fxFlex="10">
+      <button
+        mat-button
+        (click)="switchStep('castle-victory')"
+        class="bottom-left"
+      >
+        Back
+      </button>
+      <button mat-button (click)="switchStep('actions')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ ACTIONS PER TURN -------------------->
+  <div *ngSwitchCase="'actions'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Actions</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        You have 3 actions per turn.
+      </p>
+      <p class="text-centered">
+        Action is either a
+        <font class="blue bold">move</font> or an
+        <font class="red bold">attack</font>.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="actions-per-turn-gif"></div>
+    <div fxFlex="10">
+      <button
+        mat-button
+        (click)="switchStep('unit-victory')"
+        class="bottom-left"
+      >
+        Back
+      </button>
+      <button mat-button (click)="switchStep('move')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ MOVE PER TURN -------------------->
+  <div *ngSwitchCase="'move'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Moves</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        Units can move <font class="bold">once per turn</font>.
+      </p>
+      <p class="text-centered">
+        Though Knights can move 2 tiles at once.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="move-per-turn-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('actions')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('range')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ RANGE -------------------->
+  <div *ngSwitchCase="'range'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Range</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        Units can attack <font class="bold">within their range</font>.
+      </p>
+      <p class="text-centered">
+        Canons and archers attack 2 to 3 tiles away.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="range-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('move')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('sight')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ SIGHT -------------------->
+  <div *ngSwitchCase="'sight'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Sight</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        It's important to
+        <font class="bold">know the board</font>.
+      </p>
+      <p class="text-centered">
+        Archers and knights have good vision.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="sight-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('range')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('army')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ ARMY -------------------->
+  <div *ngSwitchCase="'army'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Army</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        To conduct war, you select 12 battalions.
+      </p>
+      <p class="text-centered">
+        The strategy starts here.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="army-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('sight')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('end')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ THE END -------------------->
+  <div *ngSwitchCase="'end'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>That's it!</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        You know (almost) everything.
+      </p>
+      <p class="text-centered">
+        Go ahead and try it yourself!
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="end-gif"></div>
+    <div fxFlex="10" fxFlexAlign="center">
+      <button mat-button mat-dialog-close>
+        All set!
+      </button>
+    </div>
+  </div>
+</div>

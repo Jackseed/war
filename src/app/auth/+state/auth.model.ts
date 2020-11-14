@@ -2,11 +2,12 @@ export interface User {
   id: string;
   name?: string;
   gamePlayed?: string[];
-  matchPlayed?: number
+  matchPlayed?: number;
   matchWon?: number;
   rank?: number;
   email?: string;
   oldId?: string;
+  fcmTokens?: { [token: string]: true };
 }
 
 export function createUser(params: Partial<User>) {
@@ -16,5 +17,6 @@ export function createUser(params: Partial<User>) {
     gamePlayed: [],
     matchPlayed: 0,
     matchWon: 0,
+    fcmTokens: {}
   };
 }

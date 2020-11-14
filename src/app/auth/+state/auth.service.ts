@@ -7,6 +7,7 @@ import { CollectionConfig, CollectionService } from "akita-ng-fire";
 import { createUser, User } from "./auth.model";
 import { first } from "rxjs/operators";
 import { AuthQuery } from "./auth.query";
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Injectable({ providedIn: "root" })
 @CollectionConfig({ path: "users" })
@@ -16,7 +17,8 @@ export class AuthService extends CollectionService<AuthState> {
     private query: AuthQuery,
     private afAuth: AngularFireAuth,
     private router: Router,
-    private presenceService: PresenceService
+    private presenceService: PresenceService,
+    private analytics: AngularFireAnalytics,
   ) {
     super(store);
   }
@@ -28,6 +30,7 @@ export class AuthService extends CollectionService<AuthState> {
       this.setUser(user.uid);
     }
     this.router.navigate(["/home"]);
+    this.analytics.logEvent('anonymous_login');
   }
 
   async signOut() {
@@ -88,7 +91,8 @@ export class AuthService extends CollectionService<AuthState> {
           gamePlayed: oldUser.gamePlayed,
           matchPlayed: oldUser.matchPlayed,
           matchWon: oldUser.matchWon,
-          oldId: oldUser.id
+          oldId: oldUser.id,
+          fcmTokens: oldUser.fcmTokens,
         };
 
         batch.set(newUserDoc, user);

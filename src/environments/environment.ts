@@ -11,10 +11,10 @@ export const environment = {
     projectId: "war-77bc4",
     storageBucket: "war-77bc4.appspot.com",
     messagingSenderId: "891027548677",
-    appId: "1:891027548677:web:4553ee924d68363adeca6c",
-
-  },
+    appId: "1:891027548677:web:4553ee924d68363adeca6c"
+  }
 };
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

@@ -61,15 +61,27 @@ export class GameViewComponent implements OnInit, OnDestroy {
     );
 
     // Create a timer when the opponent is offline
-    this.offlineTimer$ = this.opponentPresence$.pipe(
-      switchMap(status =>
-        status.status === "offline" ? timer(1000, 1000) : of(null)
-      )
+    this.offlineTimer$ = combineLatest([
+      this.opponentPresence$,
+      this.game$
+    ]).pipe(
+      switchMap(([status, game]) => {
+        if (game && status) {
+          if (game.isInstant) {
+            return status.status === "offline" ? timer(1000, 1000) : of(null);
+          } else {
+            return of(null);
+          }
+        } else {
+          return of(null);
+        }
+      })
     );
 
     // Close the game if the opponent is offline more than decoTimer time
     this.closeGameOnTimerSub$ = this.offlineTimer$
       .pipe(
+        filter(timer => !!timer),
         tap(timer =>
           timer === decoTimer ? this.gameService.markClosed() : false
         )
@@ -146,6 +158,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
             // this is to prevent double match count
             if (player.color === "black") {
               this.gameService.rematch();
+              this.playerService.resetActionCounts();
             }
           }
         })
@@ -219,10 +232,14 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.playerLeft();
-    this.closeGameOnTimerSub$.unsubscribe();
-    this.gameIsClosedSub$.unsubscribe();
-    this.playersCountSub$.unsubscribe();
-    this.playersReadyCountSub$.unsubscribe();
-    this.playersRematchCountSub$.unsubscribe();
+    this.closeGameOnTimerSub$ ? this.closeGameOnTimerSub$.unsubscribe() : false;
+    this.gameIsClosedSub$ ? this.gameIsClosedSub$.unsubscribe() : false;
+    this.playersCountSub$ ? this.playersCountSub$.unsubscribe() : false;
+    this.playersReadyCountSub$
+      ? this.playersReadyCountSub$.unsubscribe()
+      : false;
+    this.playersRematchCountSub$
+      ? this.playersRematchCountSub$.unsubscribe()
+      : false;
   }
 }

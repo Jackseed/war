@@ -1,4 +1,4 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start center">
   <!-----------------------------SCORE----------------------------------------->
   <div
     fxFlex="nogrow"
@@ -11,7 +11,22 @@
           lineHeigtMobile: mediaObserver.isActive('lt-md')
         }"
       >
-        <h2>Battle {{ (game$ | async)?.matchs }}</h2>
+        <div *ngIf="(gameStatus$ | async) !== 'finished'">
+          <h2>Battle {{ (game$ | async)?.matchs }}</h2>
+        </div>
+        <!--------------------- Victory messages --------------------->
+        <div
+          *ngIf="(gameStatus$ | async) === 'finished'"
+          class="text-centered italic"
+        >
+          <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
+            <h2>Victory, well done General!</h2>
+          </ng-container>
+
+          <ng-template #defeat>
+            <h2>Defeat, try again...</h2>
+          </ng-template>
+        </div>
         <h3>
           {{ (whitePlayer$ | async)?.wins }} -
           {{ (blackPlayer$ | async)?.wins }}
@@ -37,19 +52,6 @@
       <h2>Position your army</h2>
       <p>You can use any blue tiles.</p>
     </div>
-    <!--------------------- Victory messages --------------------->
-    <div
-      *ngIf="(gameStatus$ | async) === 'finished'"
-      class="text-centered italic"
-    >
-      <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
-        <h3>Victory, well done General!</h3>
-      </ng-container>
-
-      <ng-template #defeat>
-        <h3>Defeat, try again...</h3>
-      </ng-template>
-    </div>
   </div>
   <!--------------------------B0ARD------------------------------------->
   <div fxFlex fxFlexFill>
@@ -57,7 +59,7 @@
       fxFlexFill
       fxFlex
       fxLayout="row"
-      fxLayoutAlign="center center"
+      fxLayoutAlign="center start"
       fxLayoutAlign.lt-lg="center start"
     >
       <!--------------------------WHITE PLAYER BOARD------------------------------------->
@@ -65,11 +67,7 @@
         fxFlex="15"
         fxFlex.xs="40"
         fxFlex.lt-md="25"
-        class="player-board"
-        [ngClass]="{
-          marginTop: mediaObserver.isActive('lt-lg'),
-          marginBottom: !mediaObserver.isActive('lt-lg')
-        }"
+        class="player-board marginTop"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
@@ -93,12 +91,28 @@
         <div
           class="padding-bottom messages"
           *ngIf="
-            (gameStatus$ | async) === 'battle' &&
+            (gameStatus$ | async) !== 'placement' &&
             mediaObserver.isActive('lt-lg') &&
             !(offlineTimer$ | async)
           "
+          fxLayoutAlign="center center"
         >
-          <app-message-board></app-message-board>
+          <div *ngIf="(gameStatus$ | async) === 'battle'" fxFlexFill>
+            <app-message-board></app-message-board>
+          </div>
+          <!--------------------- Victory messages --------------------->
+          <div
+            *ngIf="(gameStatus$ | async) === 'finished'"
+            class="text-centered italic"
+          >
+            <ng-container *ngIf="(player$ | async).isVictorious; else defeat">
+              <h2>Victory, well done General!</h2>
+            </ng-container>
+
+            <ng-template #defeat>
+              <h2>Defeat, try again...</h2>
+            </ng-template>
+          </div>
         </div>
         <!----------------------------Board----------------------------->
         <mat-card-content fxFlexFill>
@@ -193,11 +207,7 @@
         fxFlex.xs="40"
         fxFlex.lt-md="25"
         fxFlexOffset="5"
-        class="player-board"
-        [ngClass]="{
-          marginTop: mediaObserver.isActive('lt-lg'),
-          marginBottom: !mediaObserver.isActive('lt-lg')
-        }"
+        class="player-board marginTop"
         fxLayout="column"
         fxLayoutAlign="center center"
         *ngIf="isOpen$ | async"
