@@ -8,7 +8,7 @@ import { AngularFireAnalytics } from "@angular/fire/analytics";
 // RXJS
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-// FLEX 
+// FLEX
 import { MediaObserver } from "@angular/flex-layout";
 // STATES
 import { GameQuery, Game } from "src/app/games/+state";
