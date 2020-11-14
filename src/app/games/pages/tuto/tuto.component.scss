@@ -32,6 +32,13 @@
   font-weight: bold;
 }
 
+.welcome-gif {
+  background-image: url("https://media.giphy.com/media/26tPghhb310muUkEw/giphy.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .caste-win-gif {
   background-image: url("/assets/gif/win_castle_optimized.gif");
   background-size: contain;
@@ -69,6 +76,20 @@
 
 .sight-gif {
   background-image: url("/assets/gif/sight_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.army-gif {
+  background-image: url("/assets/gif/army_optimized.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.end-gif {
+  background-image: url("https://media.giphy.com/media/3R9LDINpbGX2o/giphy.gif");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

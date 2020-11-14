@@ -1,22 +1,27 @@
 <div [ngSwitch]="step" fxFlexFill>
   <!------------------ WELCOME -------------------->
-  <div *ngSwitchCase="'welcome'" class="container">
-    <div class="text-centered">
+  <div *ngSwitchCase="'welcome'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
       <h3>Welcome to War!</h3>
     </div>
-
-    <p class="padding-top">
-      War is a simple strategic game. This tutorial will explain you the rules.
-      You can skip it and open it later through the "Rules" button.
-    </p>
-
-    <button
-      mat-button
-      (click)="switchStep('castle-victory')"
-      class="bottom-right"
-    >
-      Next
-    </button>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        War is a simple <font class="bold">strategic game</font>.
+      </p>
+      <p class="text-centered">
+        This tutorial will explain you the rules.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="welcome-gif"></div>
+    <div fxFlex="10">
+      <button
+        mat-button
+        (click)="switchStep('castle-victory')"
+        class="bottom-right"
+      >
+        Next
+      </button>
+    </div>
   </div>
 
   <!------------------ VICTORY - CASTLE -------------------->
@@ -173,8 +178,51 @@
       <button mat-button (click)="switchStep('range')" class="bottom-left">
         Back
       </button>
-      <button mat-button (click)="switchStep('welcome')" class="bottom-right">
+      <button mat-button (click)="switchStep('army')" class="bottom-right">
         Next
+      </button>
+    </div>
+  </div>
+  <!------------------ ARMY -------------------->
+  <div *ngSwitchCase="'army'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>Army</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        To conduct war, you select 12 battalions.
+      </p>
+      <p class="text-centered">
+        The strategy starts here.
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="army-gif"></div>
+    <div fxFlex="10">
+      <button mat-button (click)="switchStep('sight')" class="bottom-left">
+        Back
+      </button>
+      <button mat-button (click)="switchStep('end')" class="bottom-right">
+        Next
+      </button>
+    </div>
+  </div>
+  <!------------------ THE END -------------------->
+  <div *ngSwitchCase="'end'" class="container" fxLayout="column">
+    <div class="text-centered" fxFlex="5">
+      <h3>That's it!</h3>
+    </div>
+    <div fxFlex="15">
+      <p class="padding-top text-centered">
+        You know (almost) everything.
+      </p>
+      <p class="text-centered">
+        Go ahead and try it yourself!
+      </p>
+    </div>
+    <div fxFlex="70" fxFlexFill class="end-gif"></div>
+    <div fxFlex="10" fxFlexAlign="center">
+      <button mat-button mat-dialog-close>
+        All set!
       </button>
     </div>
   </div>
