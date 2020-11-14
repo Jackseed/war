@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { TutoComponent } from "src/app/games/pages/tuto/tuto.component";
@@ -9,7 +9,7 @@ import { MediaObserver, MediaChange } from "@angular/flex-layout";
   templateUrl: "./rules.component.html",
   styleUrls: ["./rules.component.scss"]
 })
-export class RulesComponent implements OnInit, OnDestroy {
+export class RulesComponent implements OnDestroy {
   private watcher: Subscription;
   public dialogWidth: string;
   public dialogHeight: string;
@@ -32,14 +32,12 @@ export class RulesComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {}
-
   public openTuto() {
     this.dialog.open(TutoComponent, {
       width: this.dialogWidth,
       maxWidth: this.dialogWidth,
       height: this.dialogHeight,
-      maxHeight: this.dialogHeight,
+      maxHeight: this.dialogHeight
     });
   }
 

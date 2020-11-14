@@ -43,7 +43,7 @@ export class TopBarComponent implements OnInit {
   }
 
   public openDialog() {
-    this.dialog.open(RulesComponent);
+    this.dialog.open(RulesComponent, { autoFocus: false, restoreFocus: false });
     this.analytics.logEvent("open_rules");
   }
 }
