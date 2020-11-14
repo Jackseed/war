@@ -97,7 +97,9 @@
           "
           fxLayoutAlign="center center"
         >
-
+          <div *ngIf="(gameStatus$ | async) === 'battle'" fxFlexFill>
+            <app-message-board></app-message-board>
+          </div>
           <!--------------------- Victory messages --------------------->
           <div
             *ngIf="(gameStatus$ | async) === 'finished'"
